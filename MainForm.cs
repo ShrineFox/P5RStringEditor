@@ -3,20 +3,24 @@ using MetroSet_UI.Forms;
 using Newtonsoft.Json;
 using ShrineFox.IO;
 using System;
+using System.ComponentModel;
 using System.Reflection;
+using System.Windows.Forms;
 
 namespace P5RStringEditor
 {
     public partial class MainForm : MetroSetForm
     {
         Settings settings = new Settings();
+        BindingSource bs = new BindingSource();
         public class Settings
         {
-            public List<NameTblEntry> nameTblEntries = new List<NameTblEntry>();
+            public BindingList<NameTblEntry> nameTblEntries = new BindingList<NameTblEntry>();
         }
 
         public class NameTblEntry
         {
+            public int ProgramId { get; set; } = 0;
             public string TblName { get; set; } = "";
             public int Id { get; set; } = 0;
             public string ItemName { get; set; } = "";
@@ -28,9 +32,10 @@ namespace P5RStringEditor
         {
             InitializeComponent();
             ApplyTheme();
-            settings.nameTblEntries.Add(new NameTblEntry() { Id = 0, TblName = "13 - Outfits" });
-            listBox_Main.DataBindings.Add(new Binding("Text", settings.nameTblEntries, "ItemName", 
-                true, DataSourceUpdateMode.OnPropertyChanged));
+            bs.DataSource = settings.nameTblEntries;
+            listBox_Main.DataSource = bs;
+            listBox_Main.DisplayMember = "ItemName";
+            listBox_Main.ValueMember = "ProgramId";
         }
 
         private void Save_Click(object sender, EventArgs e)
@@ -64,7 +69,18 @@ namespace P5RStringEditor
 
         private void Add_Click(object sender, EventArgs e)
         {
-            settings.nameTblEntries.Add(new NameTblEntry() { Id = 0, TblName = "13 - Outfits" });
+            // Create unique ID for binding to listbox
+            int id = 0;
+            while (true)
+            {
+                if (settings.nameTblEntries.Any(x => x.ProgramId == id))
+                    id++;
+                else
+                    break;
+            }
+
+            settings.nameTblEntries.Add(new NameTblEntry() { ItemName = "Untitled", 
+                ProgramId = id, Id = 0, TblName = "13 - Outfits" });
         }
 
         private void SelectedEntry_Changed(object sender, EventArgs e)
@@ -95,35 +111,37 @@ namespace P5RStringEditor
 
         private void Id_Changed(object sender, EventArgs e)
         {
-            if (num_Id.Enabled)
+            if (!num_Id.Enabled)
                 return;
             settings.nameTblEntries[listBox_Main.SelectedIndex].Id = Convert.ToInt32(num_Id.Value);
         }
 
         private void TBL_Changed(object sender, EventArgs e)
         {
-            if (comboBox_TBL.Enabled)
+            if (!comboBox_TBL.Enabled)
                 return;
             settings.nameTblEntries[listBox_Main.SelectedIndex].TblName = comboBox_TBL.SelectedItem.ToString();
         }
 
         private void Name_Changed(object sender, EventArgs e)
         {
-            if (txt_Name.Enabled)
+            if (!txt_Name.Enabled)
                 return;
             settings.nameTblEntries[listBox_Main.SelectedIndex].ItemName = txt_Name.Text;
+
+            bs.ResetBindings(false);
         }
 
         private void OldName_Changed(object sender, EventArgs e)
         {
-            if (txt_OldName.Enabled)
+            if (!txt_OldName.Enabled)
                 return;
             settings.nameTblEntries[listBox_Main.SelectedIndex].OldName = txt_OldName.Text;
         }
 
         private void Desc_Changed(object sender, EventArgs e)
         {
-            if (txt_Description.Enabled)
+            if (!txt_Description.Enabled)
                 return;
             settings.nameTblEntries[listBox_Main.SelectedIndex].OldName = txt_Description.Text;
         }

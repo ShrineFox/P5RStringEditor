@@ -57,6 +57,7 @@ namespace P5RStringEditor
             lbl_Name = new Label();
             lbl_OldName = new Label();
             comboBox_TBL = new ComboBox();
+            exportToolStripMenuItem = new ToolStripMenuItem();
             ContextMenuStrip_RightClick.SuspendLayout();
             menuStrip_Main.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer_Main).BeginInit();
@@ -110,7 +111,7 @@ namespace P5RStringEditor
             // 
             // fileToolStripMenuItem
             // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { saveToolStripMenuItem, loadToolStripMenuItem });
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { saveToolStripMenuItem, loadToolStripMenuItem, exportToolStripMenuItem });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new Size(46, 24);
             fileToolStripMenuItem.Text = "File";
@@ -118,14 +119,14 @@ namespace P5RStringEditor
             // saveToolStripMenuItem
             // 
             saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            saveToolStripMenuItem.Size = new Size(125, 26);
+            saveToolStripMenuItem.Size = new Size(224, 26);
             saveToolStripMenuItem.Text = "Save";
             saveToolStripMenuItem.Click += Save_Click;
             // 
             // loadToolStripMenuItem
             // 
             loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            loadToolStripMenuItem.Size = new Size(125, 26);
+            loadToolStripMenuItem.Size = new Size(224, 26);
             loadToolStripMenuItem.Text = "Load";
             // 
             // toggleThemeToolStripMenuItem
@@ -305,6 +306,13 @@ namespace P5RStringEditor
             comboBox_TBL.TabIndex = 10;
             comboBox_TBL.SelectedIndexChanged += TBL_Changed;
             // 
+            // exportToolStripMenuItem
+            // 
+            exportToolStripMenuItem.Name = "exportToolStripMenuItem";
+            exportToolStripMenuItem.Size = new Size(224, 26);
+            exportToolStripMenuItem.Text = "Export";
+            exportToolStripMenuItem.Click += Export_Click;
+            // 
             // MainForm
             // 
             AutoScaleMode = AutoScaleMode.None;
@@ -371,5 +379,6 @@ namespace P5RStringEditor
         private TextBox txt_Name;
         private ComboBox comboBox_TBL;
         private ToolStripMenuItem toggleThemeToolStripMenuItem;
+        private ToolStripMenuItem exportToolStripMenuItem;
     }
 }

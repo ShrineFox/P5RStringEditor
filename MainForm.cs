@@ -79,8 +79,13 @@ namespace P5RStringEditor
                     break;
             }
 
-            settings.nameTblEntries.Add(new NameTblEntry() { ItemName = "Untitled", 
-                ProgramId = id, Id = 0, TblName = "13 - Outfits" });
+            settings.nameTblEntries.Add(new NameTblEntry()
+            {
+                ItemName = "Untitled",
+                ProgramId = id,
+                Id = 0,
+                TblName = "13 - Outfits"
+            });
         }
 
         private void SelectedEntry_Changed(object sender, EventArgs e)
@@ -165,6 +170,51 @@ namespace P5RStringEditor
             Theme.ApplyToForm(this);
             Theme.SetMenuRenderer(ContextMenuStrip_RightClick);
             Theme.RecursivelySetColors(ContextMenuStrip_RightClick);
+        }
+
+        private void Export_Click(object sender, EventArgs e)
+        {
+            string outPath = Path.GetFullPath("./Output");
+
+            foreach (var versionPath in new string[] { Path.Combine(outPath, "p5r.mod"), Path.Combine(outPath, "p5r.mod.cbt") })
+            {
+                CreateNameTBL(versionPath, versionPath.Contains("cbt"));
+                //CreateDressHelpBMD(outPath);
+            }
+
+            MessageBox.Show("Done exporting to output folder!");
+        }
+
+        private void CreateNameTBL(string outPath, bool isCBT)
+        {
+            outPath = Path.Combine(outPath, "BATTLE/TABLE/NAME.TBL");
+
+            string inPath = "./Dependencies/P5R/NAME.TBL";
+            if (isCBT)
+                inPath = "./Dependencies/P5RCBT/NAME.TBL";
+
+            using (FileSys.WaitForFile(inPath)) { }
+
+            var tblSections = NameTBLEditor.ReadNameTBL(inPath);
+
+            foreach (var entry in settings.nameTblEntries)
+            {
+                if (tblSections.Any(x => x.Name.Equals(entry.TblName)))
+                {
+                    tblSections.First(x => x.Name.Equals(entry.TblName)).Lines[entry.Id] = entry.ItemName;
+                }
+            }
+
+            Directory.CreateDirectory(Path.GetDirectoryName(outPath));
+
+            NameTBLEditor.SaveNameTBL(tblSections, outPath);
+        }
+
+        private void CreateDressHelpBMD(string outPath)
+        {
+            outPath = Path.Combine(outPath, "FEmulator/PAK/INIT/DATMSG.PAK/datDressHelp.bmd");
+            Directory.CreateDirectory(Path.GetDirectoryName(outPath));
+
         }
     }
 }

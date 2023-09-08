@@ -17,4 +17,33 @@
     <ProjectReference Include="..\ShrineFox.IO\ShrineFox.IO.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Dependencies\P5RCBT\" />
+    <Folder Include="Dependencies\P5R\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Amicitia.IO">
+      <HintPath>..\P5NameTBLEditor\P5NameTBLEditor\ref\Amicitia.IO.dll</HintPath>
+    </Reference>
+    <Reference Include="AtlusScriptLibrary">
+      <HintPath>..\P5NameTBLEditor\P5NameTBLEditor\ref\AtlusScriptLibrary.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Charsets\P5R_EFIGS.tsv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\datDressHelp.bmd">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\P5RCBT\NAME.TBL">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\P5R\NAME.TBL">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

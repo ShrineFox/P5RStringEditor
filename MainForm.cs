@@ -192,9 +192,9 @@ namespace P5RStringEditor
         {
             string outPath = Path.GetFullPath("./Output");
 
-            foreach (var versionPath in new string[] { Path.Combine(outPath, "p5r.mod"), Path.Combine(outPath, "p5r.mod.cbt") })
+            foreach (var versionPath in new string[] { /* Path.Combine(outPath, "p5r.mod"), */ Path.Combine(outPath, "p5r.mod.cbt") })
             {
-                CreateNameTBL(versionPath, versionPath.Contains("cbt"));
+                //CreateNameTBL(versionPath, versionPath.Contains("cbt"));
             }
 
             CreateNewBMD(outPath, "01 - Skills", "Skill");
@@ -239,13 +239,17 @@ namespace P5RStringEditor
 
         private void CreateNewBMD(string outPath, string tblName = "13 - Outfits", string datName = "Dress")
         {
+            string bmdName = "dat" + datName;
+            if (datName != "Myth")
+                bmdName += "Help";
+
             // Skip this if no outfit name TBL entries, or no descriptions
             if (!settings.nameTblEntries.Any(x => x.TblName == tblName)
                 || !settings.nameTblEntries.Any(x => !string.IsNullOrEmpty(x.Description)))
                 return;
 
             // Load BMD as a script
-            string inPath = Path.GetFullPath($"./Dependencies/dat{datName}Help.bmd");
+            string inPath = Path.GetFullPath($"./Dependencies/{bmdName}.bmd");
             var script = MessageScript.FromFile(inPath, FormatVersion.Version1BigEndian, AtlusEncoding.Persona5RoyalEFIGS);
             for (var i = 0; i < script.Dialogs.Count; i++)
             {
@@ -274,7 +278,7 @@ namespace P5RStringEditor
             }
 
             // Output edited script
-            outPath = Path.Combine(outPath, $"FEmulator/PAK/INIT/DATMSG.PAK/dat{datName}Help.bmd");
+            outPath = Path.Combine(outPath, $"FEmulator/PAK/INIT/DATMSG.PAK/{datName}.bmd");
             Directory.CreateDirectory(Path.GetDirectoryName(outPath));
             script.ToFile(outPath);
         }

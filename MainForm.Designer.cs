@@ -42,6 +42,7 @@ namespace P5RStringEditor
             fileToolStripMenuItem = new ToolStripMenuItem();
             saveToolStripMenuItem = new ToolStripMenuItem();
             loadToolStripMenuItem = new ToolStripMenuItem();
+            exportToolStripMenuItem = new ToolStripMenuItem();
             toggleThemeToolStripMenuItem = new ToolStripMenuItem();
             splitContainer_Main = new SplitContainer();
             listBox_Main = new ListBox();
@@ -57,7 +58,6 @@ namespace P5RStringEditor
             lbl_Name = new Label();
             lbl_OldName = new Label();
             comboBox_TBL = new ComboBox();
-            exportToolStripMenuItem = new ToolStripMenuItem();
             ContextMenuStrip_RightClick.SuspendLayout();
             menuStrip_Main.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer_Main).BeginInit();
@@ -128,6 +128,14 @@ namespace P5RStringEditor
             loadToolStripMenuItem.Name = "loadToolStripMenuItem";
             loadToolStripMenuItem.Size = new Size(224, 26);
             loadToolStripMenuItem.Text = "Load";
+            loadToolStripMenuItem.Click += Load_Click;
+            // 
+            // exportToolStripMenuItem
+            // 
+            exportToolStripMenuItem.Name = "exportToolStripMenuItem";
+            exportToolStripMenuItem.Size = new Size(224, 26);
+            exportToolStripMenuItem.Text = "Export";
+            exportToolStripMenuItem.Click += Export_Click;
             // 
             // toggleThemeToolStripMenuItem
             // 
@@ -150,7 +158,7 @@ namespace P5RStringEditor
             // 
             splitContainer_Main.Panel2.Controls.Add(panel_Editor);
             splitContainer_Main.Size = new Size(696, 470);
-            splitContainer_Main.SplitterDistance = 232;
+            splitContainer_Main.SplitterDistance = 164;
             splitContainer_Main.TabIndex = 3;
             // 
             // listBox_Main
@@ -161,7 +169,7 @@ namespace P5RStringEditor
             listBox_Main.ItemHeight = 20;
             listBox_Main.Location = new Point(0, 0);
             listBox_Main.Name = "listBox_Main";
-            listBox_Main.Size = new Size(232, 470);
+            listBox_Main.Size = new Size(164, 470);
             listBox_Main.TabIndex = 0;
             listBox_Main.SelectedIndexChanged += SelectedEntry_Changed;
             // 
@@ -173,15 +181,15 @@ namespace P5RStringEditor
             panel_Editor.Dock = DockStyle.Fill;
             panel_Editor.Location = new Point(0, 0);
             panel_Editor.Name = "panel_Editor";
-            panel_Editor.Size = new Size(460, 470);
+            panel_Editor.Size = new Size(528, 470);
             panel_Editor.TabIndex = 0;
             // 
             // tlp_Editor
             // 
             tlp_Editor.AutoScroll = true;
             tlp_Editor.ColumnCount = 2;
-            tlp_Editor.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-            tlp_Editor.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 80F));
+            tlp_Editor.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            tlp_Editor.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 75F));
             tlp_Editor.Controls.Add(txt_Description, 1, 4);
             tlp_Editor.Controls.Add(lbl_Id, 0, 0);
             tlp_Editor.Controls.Add(num_Id, 1, 0);
@@ -201,13 +209,13 @@ namespace P5RStringEditor
             tlp_Editor.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
             tlp_Editor.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
             tlp_Editor.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
-            tlp_Editor.Size = new Size(460, 464);
+            tlp_Editor.Size = new Size(528, 464);
             tlp_Editor.TabIndex = 0;
             // 
             // txt_Description
             // 
             txt_Description.Enabled = false;
-            txt_Description.Location = new Point(95, 163);
+            txt_Description.Location = new Point(135, 163);
             txt_Description.Multiline = true;
             txt_Description.Name = "txt_Description";
             txt_Description.Size = new Size(362, 213);
@@ -218,7 +226,7 @@ namespace P5RStringEditor
             // 
             lbl_Id.Anchor = AnchorStyles.Right;
             lbl_Id.AutoSize = true;
-            lbl_Id.Location = new Point(58, 10);
+            lbl_Id.Location = new Point(98, 10);
             lbl_Id.Name = "lbl_Id";
             lbl_Id.Size = new Size(31, 20);
             lbl_Id.TabIndex = 0;
@@ -228,7 +236,8 @@ namespace P5RStringEditor
             // 
             num_Id.Anchor = AnchorStyles.Left;
             num_Id.Enabled = false;
-            num_Id.Location = new Point(95, 7);
+            num_Id.Location = new Point(135, 7);
+            num_Id.Maximum = new decimal(new int[] { 999999, 0, 0, 0 });
             num_Id.Name = "num_Id";
             num_Id.Size = new Size(150, 26);
             num_Id.TabIndex = 1;
@@ -238,9 +247,9 @@ namespace P5RStringEditor
             // 
             label1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             label1.AutoSize = true;
-            label1.Location = new Point(3, 160);
+            label1.Location = new Point(29, 160);
             label1.Name = "label1";
-            label1.Size = new Size(86, 40);
+            label1.Size = new Size(100, 20);
             label1.TabIndex = 5;
             label1.Text = "Description:";
             // 
@@ -248,7 +257,7 @@ namespace P5RStringEditor
             // 
             txt_OldName.Anchor = AnchorStyles.Left;
             txt_OldName.Enabled = false;
-            txt_OldName.Location = new Point(95, 127);
+            txt_OldName.Location = new Point(135, 127);
             txt_OldName.Name = "txt_OldName";
             txt_OldName.Size = new Size(199, 26);
             txt_OldName.TabIndex = 7;
@@ -258,7 +267,7 @@ namespace P5RStringEditor
             // 
             txt_Name.Anchor = AnchorStyles.Left;
             txt_Name.Enabled = false;
-            txt_Name.Location = new Point(95, 87);
+            txt_Name.Location = new Point(135, 87);
             txt_Name.Name = "txt_Name";
             txt_Name.Size = new Size(199, 26);
             txt_Name.TabIndex = 6;
@@ -268,7 +277,7 @@ namespace P5RStringEditor
             // 
             lbl_Tbl.Anchor = AnchorStyles.Right;
             lbl_Tbl.AutoSize = true;
-            lbl_Tbl.Location = new Point(11, 50);
+            lbl_Tbl.Location = new Point(51, 50);
             lbl_Tbl.Name = "lbl_Tbl";
             lbl_Tbl.Size = new Size(78, 20);
             lbl_Tbl.TabIndex = 4;
@@ -278,7 +287,7 @@ namespace P5RStringEditor
             // 
             lbl_Name.Anchor = AnchorStyles.Right;
             lbl_Name.AutoSize = true;
-            lbl_Name.Location = new Point(31, 90);
+            lbl_Name.Location = new Point(71, 90);
             lbl_Name.Name = "lbl_Name";
             lbl_Name.Size = new Size(58, 20);
             lbl_Name.TabIndex = 2;
@@ -288,9 +297,9 @@ namespace P5RStringEditor
             // 
             lbl_OldName.Anchor = AnchorStyles.Right;
             lbl_OldName.AutoSize = true;
-            lbl_OldName.Location = new Point(31, 120);
+            lbl_OldName.Location = new Point(40, 130);
             lbl_OldName.Name = "lbl_OldName";
-            lbl_OldName.Size = new Size(58, 40);
+            lbl_OldName.Size = new Size(89, 20);
             lbl_OldName.TabIndex = 3;
             lbl_OldName.Text = "OG Name:";
             // 
@@ -300,18 +309,11 @@ namespace P5RStringEditor
             comboBox_TBL.Enabled = false;
             comboBox_TBL.FormattingEnabled = true;
             comboBox_TBL.Items.AddRange(new object[] { "00 - Arcanas", "01 - Skills", "02 - Skills Again", "03 - Enemies", "04 - Personas", "05 - Traits", "06 - Accessories", "07 - Protectors", "08 - Consumables", "09 - Key Items", "10 - Materials", "11 - Melee Weapons", "12 - Battle Actions", "13 - Outfits", "14 - Skill Cards", "15 - Party FirstNames", "16 - Party LastNames", "17 - Confidant Names", "18 - Ranged Weapons" });
-            comboBox_TBL.Location = new Point(95, 43);
+            comboBox_TBL.Location = new Point(135, 43);
             comboBox_TBL.Name = "comboBox_TBL";
             comboBox_TBL.Size = new Size(199, 28);
             comboBox_TBL.TabIndex = 10;
             comboBox_TBL.SelectedIndexChanged += TBL_Changed;
-            // 
-            // exportToolStripMenuItem
-            // 
-            exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            exportToolStripMenuItem.Size = new Size(224, 26);
-            exportToolStripMenuItem.Text = "Export";
-            exportToolStripMenuItem.Click += Export_Click;
             // 
             // MainForm
             // 

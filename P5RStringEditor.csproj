@@ -14,21 +14,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Amicitia.IO\src\Amicitia.IO\Amicitia.IO.csproj" />
+    <ProjectReference Include="..\Atlus-Script-Tools\Source\AtlusScriptCompiler\AtlusScriptCompiler.csproj" />
+    <ProjectReference Include="..\Atlus-Script-Tools\Source\AtlusScriptLibrary\AtlusScriptLibrary.csproj" />
     <ProjectReference Include="..\ShrineFox.IO\ShrineFox.IO.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Dependencies\P5RCBT\" />
     <Folder Include="Dependencies\P5R\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Amicitia.IO">
-      <HintPath>..\P5NameTBLEditor\P5NameTBLEditor\ref\Amicitia.IO.dll</HintPath>
-    </Reference>
-    <Reference Include="AtlusScriptLibrary">
-      <HintPath>..\P5NameTBLEditor\P5NameTBLEditor\ref\AtlusScriptLibrary.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
   <ItemGroup>

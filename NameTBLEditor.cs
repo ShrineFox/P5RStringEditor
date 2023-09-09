@@ -76,7 +76,7 @@ namespace P5RStringEditor
 
         public static void SaveNameTBL(List<NameTblSection> tblSections, string outPath)
         {
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            
 
             using (BinaryObjectWriter NAMETBLFile = new BinaryObjectWriter(outPath, Endianness.Big, AtlusEncoding.Persona5RoyalEFIGS))
             {

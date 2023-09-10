@@ -1,5 +1,7 @@
 ﻿using MetroSet_UI.Controls;
 using MetroSet_UI.Forms;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace P5RStringEditor
 {
@@ -272,7 +274,6 @@ namespace P5RStringEditor
             tabControl_TblSections.AnimateTime = 200;
             tabControl_TblSections.BackgroundColor = Color.White;
             tabControl_TblSections.Dock = DockStyle.Fill;
-            tabControl_TblSections.Enabled = false;
             tabControl_TblSections.IsDerivedStyle = true;
             tabControl_TblSections.ItemSize = new Size(100, 38);
             tabControl_TblSections.Location = new Point(3, 3);

@@ -6,13 +6,13 @@ using AtlusScriptLibrary.FlowScriptLanguage.Syntax;
 using AtlusScriptLibrary.MessageScriptLanguage;
 using AtlusScriptLibrary.MessageScriptLanguage.Compiler;
 using AtlusScriptLibrary.MessageScriptLanguage.Decompiler;
-using DarkUI.Controls;
 using MetroSet_UI.Child;
 using MetroSet_UI.Forms;
 using Newtonsoft.Json;
 using ShrineFox.IO;
 using System;
 using System.CodeDom.Compiler;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -20,9 +20,6 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
-using static P5RStringEditor.MainForm;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using static System.Windows.Forms.DataFormats;
 
 namespace P5RStringEditor
 {
@@ -64,7 +61,7 @@ namespace P5RStringEditor
         public MainForm()
         {
             InitializeComponent();
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            //Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             SetTabPages();
             ApplyTheme();
             SetLogging();
@@ -109,12 +106,12 @@ namespace P5RStringEditor
 
                 if (File.Exists(msgPath))
                 {
-                    string[] lines = File.ReadAllLines(msgPath, AtlusEncoding.Persona5RoyalEFIGS);
+                    string[] lines = File.ReadAllLines(msgPath);
                     for (int i = 0; i < lines.Length; i++)
                     {
                         if (lines[i].StartsWith("[msg "))
                         {
-                            int itemId = GetItemIdFromFlowscriptLine(lines[i]);
+                            int itemId = GetItemIdFromFlowscriptLine(lines[i], msgPath.Contains("Help"));
 
                             if (tblSection.TblEntries.Any(x => x.Id.Equals(itemId)))
                             {
@@ -127,7 +124,7 @@ namespace P5RStringEditor
                                     description += lines[x] + "\r\n";
                                 }
 
-                                description = description.Replace("[s]", "").Replace("[n]", "\r\n").Replace("[e]", "");
+                                description = description.Replace("[s]", "").Replace("[n]", "\r\n").Replace("[e]", "").TrimEnd();
                                 tblSection.TblEntries.First(x => x.Id.Equals(Convert.ToInt32(itemId))).Description = description;
                             }
                         }
@@ -136,8 +133,11 @@ namespace P5RStringEditor
             }
         }
 
-        private static int GetItemIdFromFlowscriptLine(string line)
+        private static int GetItemIdFromFlowscriptLine(string line, bool isHelpBmd)
         {
+            if (!isHelpBmd)
+                return Convert.ToInt32(line.Split('_')[1].Replace("]", ""));
+
             return Convert.ToInt32(Int64.Parse(line.Split('_')[1].Replace("]", ""), System.Globalization.NumberStyles.HexNumber));
         }
 
@@ -162,6 +162,16 @@ namespace P5RStringEditor
             listBox_Main.DataSource = bs;
             listBox_Main.DisplayMember = "ItemName";
             listBox_Main.ValueMember = "Id";
+            listBox_Main.FormattingEnabled = true;
+            listBox_Main.Format += ListBoxFormat;
+        }
+
+        private void ListBoxFormat(object sender, ListControlConvertEventArgs e)
+        {
+            string id = ((Entry)e.ListItem).Id.ToString();
+            string itemName = ((Entry)e.ListItem).ItemName;
+
+            e.Value = $"[{id}] {itemName}";
         }
 
         private void SelectFirstEntry()
@@ -179,6 +189,7 @@ namespace P5RStringEditor
         {
             ToggleFormOptions(false);
 
+            num_Id.Value = tblEntry.Id;
             txt_Name.Text = tblEntry.ItemName;
             txt_Description.Text = tblEntry.Description;
             txt_OldName.Text = tblEntry.OldName;
@@ -307,11 +318,11 @@ namespace P5RStringEditor
                 {
                     newMsgLines.Add(oldMsgLines[i]);
 
-                    int itemId = GetItemIdFromFlowscriptLine(oldMsgLines[i]);
+                    int itemId = GetItemIdFromFlowscriptLine(oldMsgLines[i], bmdName.Contains("Help"));
 
                     if (tblSection.TblEntries.Any(x => x.Id.Equals(itemId)))
                     {
-                        string[] descLines = tblSection.TblEntries.First(x => x.Id.Equals(itemId)).Description.Split("\n");
+                        string[] descLines = tblSection.TblEntries.First(x => x.Id.Equals(itemId)).Description.Split('\n');
                         foreach (var line in descLines)
                         {
                             if (!string.IsNullOrEmpty(line) && !line.Equals("\r"))
@@ -328,17 +339,8 @@ namespace P5RStringEditor
             File.WriteAllLines(msgPath, newMsgLines, AtlusEncoding.Persona5RoyalEFIGS);
             using (FileSys.WaitForFile(msgPath)) { }
 
-            // Compile new .msg to .bmd
-            var compiler = new MessageScriptCompiler(FormatVersion.Version1BigEndian, AtlusEncoding.Persona5RoyalEFIGS);
-            compiler.Library = LibraryLookup.GetLibrary("P5R");
-            MessageScript script = null;
-            bool success = compiler.TryCompile(File.OpenText(msgPath), out script);
-
-            // Save .bmd to output folder
-            if (!success)
-                MessageBox.Show($"Failed to compile output bmd: {bmdName}.bmd");
-            else
-                script.ToFile(outPath);
+            AtlusScriptCompiler.Program.Main(new string[] { msgPath, 
+                "-Compile", "-Library", "P5R", "-Encoding", "P5R", "-OutFormat", "V1BE", "-Out", outPath });
         }
 
         private void Import_Click(object sender, EventArgs e)

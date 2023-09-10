@@ -65,7 +65,7 @@ namespace P5RStringEditor
                     }
 
                     TblSections.Add(new NameTblSection() { 
-                        Name = $"{pad_an_int(i, 2)} - {GetTBLDirName(tblNumber, i)}", 
+                        Name = GetTBLDirName(tblNumber, i),
                         Lines = NameTBLStrings }
                     );
                 }

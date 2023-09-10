@@ -1,36 +1,59 @@
 using AtlusScriptLibrary.Common.Libraries;
 using AtlusScriptLibrary.Common.Logging;
+using AtlusScriptLibrary.Common.Text;
 using AtlusScriptLibrary.Common.Text.Encodings;
 using AtlusScriptLibrary.MessageScriptLanguage;
 using AtlusScriptLibrary.MessageScriptLanguage.Compiler;
+using AtlusScriptLibrary.MessageScriptLanguage.Decompiler;
 using DarkUI.Controls;
+using MetroSet_UI.Child;
 using MetroSet_UI.Forms;
 using Newtonsoft.Json;
 using ShrineFox.IO;
 using System;
+using System.CodeDom.Compiler;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
+using static P5RStringEditor.MainForm;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 using static System.Windows.Forms.DataFormats;
 
 namespace P5RStringEditor
 {
     public partial class MainForm : MetroSetForm
     {
-        Settings settings = new Settings();
+        List<TblSection> TblSections = new List<TblSection>();
+        public static string TblPath { get; set; } = Path.GetFullPath("./Dependencies/P5RCBT/TABLE/NAME.TBL");
+        public static string DatMsgPakPath { get; set; } = Path.GetFullPath("./Dependencies/P5RCBT/DATMSGPAK");
+        public static Dictionary<string, string> TblSectionDatNamePairs = new Dictionary<string, string>()
+            {
+                {"Skills", "Skill"},
+                {"Melee Weapons", "Weapon"},
+                {"Ranged Weapons", "Gun"},
+                {"Protectors", "Armor"},
+                {"Accessories", "Accessory"},
+                {"Consumables", "Item"},
+                {"Key Items", "EventItem"},
+                {"Materials", "Material"},
+                {"Skill Cards", "SkillCard"},
+                {"Outfits", "Dress"},
+                {"Personas", "Myth"},
+            };
         BindingSource bs = new BindingSource();
-        public class Settings
+
+        public class TblSection
         {
-            public BindingList<NameTblEntry> nameTblEntries = new BindingList<NameTblEntry>();
+            public string SectionName { get; set; } = "";
+            public List<Entry> TblEntries { get; set; } = new List<Entry>();
         }
 
-        public class NameTblEntry
+        public class Entry
         {
-            public int ProgramId { get; set; } = 0;
-            public string TblName { get; set; } = "";
             public int Id { get; set; } = 0;
             public string ItemName { get; set; } = "";
             public string OldName { get; set; } = "";
@@ -41,16 +64,111 @@ namespace P5RStringEditor
         {
             InitializeComponent();
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            SetTabPages();
             ApplyTheme();
-            SetupDataSource();
+
+            ImportTBLData();
+            ImportBMDData();
+
+            tabControl_TblSections.Enabled = true;
+            tabControl_TblSections.SelectedIndex = 0;
+
         }
 
-        private void SetupDataSource()
+        private void ImportTBLData()
         {
-            bs.DataSource = settings.nameTblEntries;
+            List<TblSection> newSections = new List<TblSection>();
+            foreach (var nameTblSection in NameTBLEditor.ReadNameTBL(TblPath))
+            {
+                var section = new TblSection() { SectionName = nameTblSection.Name };
+                for (int i = 0; i < nameTblSection.Lines.Count; i++)
+                    section.TblEntries.Add(new Entry()
+                    {
+                        Id = i,
+                        ItemName = nameTblSection.Lines[i],
+                        OldName = nameTblSection.Lines[i]
+                    });
+                newSections.Add(section);
+            }
+            TblSections = newSections;
+        }
+
+        private void ImportBMDData()
+        {
+            foreach (var tblSection in TblSections.Where(x => TblSectionDatNamePairs.Any(y => y.Key == x.SectionName)))
+            {
+                string datPath = Path.Combine(DatMsgPakPath, $"dat{TblSectionDatNamePairs.First(x => x.Key == tblSection.SectionName).Value}Help.bmd");
+                if (tblSection.SectionName.Contains("Persona"))
+                    datPath = datPath.Replace("Help.bmd", ".bmd");
+
+                if (File.Exists(datPath))
+                {
+                    // Load BMD as a script
+                    var script = MessageScript.FromFile(datPath, FormatVersion.Version1BigEndian, AtlusEncoding.Persona5RoyalEFIGS);
+                    for (var i = 0; i < script.Dialogs.Count; i++)
+                    {
+                        // Get item ID from each dialog in script
+                        var message = script.Dialogs[i];
+                        long itemId = Int64.Parse(message.Name.Split('_')[1], System.Globalization.NumberStyles.HexNumber);
+                        if (tblSection.TblEntries.Any(x => x.Id == Convert.ToInt32(itemId)))
+                        {
+                            // Get message contents
+                        }
+                    }
+                }
+            }
+        }
+
+        private void SetTabPages()
+        {
+            foreach (var pair in TblSectionDatNamePairs)
+                tabControl_TblSections.Controls.Add(new MetroSetSetTabPage() { Text = pair.Key });
+        }
+
+        private void SelectedTblSection_Changed(object sender, EventArgs e)
+        {
+            if (!tabControl_TblSections.Enabled)
+                return;
+
+            SetListBoxDataSource();
+            SelectFirstEntry();
+        }
+
+        private void SetListBoxDataSource()
+        {
+            bs.DataSource = TblSections.First(x => x.SectionName.Equals(tabControl_TblSections.SelectedTab.Text)).TblEntries;
             listBox_Main.DataSource = bs;
             listBox_Main.DisplayMember = "ItemName";
-            listBox_Main.ValueMember = "ProgramId";
+            listBox_Main.ValueMember = "Id";
+        }
+
+        private void SelectFirstEntry()
+        {
+            listBox_Main.SelectedIndex = 0;
+        }
+
+        private void SelectedEntry_Changed(object sender, EventArgs e)
+        {
+            var tblEntry = (Entry)listBox_Main.SelectedItem;
+            UpdateFormOptions(tblEntry);
+        }
+
+        private void UpdateFormOptions(Entry tblEntry)
+        {
+            ToggleFormOptions(false);
+
+            txt_Name.Text = tblEntry.ItemName;
+            txt_OldName.Text = tblEntry.OldName;
+            txt_Description.Text = tblEntry.Description;
+
+            ToggleFormOptions(true);
+        }
+
+        private void ToggleFormOptions(bool enable)
+        {
+            txt_Name.Enabled = enable;
+            txt_OldName.Enabled = enable; 
+            txt_Description.Enabled = enable;
         }
 
         private void Save_Click(object sender, EventArgs e)
@@ -66,7 +184,7 @@ namespace P5RStringEditor
                 outPath += ".json";
 
             // Remove default values from serialized objects
-            string jsonText = JsonConvert.SerializeObject(settings, Newtonsoft.Json.Formatting.Indented);
+            string jsonText = JsonConvert.SerializeObject(TblSections, Newtonsoft.Json.Formatting.Indented);
 
             // Save to .json file
             File.WriteAllText(outPath, jsonText);
@@ -79,76 +197,17 @@ namespace P5RStringEditor
             if (filePaths == null || filePaths.Count == 0 || string.IsNullOrEmpty(filePaths.First()))
                 return;
 
-            settings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(filePaths.First()));
-            SetupDataSource();
-        }
+            TblSections = JsonConvert.DeserializeObject<List<TblSection>>(File.ReadAllText(filePaths.First()));
 
-        private void Add_Click(object sender, EventArgs e)
-        {
-            // Create unique ID for binding to listbox
-            int id = 0;
-            while (true)
-            {
-                if (settings.nameTblEntries.Any(x => x.ProgramId == id))
-                    id++;
-                else
-                    break;
-            }
-
-            settings.nameTblEntries.Add(new NameTblEntry()
-            {
-                ItemName = "Untitled",
-                ProgramId = id,
-                Id = 0,
-                TblName = "13 - Outfits"
-            });
-        }
-
-        private void SelectedEntry_Changed(object sender, EventArgs e)
-        {
-            var tblEntry = (NameTblEntry)listBox_Main.SelectedItem;
-            UpdateFormOptions(tblEntry);
-        }
-
-        private void UpdateFormOptions(NameTblEntry tblEntry)
-        {
-            ToggleFormOptions(false);
-
-            num_Id.Value = tblEntry.Id;
-            txt_Name.Text = tblEntry.ItemName;
-            txt_OldName.Text = tblEntry.OldName;
-            txt_Description.Text = tblEntry.Description;
-            comboBox_TBL.SelectedIndex = comboBox_TBL.Items.IndexOf(tblEntry.TblName);
-
-            ToggleFormOptions(true);
-        }
-
-        private void ToggleFormOptions(bool enable)
-        {
-            num_Id.Enabled = enable; txt_Name.Enabled = enable;
-            txt_OldName.Enabled = enable; txt_Description.Enabled = enable;
-            comboBox_TBL.Enabled = enable;
-        }
-
-        private void Id_Changed(object sender, EventArgs e)
-        {
-            if (!num_Id.Enabled)
-                return;
-            settings.nameTblEntries[listBox_Main.SelectedIndex].Id = Convert.ToInt32(num_Id.Value);
-        }
-
-        private void TBL_Changed(object sender, EventArgs e)
-        {
-            if (!comboBox_TBL.Enabled)
-                return;
-            settings.nameTblEntries[listBox_Main.SelectedIndex].TblName = comboBox_TBL.SelectedItem.ToString();
+            SetListBoxDataSource();
+            SelectFirstEntry();
         }
 
         private void Name_Changed(object sender, EventArgs e)
         {
             if (!txt_Name.Enabled)
                 return;
-            settings.nameTblEntries[listBox_Main.SelectedIndex].ItemName = txt_Name.Text;
+            TblSections.First(x => x.SectionName.Equals(tabControl_TblSections.SelectedTab.Text)).TblEntries[listBox_Main.SelectedIndex].ItemName = txt_Name.Text;
 
             bs.ResetBindings(false);
         }
@@ -157,14 +216,102 @@ namespace P5RStringEditor
         {
             if (!txt_OldName.Enabled)
                 return;
-            settings.nameTblEntries[listBox_Main.SelectedIndex].OldName = txt_OldName.Text;
+            TblSections.First(x => x.SectionName.Equals(tabControl_TblSections.SelectedTab.Text)).TblEntries[listBox_Main.SelectedIndex].OldName = txt_OldName.Text;
         }
 
         private void Desc_Changed(object sender, EventArgs e)
         {
             if (!txt_Description.Enabled)
                 return;
-            settings.nameTblEntries[listBox_Main.SelectedIndex].Description = txt_Description.Text;
+            TblSections.First(x => x.SectionName.Equals(tabControl_TblSections.SelectedTab.Text)).TblEntries[listBox_Main.SelectedIndex].Description = txt_Description.Text;
+        }
+
+        private void Export_Click(object sender, EventArgs e)
+        {
+            CreateNameTBL();
+
+            foreach (var pair in TblSectionDatNamePairs)
+                CreateNewBMD(pair);
+
+            MessageBox.Show("Done exporting to output folder!");
+        }
+
+        private void CreateNameTBL()
+        {
+            var tblSections = NameTBLEditor.ReadNameTBL(TblPath);
+
+            foreach (var section in TblSections)
+                foreach (var entry in section.TblEntries)
+                {
+                    tblSections.First(x => x.Name.Equals(section.SectionName)).Lines[entry.Id] = entry.ItemName;
+                }
+
+            string outPath = Path.GetFullPath(".//Output//p5r.tblmod//P5REssentials//CPK//TBL.CPK/BATTLE/TABLE/NAME.TBL");
+            Directory.CreateDirectory(Path.GetDirectoryName(outPath));
+            NameTBLEditor.SaveNameTBL(tblSections, outPath);
+        }
+
+        private void CreateNewBMD(KeyValuePair<string, string> tblPair)
+        {
+            string tblName = tblPair.Key;
+            string datName = tblPair.Value;
+
+            // Get input/output paths
+            string bmdName = "dat" + datName;
+            if (datName != "Myth")
+                bmdName += "Help";
+
+            string inPath = Path.GetFullPath($".\\Dependencies\\{bmdName}.bmd");
+            string outDir = Path.GetFullPath(".\\Output\\p5r.tblmod\\FEmulator\\PAK\\INIT\\DATMSG.PAK");
+            Directory.CreateDirectory("FEmulator\\PAK\\INIT\\DATMSG.PAK");
+            string outPath = Path.Combine(outDir, $"{bmdName}.bmd");
+
+            // Load BMD as a script
+            var script = MessageScript.FromFile(inPath, FormatVersion.Version1BigEndian, AtlusEncoding.Persona5RoyalEFIGS);
+            for (var i = 0; i < script.Dialogs.Count; i++)
+            {
+                // Get item ID from each dialog in script
+                var message = script.Dialogs[i];
+                long itemId = Int64.Parse(message.Name.Split('_')[1], System.Globalization.NumberStyles.HexNumber);
+
+                {
+                    // Replace description text
+                    TokenTextBuilder lineBuilder = new TokenTextBuilder();
+                    lineBuilder.AddFunction(0, 5, new ushort[] { 65278 });
+                    lineBuilder.AddFunction(2, 1);
+
+                    string desc = TblSections.First(x => x.SectionName == tblName)
+                        .TblEntries.First(x => x.Id == Convert.ToInt32(itemId)).Description;
+                    string[] descLines = desc.Split('\n');
+
+                    foreach (var line in descLines)
+                    {
+                        lineBuilder.AddToken(new StringToken(line.Replace("\r", "")));
+                        lineBuilder.AddNewLine();
+                    }
+                    message.Lines[0] = lineBuilder.Build();
+                }
+            }
+
+            // Output edited script
+            script.ToFile(outPath);
+        }
+
+        private void Import_Click(object sender, EventArgs e)
+        {
+            var tblPath = WinFormsDialogs.SelectFile("Choose TBL File", false, new string[] { "TBL (*.tbl)" });
+            if (tblPath.Count > 0 && File.Exists(tblPath.First()))
+                TblPath = tblPath.First();
+
+            var bmdPath = WinFormsDialogs.SelectFolder("Choose DATMSG.PAK Folder");
+            if (Directory.Exists(bmdPath))
+                DatMsgPakPath = bmdPath;
+
+            if (!WinFormsDialogs.ShowMessageBox("Confirm Import",
+                "Are you sure you want to import? Current form data will be lost.", MessageBoxButtons.YesNo))
+                return;
+
+            //LoadTBLEntries();
         }
 
         private void ToggleTheme_Click(object sender, EventArgs e)
@@ -186,101 +333,6 @@ namespace P5RStringEditor
             Theme.ApplyToForm(this);
             Theme.SetMenuRenderer(ContextMenuStrip_RightClick);
             Theme.RecursivelySetColors(ContextMenuStrip_RightClick);
-        }
-
-        private void Export_Click(object sender, EventArgs e)
-        {
-            string outPath = Path.GetFullPath("./Output");
-
-            foreach (var versionPath in new string[] { /* Path.Combine(outPath, "p5r.mod"), */ Path.Combine(outPath, "p5r.mod.cbt") })
-            {
-                //CreateNameTBL(versionPath, versionPath.Contains("cbt"));
-            }
-
-            CreateNewBMD(outPath, "01 - Skills", "Skill");
-            CreateNewBMD(outPath, "11 - Melee Weapons", "Weapon");
-            CreateNewBMD(outPath, "18 - Ranged Weapons", "Gun");
-            CreateNewBMD(outPath, "07 - Protectors", "Armor");
-            CreateNewBMD(outPath, "06 - Accessories", "Accessory");
-            CreateNewBMD(outPath, "08 - Consumables", "Item");
-            CreateNewBMD(outPath, "09 - Key Items", "EventItem");
-            CreateNewBMD(outPath, "10 - Materials", "Material");
-            CreateNewBMD(outPath, "14 - Skill Cards", "SkillCard");
-            CreateNewBMD(outPath); // Dress
-            CreateNewBMD(outPath, "04 - Personas", "Myth");
-
-            MessageBox.Show("Done exporting to output folder!");
-        }
-
-        private void CreateNameTBL(string outPath, bool isCBT)
-        {
-            outPath = Path.Combine(outPath, "BATTLE/TABLE/NAME.TBL");
-
-            string inPath = "./Dependencies/P5R/NAME.TBL";
-            if (isCBT)
-                inPath = "./Dependencies/P5RCBT/NAME.TBL";
-
-            using (FileSys.WaitForFile(inPath)) { }
-
-            var tblSections = NameTBLEditor.ReadNameTBL(inPath);
-
-            foreach (var entry in settings.nameTblEntries)
-            {
-                if (tblSections.Any(x => x.Name.Equals(entry.TblName)))
-                {
-                    tblSections.First(x => x.Name.Equals(entry.TblName)).Lines[entry.Id] = entry.ItemName;
-                }
-            }
-
-            Directory.CreateDirectory(Path.GetDirectoryName(outPath));
-
-            NameTBLEditor.SaveNameTBL(tblSections, outPath);
-        }
-
-        private void CreateNewBMD(string outPath, string tblName = "13 - Outfits", string datName = "Dress")
-        {
-            string bmdName = "dat" + datName;
-            if (datName != "Myth")
-                bmdName += "Help";
-
-            // Skip this if no outfit name TBL entries, or no descriptions
-            if (!settings.nameTblEntries.Any(x => x.TblName == tblName)
-                || !settings.nameTblEntries.Any(x => !string.IsNullOrEmpty(x.Description)))
-                return;
-
-            // Load BMD as a script
-            string inPath = Path.GetFullPath($"./Dependencies/{bmdName}.bmd");
-            var script = MessageScript.FromFile(inPath, FormatVersion.Version1BigEndian, AtlusEncoding.Persona5RoyalEFIGS);
-            for (var i = 0; i < script.Dialogs.Count; i++)
-            {
-                // Get item ID from each dialog in script
-                var message = script.Dialogs[i];
-                long itemId = Int64.Parse(message.Name.Split('_')[1], System.Globalization.NumberStyles.HexNumber);
-                if (settings.nameTblEntries.Any(x => x.TblName == tblName 
-                    && x.Id == Convert.ToInt32(itemId)))
-                {
-                    // If there's a message with a matching ID, replace with description text
-                    TokenTextBuilder lineBuilder = new TokenTextBuilder();
-                    lineBuilder.AddFunction(0, 5, new ushort[] { 65278 });
-                    lineBuilder.AddFunction(2, 1);
-
-                    string desc = settings.nameTblEntries.First(x => x.TblName == tblName 
-                        && x.Id == Convert.ToInt32(itemId)).Description;
-                    string[] descLines = desc.Split('\n');
-
-                    foreach (var line in descLines)
-                    {
-                        lineBuilder.AddToken(new StringToken(line.Replace("\r", "")));
-                        lineBuilder.AddNewLine();
-                    }
-                    message.Lines[0] = lineBuilder.Build();
-                }
-            }
-
-            // Output edited script
-            outPath = Path.Combine(outPath, $"FEmulator/PAK/INIT/DATMSG.PAK/{datName}.bmd");
-            Directory.CreateDirectory(Path.GetDirectoryName(outPath));
-            script.ToFile(outPath);
         }
     }
 }

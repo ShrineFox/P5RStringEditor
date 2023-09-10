@@ -1,4 +1,4 @@
-using AtlusScriptLibrary.Common.Libraries;
+﻿using AtlusScriptLibrary.Common.Libraries;
 using AtlusScriptLibrary.Common.Logging;
 using AtlusScriptLibrary.Common.Text;
 using AtlusScriptLibrary.Common.Text.Encodings;
@@ -67,6 +67,7 @@ namespace P5RStringEditor
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             SetTabPages();
             ApplyTheme();
+            SetLogging();
 
             ImportTBLData();
             ImportMSGData();
@@ -108,7 +109,7 @@ namespace P5RStringEditor
 
                 if (File.Exists(msgPath))
                 {
-                    string[] lines = File.ReadAllLines(msgPath);
+                    string[] lines = File.ReadAllLines(msgPath, AtlusEncoding.Persona5RoyalEFIGS);
                     for (int i = 0; i < lines.Length; i++)
                     {
                         if (lines[i].StartsWith("[msg "))
@@ -241,7 +242,7 @@ namespace P5RStringEditor
 
         private void Export_Click(object sender, EventArgs e)
         {
-            CreateNameTBL();
+            //CreateNameTBL();
 
             foreach (var pair in TblSectionDatNamePairs)
                 CreateNewBMD(pair);
@@ -251,19 +252,28 @@ namespace P5RStringEditor
 
         private void CreateNameTBL()
         {
-            var tblSections = new List<NameTblSection>();
+            var tblSections = NameTBLEditor.ReadNameTBL(Path.GetFullPath("./Dependencies/P5RCBT/TABLE/NAME.TBL"));
 
-            foreach (var section in TblSections)
+            foreach (var section in tblSections)
             {
-                NameTblSection tblSection = new NameTblSection();
-                tblSection.Name = section.SectionName;
-                foreach (var entry in section.TblEntries)
-                    tblSection.Lines.Add(entry.ItemName);
+                if (TblSections.Any(x => x.SectionName == section.Name))
+                {
+                    var matchingSection = TblSections.First(x => x.SectionName == section.Name);
+                    for (int i = 0; i < section.Lines.Count; i++)
+                        section.Lines[i] = matchingSection.TblEntries[i].ItemName;
+                }
             }
 
             string outPath = Path.GetFullPath(".//Output//p5r.tblmod//P5REssentials//CPK//TBL.CPK/BATTLE/TABLE/NAME.TBL");
             Directory.CreateDirectory(Path.GetDirectoryName(outPath));
             NameTBLEditor.SaveNameTBL(tblSections, outPath);
+        }
+
+        private void SetLogging()
+        {
+            Output.Logging = true;
+            Output.LogPath = "Log.txt";
+            Output.LogToFile = true;
         }
 
         private void CreateNewBMD(KeyValuePair<string, string> tblPair)
@@ -279,6 +289,7 @@ namespace P5RStringEditor
             string inPath = Path.GetFullPath($".\\Dependencies\\P5RCBT\\DATMSGPAK\\{bmdName}.msg");
             string outDir = Path.GetFullPath(".\\Output\\p5r.tblmod\\FEmulator\\PAK\\INIT\\DATMSG.PAK");
             Directory.CreateDirectory(outDir + "\\h");
+            Directory.Delete(outDir + "\\h"); // hack to create folder with extension in name
             string outPath = Path.Combine(outDir, $"{bmdName}.bmd");
 
             if (!File.Exists(inPath))
@@ -303,7 +314,8 @@ namespace P5RStringEditor
                         string[] descLines = tblSection.TblEntries.First(x => x.Id.Equals(itemId)).Description.Split("\n");
                         foreach (var line in descLines)
                         {
-                            newMsgLines.Add(line);
+                            if (!string.IsNullOrEmpty(line) && !line.Equals("\r"))
+                                newMsgLines.Add(line.Replace("\r","[n]"));
                         }
                     }
 
@@ -313,7 +325,7 @@ namespace P5RStringEditor
 
             // Save new .msg to output folder
             string msgPath = outPath.Replace(".bmd", ".msg");
-            File.WriteAllLines(msgPath, newMsgLines);
+            File.WriteAllLines(msgPath, newMsgLines, AtlusEncoding.Persona5RoyalEFIGS);
             using (FileSys.WaitForFile(msgPath)) { }
 
             // Compile new .msg to .bmd

@@ -63,6 +63,9 @@
     <None Update="Dependencies\P5RCBT\DATMSGPAK\datWeaponHelp.msg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Dependencies\P5RCBT\TABLE\NAME.TBL">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Dependencies\P5RCBT\TABLE\NAME\Accessories.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

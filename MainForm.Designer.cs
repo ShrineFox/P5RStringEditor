@@ -31,12 +31,7 @@ namespace P5RStringEditor
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            ContextMenuStrip_RightClick = new ContextMenuStrip(components);
-            renameToolStripMenuItem = new ToolStripMenuItem();
-            deleteToolStripMenuItem = new ToolStripMenuItem();
-            addToolStripMenuItem = new ToolStripMenuItem();
             columnHeader = new ColumnHeader();
             menuStrip_Main = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
@@ -59,7 +54,6 @@ namespace P5RStringEditor
             txt_OldName = new TextBox();
             tabControl_TblSections = new MetroSetTabControl();
             tlp_Main = new TableLayoutPanel();
-            ContextMenuStrip_RightClick.SuspendLayout();
             menuStrip_Main.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer_Main).BeginInit();
             splitContainer_Main.Panel1.SuspendLayout();
@@ -70,31 +64,6 @@ namespace P5RStringEditor
             ((System.ComponentModel.ISupportInitialize)num_Id).BeginInit();
             tlp_Main.SuspendLayout();
             SuspendLayout();
-            // 
-            // ContextMenuStrip_RightClick
-            // 
-            ContextMenuStrip_RightClick.ImageScalingSize = new Size(20, 20);
-            ContextMenuStrip_RightClick.Items.AddRange(new ToolStripItem[] { renameToolStripMenuItem, deleteToolStripMenuItem, addToolStripMenuItem });
-            ContextMenuStrip_RightClick.Name = "ContextMenuStrip_RightClick";
-            ContextMenuStrip_RightClick.Size = new Size(133, 76);
-            // 
-            // renameToolStripMenuItem
-            // 
-            renameToolStripMenuItem.Name = "renameToolStripMenuItem";
-            renameToolStripMenuItem.Size = new Size(132, 24);
-            renameToolStripMenuItem.Text = "Rename";
-            // 
-            // deleteToolStripMenuItem
-            // 
-            deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            deleteToolStripMenuItem.Size = new Size(132, 24);
-            deleteToolStripMenuItem.Text = "Delete";
-            // 
-            // addToolStripMenuItem
-            // 
-            addToolStripMenuItem.Name = "addToolStripMenuItem";
-            addToolStripMenuItem.Size = new Size(132, 24);
-            addToolStripMenuItem.Text = "Add";
             // 
             // columnHeader
             // 
@@ -172,7 +141,6 @@ namespace P5RStringEditor
             // listBox_Main
             // 
             listBox_Main.BorderStyle = BorderStyle.FixedSingle;
-            listBox_Main.ContextMenuStrip = ContextMenuStrip_RightClick;
             listBox_Main.Dock = DockStyle.Fill;
             listBox_Main.ItemHeight = 20;
             listBox_Main.Location = new Point(0, 0);
@@ -364,7 +332,6 @@ namespace P5RStringEditor
             Text = "P5RStringEditor";
             TextColor = Color.White;
             ThemeName = "MetroDark";
-            ContextMenuStrip_RightClick.ResumeLayout(false);
             menuStrip_Main.ResumeLayout(false);
             menuStrip_Main.PerformLayout();
             splitContainer_Main.Panel1.ResumeLayout(false);
@@ -386,14 +353,10 @@ namespace P5RStringEditor
         private ToolStripMenuItem fileToolStripMenuItem;
         private ToolStripMenuItem saveToolStripMenuItem;
         private ToolStripMenuItem loadToolStripMenuItem;
-        private ContextMenuStrip ContextMenuStrip_RightClick;
-        private ToolStripMenuItem renameToolStripMenuItem;
-        private ToolStripMenuItem deleteToolStripMenuItem;
         private ColumnHeader columnHeader;
         private SplitContainer splitContainer_Main;
         private Panel panel_Editor;
         private TableLayoutPanel tlp_Editor;
-        private ToolStripMenuItem addToolStripMenuItem;
         private ListBox listBox_Main;
         private Label lbl_Name;
         private Label lbl_Id;

@@ -363,8 +363,8 @@ namespace P5RStringEditor
         private void ApplyTheme()
         {
             Theme.ApplyToForm(this);
-            Theme.SetMenuRenderer(ContextMenuStrip_RightClick);
-            Theme.RecursivelySetColors(ContextMenuStrip_RightClick);
+            //Theme.SetMenuRenderer(ContextMenuStrip_RightClick);
+            //Theme.RecursivelySetColors(ContextMenuStrip_RightClick);
         }
     }
 }

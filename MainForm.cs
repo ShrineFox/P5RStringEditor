@@ -2,6 +2,7 @@ using AtlusScriptLibrary.Common.Libraries;
 using AtlusScriptLibrary.Common.Logging;
 using AtlusScriptLibrary.Common.Text;
 using AtlusScriptLibrary.Common.Text.Encodings;
+using AtlusScriptLibrary.FlowScriptLanguage.Syntax;
 using AtlusScriptLibrary.MessageScriptLanguage;
 using AtlusScriptLibrary.MessageScriptLanguage.Compiler;
 using AtlusScriptLibrary.MessageScriptLanguage.Decompiler;
@@ -28,7 +29,7 @@ namespace P5RStringEditor
     public partial class MainForm : MetroSetForm
     {
         List<TblSection> TblSections = new List<TblSection>();
-        public static string TblPath { get; set; } = Path.GetFullPath("./Dependencies/P5RCBT/TABLE/NAME.TBL");
+        public static string TblPath { get; set; } = Path.GetFullPath("./Dependencies/P5RCBT/TABLE/NAME");
         public static string DatMsgPakPath { get; set; } = Path.GetFullPath("./Dependencies/P5RCBT/DATMSGPAK");
         public static Dictionary<string, string> TblSectionDatNamePairs = new Dictionary<string, string>()
             {
@@ -68,7 +69,7 @@ namespace P5RStringEditor
             ApplyTheme();
 
             ImportTBLData();
-            ImportBMDData();
+            ImportMSGData();
 
             tabControl_TblSections.Enabled = true;
             tabControl_TblSections.SelectedIndex = 0;
@@ -78,45 +79,65 @@ namespace P5RStringEditor
         private void ImportTBLData()
         {
             List<TblSection> newSections = new List<TblSection>();
-            foreach (var nameTblSection in NameTBLEditor.ReadNameTBL(TblPath))
+            foreach (var txt in Directory.GetFiles(TblPath, "*.txt", SearchOption.TopDirectoryOnly))
             {
-                var section = new TblSection() { SectionName = nameTblSection.Name };
-                for (int i = 0; i < nameTblSection.Lines.Count; i++)
+                string txtName = Path.GetFileNameWithoutExtension(txt);
+                var section = new TblSection() { SectionName = txtName };
+
+                string[] txtLines = File.ReadAllLines(txt);
+
+                for (int i = 0; i < txtLines.Length; i++)
                     section.TblEntries.Add(new Entry()
                     {
                         Id = i,
-                        ItemName = nameTblSection.Lines[i],
-                        OldName = nameTblSection.Lines[i]
+                        ItemName = txtLines[i],
+                        OldName = txtLines[i]
                     });
                 newSections.Add(section);
             }
             TblSections = newSections;
         }
 
-        private void ImportBMDData()
+        private void ImportMSGData()
         {
             foreach (var tblSection in TblSections.Where(x => TblSectionDatNamePairs.Any(y => y.Key == x.SectionName)))
             {
-                string datPath = Path.Combine(DatMsgPakPath, $"dat{TblSectionDatNamePairs.First(x => x.Key == tblSection.SectionName).Value}Help.bmd");
+                string msgPath = Path.Combine(DatMsgPakPath, $"dat{TblSectionDatNamePairs.First(x => x.Key == tblSection.SectionName).Value}Help.msg");
                 if (tblSection.SectionName.Contains("Persona"))
-                    datPath = datPath.Replace("Help.bmd", ".bmd");
+                    msgPath = msgPath.Replace("Help.msg", ".msg");
 
-                if (File.Exists(datPath))
+                if (File.Exists(msgPath))
                 {
-                    // Load BMD as a script
-                    var script = MessageScript.FromFile(datPath, FormatVersion.Version1BigEndian, AtlusEncoding.Persona5RoyalEFIGS);
-                    for (var i = 0; i < script.Dialogs.Count; i++)
+                    string[] lines = File.ReadAllLines(msgPath);
+                    for (int i = 0; i < lines.Length; i++)
                     {
-                        // Get item ID from each dialog in script
-                        var message = script.Dialogs[i];
-                        long itemId = Int64.Parse(message.Name.Split('_')[1], System.Globalization.NumberStyles.HexNumber);
-                        if (tblSection.TblEntries.Any(x => x.Id == Convert.ToInt32(itemId)))
+                        if (lines[i].StartsWith("[msg "))
                         {
-                            // Get message contents
+                            int itemId = GetItemIdFromFlowscriptLine(lines[i]);
+
+                            if (tblSection.TblEntries.Any(x => x.Id.Equals(itemId)))
+                            {
+                                string description = "";
+                                for (int x = i + 1; x < lines.Length; x++)
+                                {
+                                    if (lines[x].Contains("[msg "))
+                                        break;
+
+                                    description += lines[x] + "\r\n";
+                                }
+
+                                description = description.Replace("[s]", "").Replace("[n]", "\n").Replace("[e]", "");
+                                tblSection.TblEntries.First(x => x.Id.Equals(Convert.ToInt32(itemId))).Description = description;
+                            }
                         }
                     }
                 }
             }
+        }
+
+        private static int GetItemIdFromFlowscriptLine(string line)
+        {
+            return Convert.ToInt32(Int64.Parse(line.Split('_')[1].Replace("]", ""), System.Globalization.NumberStyles.HexNumber));
         }
 
         private void SetTabPages()
@@ -158,7 +179,6 @@ namespace P5RStringEditor
             ToggleFormOptions(false);
 
             txt_Name.Text = tblEntry.ItemName;
-            txt_OldName.Text = tblEntry.OldName;
             txt_Description.Text = tblEntry.Description;
 
             ToggleFormOptions(true);
@@ -167,7 +187,6 @@ namespace P5RStringEditor
         private void ToggleFormOptions(bool enable)
         {
             txt_Name.Enabled = enable;
-            txt_OldName.Enabled = enable; 
             txt_Description.Enabled = enable;
         }
 
@@ -212,13 +231,6 @@ namespace P5RStringEditor
             bs.ResetBindings(false);
         }
 
-        private void OldName_Changed(object sender, EventArgs e)
-        {
-            if (!txt_OldName.Enabled)
-                return;
-            TblSections.First(x => x.SectionName.Equals(tabControl_TblSections.SelectedTab.Text)).TblEntries[listBox_Main.SelectedIndex].OldName = txt_OldName.Text;
-        }
-
         private void Desc_Changed(object sender, EventArgs e)
         {
             if (!txt_Description.Enabled)
@@ -238,13 +250,15 @@ namespace P5RStringEditor
 
         private void CreateNameTBL()
         {
-            var tblSections = NameTBLEditor.ReadNameTBL(TblPath);
-
+            var tblSections = new List<NameTblSection>();
+            
             foreach (var section in TblSections)
+            {
+                NameTblSection tblSection = new NameTblSection();
+                tblSection.Name = section.SectionName;
                 foreach (var entry in section.TblEntries)
-                {
-                    tblSections.First(x => x.Name.Equals(section.SectionName)).Lines[entry.Id] = entry.ItemName;
-                }
+                    tblSection.Lines.Add(entry.ItemName);
+            }
 
             string outPath = Path.GetFullPath(".//Output//p5r.tblmod//P5REssentials//CPK//TBL.CPK/BATTLE/TABLE/NAME.TBL");
             Directory.CreateDirectory(Path.GetDirectoryName(outPath));
@@ -261,40 +275,57 @@ namespace P5RStringEditor
             if (datName != "Myth")
                 bmdName += "Help";
 
-            string inPath = Path.GetFullPath($".\\Dependencies\\{bmdName}.bmd");
+            string inPath = Path.GetFullPath($".\\Dependencies\\P5RCBT\\DATMSGPAK\\{bmdName}.msg");
             string outDir = Path.GetFullPath(".\\Output\\p5r.tblmod\\FEmulator\\PAK\\INIT\\DATMSG.PAK");
-            Directory.CreateDirectory("FEmulator\\PAK\\INIT\\DATMSG.PAK");
+            Directory.CreateDirectory(outDir + "\\h");
             string outPath = Path.Combine(outDir, $"{bmdName}.bmd");
 
-            // Load BMD as a script
-            var script = MessageScript.FromFile(inPath, FormatVersion.Version1BigEndian, AtlusEncoding.Persona5RoyalEFIGS);
-            for (var i = 0; i < script.Dialogs.Count; i++)
+            if (!File.Exists(inPath))
+                return;
+
+            string[] oldMsgLines = File.ReadAllLines(inPath);
+            List<string> newMsgLines = new List<string>();
+
+            TblSection tblSection = TblSections.First(x => x.SectionName.Equals(tblName));
+
+            // Replace lines in msg with form data's description text
+            for (int i = 0; i < oldMsgLines.Length; i++)
             {
-                // Get item ID from each dialog in script
-                var message = script.Dialogs[i];
-                long itemId = Int64.Parse(message.Name.Split('_')[1], System.Globalization.NumberStyles.HexNumber);
-
+                if (oldMsgLines[i].StartsWith("[msg "))
                 {
-                    // Replace description text
-                    TokenTextBuilder lineBuilder = new TokenTextBuilder();
-                    lineBuilder.AddFunction(0, 5, new ushort[] { 65278 });
-                    lineBuilder.AddFunction(2, 1);
+                    newMsgLines.Add(oldMsgLines[i]);
 
-                    string desc = TblSections.First(x => x.SectionName == tblName)
-                        .TblEntries.First(x => x.Id == Convert.ToInt32(itemId)).Description;
-                    string[] descLines = desc.Split('\n');
+                    int itemId = GetItemIdFromFlowscriptLine(oldMsgLines[i]);
 
-                    foreach (var line in descLines)
+                    if (tblSection.TblEntries.Any(x => x.Id.Equals(itemId)))
                     {
-                        lineBuilder.AddToken(new StringToken(line.Replace("\r", "")));
-                        lineBuilder.AddNewLine();
+                        string[] descLines = tblSection.TblEntries.First(x => x.Id.Equals(itemId)).Description.Split("\n");
+                        foreach (var line in descLines)
+                        {
+                            newMsgLines.Add(line);
+                        }
                     }
-                    message.Lines[0] = lineBuilder.Build();
+
+                    newMsgLines.Add("[e]");
                 }
             }
 
-            // Output edited script
-            script.ToFile(outPath);
+            // Save new .msg to output folder
+            string msgPath = outPath.Replace(".bmd", ".msg");
+            File.WriteAllLines(msgPath, newMsgLines);
+            using (FileSys.WaitForFile(msgPath)) { }
+
+            // Compile new .msg to .bmd
+            var compiler = new MessageScriptCompiler(FormatVersion.Version1BigEndian, AtlusEncoding.Persona5RoyalEFIGS);
+            compiler.Library = LibraryLookup.GetLibrary("P5R");
+            MessageScript script = null;
+            bool success = compiler.TryCompile(File.OpenText(msgPath), out script);
+
+            // Save .bmd to output folder
+            if (!success)
+                MessageBox.Show($"Failed to compile output bmd: {bmdName}.bmd");
+            else
+                script.ToFile(outPath);
         }
 
         private void Import_Click(object sender, EventArgs e)

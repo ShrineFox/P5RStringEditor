@@ -30,42 +30,101 @@
     <None Update="Charsets\P5R_EFIGS.tsv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Dependencies\P5RCBT\DATMSGPAK\datAccessoryHelp.bmd">
+    <None Update="Dependencies\P5RCBT\DATMSGPAK\datAccessoryHelp.msg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Dependencies\P5RCBT\DATMSGPAK\datArmorHelp.bmd">
+    <None Update="Dependencies\P5RCBT\DATMSGPAK\datArmorHelp.msg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Dependencies\P5RCBT\DATMSGPAK\datDressHelp.bmd">
+    <None Update="Dependencies\P5RCBT\DATMSGPAK\datDressHelp.msg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Dependencies\P5RCBT\DATMSGPAK\datEventItemHelp.bmd">
+    <None Update="Dependencies\P5RCBT\DATMSGPAK\datEventItemHelp.msg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Dependencies\P5RCBT\DATMSGPAK\datGunHelp.bmd">
+    <None Update="Dependencies\P5RCBT\DATMSGPAK\datGunHelp.msg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Dependencies\P5RCBT\DATMSGPAK\datItemHelp.bmd">
+    <None Update="Dependencies\P5RCBT\DATMSGPAK\datItemHelp.msg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Dependencies\P5RCBT\DATMSGPAK\datMaterialHelp.bmd">
+    <None Update="Dependencies\P5RCBT\DATMSGPAK\datMaterialHelp.msg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Dependencies\P5RCBT\DATMSGPAK\datMyth.bmd">
+    <None Update="Dependencies\P5RCBT\DATMSGPAK\datMyth.msg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Dependencies\P5RCBT\DATMSGPAK\datSkillCardHelp.bmd">
+    <None Update="Dependencies\P5RCBT\DATMSGPAK\datSkillCardHelp.msg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Dependencies\P5RCBT\DATMSGPAK\datSkillHelp.bmd">
+    <None Update="Dependencies\P5RCBT\DATMSGPAK\datSkillHelp.msg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Dependencies\P5RCBT\DATMSGPAK\datWeaponHelp.bmd">
+    <None Update="Dependencies\P5RCBT\DATMSGPAK\datWeaponHelp.msg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Dependencies\P5RCBT\TABLE\NAME.TBL">
+    <None Update="Dependencies\P5RCBT\TABLE\NAME\Accessories.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Dependencies\P5RCBT\TABLE\NAME\Arcanas.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\P5RCBT\TABLE\NAME\Battle Actions.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\P5RCBT\TABLE\NAME\Confidant Names.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\P5RCBT\TABLE\NAME\Consumables.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\P5RCBT\TABLE\NAME\Enemies.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\P5RCBT\TABLE\NAME\Key Items.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\P5RCBT\TABLE\NAME\Materials.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\P5RCBT\TABLE\NAME\Melee Weapons.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\P5RCBT\TABLE\NAME\Outfits.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\P5RCBT\TABLE\NAME\Party FirstNames.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\P5RCBT\TABLE\NAME\Party LastNames.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\P5RCBT\TABLE\NAME\Personas.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\P5RCBT\TABLE\NAME\Protectors.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\P5RCBT\TABLE\NAME\Ranged Weapons.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\P5RCBT\TABLE\NAME\Skill Cards.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\P5RCBT\TABLE\NAME\Skills Again.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\P5RCBT\TABLE\NAME\Skills.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\P5RCBT\TABLE\NAME\Traits.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Dependencies\P5RCBT\DATMSGPAK\" />
+    <Folder Include="Dependencies\P5RCBT\TABLE\" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,32 @@
+﻿00
+Order
+Special
+Attack
+Use a Skill
+Baton Pass
+Use an Item
+Use an Item
+Escape
+Hold Up
+Demand Treasure
+Spill It
+Execution
+Holster Gun
+Start Persona Negotiation
+Start Item Negotiation
+Start Info Negotiation
+Defeat All Enemies
+Escape
+13
+14
+15
+16
+17
+18
+19
+1A
+1B
+1C
+1D
+1E
+1F

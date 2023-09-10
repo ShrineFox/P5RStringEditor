@@ -297,7 +297,6 @@ namespace P5RStringEditor
             txt_OldName.Name = "txt_OldName";
             txt_OldName.Size = new Size(199, 26);
             txt_OldName.TabIndex = 7;
-            txt_OldName.TextChanged += OldName_Changed;
             // 
             // tabControl_TblSections
             // 

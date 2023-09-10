@@ -292,9 +292,9 @@ namespace P5RStringEditor
             // txt_OldName
             // 
             txt_OldName.Anchor = AnchorStyles.Left;
-            txt_OldName.Enabled = false;
             txt_OldName.Location = new Point(128, 87);
             txt_OldName.Name = "txt_OldName";
+            txt_OldName.ReadOnly = true;
             txt_OldName.Size = new Size(199, 26);
             txt_OldName.TabIndex = 7;
             // 

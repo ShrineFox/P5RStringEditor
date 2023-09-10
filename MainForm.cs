@@ -126,7 +126,7 @@ namespace P5RStringEditor
                                     description += lines[x] + "\r\n";
                                 }
 
-                                description = description.Replace("[s]", "").Replace("[n]", "\n").Replace("[e]", "");
+                                description = description.Replace("[s]", "").Replace("[n]", "\r\n").Replace("[e]", "");
                                 tblSection.TblEntries.First(x => x.Id.Equals(Convert.ToInt32(itemId))).Description = description;
                             }
                         }
@@ -180,6 +180,7 @@ namespace P5RStringEditor
 
             txt_Name.Text = tblEntry.ItemName;
             txt_Description.Text = tblEntry.Description;
+            txt_OldName.Text = tblEntry.OldName;
 
             ToggleFormOptions(true);
         }
@@ -251,7 +252,7 @@ namespace P5RStringEditor
         private void CreateNameTBL()
         {
             var tblSections = new List<NameTblSection>();
-            
+
             foreach (var section in TblSections)
             {
                 NameTblSection tblSection = new NameTblSection();

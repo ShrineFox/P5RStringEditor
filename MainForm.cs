@@ -306,7 +306,7 @@ namespace P5RStringEditor
             if (!File.Exists(inPath))
                 return;
 
-            string[] oldMsgLines = File.ReadAllLines(inPath);
+            string[] oldMsgLines = File.ReadAllLines(inPath, AtlusEncoding.Persona5RoyalEFIGS);
             List<string> newMsgLines = new List<string>();
 
             TblSection tblSection = TblSections.First(x => x.SectionName.Equals(tblName));
@@ -334,13 +334,26 @@ namespace P5RStringEditor
                 }
             }
 
+
             // Save new .msg to output folder
             string msgPath = outPath.Replace(".bmd", ".msg");
-            File.WriteAllLines(msgPath, newMsgLines, AtlusEncoding.Persona5RoyalEFIGS);
+            File.WriteAllLines(msgPath, newMsgLines);
             using (FileSys.WaitForFile(msgPath)) { }
 
-            AtlusScriptCompiler.Program.Main(new string[] { msgPath, 
-                "-Compile", "-Library", "P5R", "-Encoding", "P5R", "-OutFormat", "V1BE", "-Out", outPath });
+            //AtlusScriptCompiler.Program.Main(new string[] { msgPath, 
+            //"-Compile", "-Library", "P5R", "-Encoding", "P5R", "-OutFormat", "V1BE", "-Out", outPath });
+
+            // Compile new .msg to .bmd
+            var compiler = new MessageScriptCompiler(FormatVersion.Version1BigEndian, AtlusEncoding.Persona5RoyalEFIGS);
+            compiler.Library = LibraryLookup.GetLibrary("P5R");
+            MessageScript script = null;
+            bool success = compiler.TryCompile(File.OpenText(msgPath), out script);
+
+            // Save .bmd to output folder
+            if (!success)
+                MessageBox.Show($"Failed to compile output bmd: {bmdName}.bmd");
+            else
+                script.ToFile(outPath);
         }
 
         private void Import_Click(object sender, EventArgs e)

@@ -34,319 +34,400 @@ namespace P5RStringEditor
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            columnHeader = new ColumnHeader();
-            menuStrip_Main = new MenuStrip();
-            fileToolStripMenuItem = new ToolStripMenuItem();
-            saveToolStripMenuItem = new ToolStripMenuItem();
-            loadToolStripMenuItem = new ToolStripMenuItem();
-            importToolStripMenuItem = new ToolStripMenuItem();
-            exportToolStripMenuItem = new ToolStripMenuItem();
-            toggleThemeToolStripMenuItem = new ToolStripMenuItem();
-            splitContainer_Main = new SplitContainer();
-            listBox_Main = new ListBox();
-            panel_Editor = new Panel();
-            tlp_Editor = new TableLayoutPanel();
-            txt_Description = new TextBox();
-            lbl_Id = new Label();
-            num_Id = new NumericUpDown();
-            label1 = new Label();
-            lbl_Name = new Label();
-            txt_Name = new TextBox();
-            lbl_OldName = new Label();
-            txt_OldName = new TextBox();
-            tabControl_TblSections = new MetroSetTabControl();
-            tlp_Main = new TableLayoutPanel();
-            menuStrip_Main.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)splitContainer_Main).BeginInit();
-            splitContainer_Main.Panel1.SuspendLayout();
-            splitContainer_Main.Panel2.SuspendLayout();
-            splitContainer_Main.SuspendLayout();
-            panel_Editor.SuspendLayout();
-            tlp_Editor.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)num_Id).BeginInit();
-            tlp_Main.SuspendLayout();
-            SuspendLayout();
+            this.columnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.menuStrip_Main = new System.Windows.Forms.MenuStrip();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toggleThemeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.outputBMDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.outputTBLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.splitContainer_Main = new System.Windows.Forms.SplitContainer();
+            this.tlp_ListAndSearch = new System.Windows.Forms.TableLayoutPanel();
+            this.txt_Search = new System.Windows.Forms.TextBox();
+            this.listBox_Main = new System.Windows.Forms.ListBox();
+            this.panel_Editor = new System.Windows.Forms.Panel();
+            this.tlp_Editor = new System.Windows.Forms.TableLayoutPanel();
+            this.txt_Description = new System.Windows.Forms.TextBox();
+            this.lbl_Id = new System.Windows.Forms.Label();
+            this.num_Id = new System.Windows.Forms.NumericUpDown();
+            this.label1 = new System.Windows.Forms.Label();
+            this.lbl_Name = new System.Windows.Forms.Label();
+            this.txt_Name = new System.Windows.Forms.TextBox();
+            this.lbl_OldName = new System.Windows.Forms.Label();
+            this.txt_OldName = new System.Windows.Forms.TextBox();
+            this.tabControl_TblSections = new MetroSet_UI.Controls.MetroSetTabControl();
+            this.tlp_Main = new System.Windows.Forms.TableLayoutPanel();
+            this.comboBox_Encoding = new System.Windows.Forms.ToolStripComboBox();
+            this.menuStrip_Main.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer_Main)).BeginInit();
+            this.splitContainer_Main.Panel1.SuspendLayout();
+            this.splitContainer_Main.Panel2.SuspendLayout();
+            this.splitContainer_Main.SuspendLayout();
+            this.tlp_ListAndSearch.SuspendLayout();
+            this.panel_Editor.SuspendLayout();
+            this.tlp_Editor.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.num_Id)).BeginInit();
+            this.tlp_Main.SuspendLayout();
+            this.SuspendLayout();
             // 
             // columnHeader
             // 
-            columnHeader.Width = 100;
+            this.columnHeader.Width = 100;
             // 
             // menuStrip_Main
             // 
-            menuStrip_Main.ImageScalingSize = new Size(20, 20);
-            menuStrip_Main.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, toggleThemeToolStripMenuItem });
-            menuStrip_Main.Location = new Point(2, 0);
-            menuStrip_Main.Name = "menuStrip_Main";
-            menuStrip_Main.Padding = new Padding(3, 2, 0, 2);
-            menuStrip_Main.Size = new Size(696, 28);
-            menuStrip_Main.TabIndex = 2;
+            this.menuStrip_Main.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.menuStrip_Main.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem,
+            this.toggleThemeToolStripMenuItem,
+            this.optionsToolStripMenuItem});
+            this.menuStrip_Main.Location = new System.Drawing.Point(2, 0);
+            this.menuStrip_Main.Name = "menuStrip_Main";
+            this.menuStrip_Main.Padding = new System.Windows.Forms.Padding(3, 2, 0, 2);
+            this.menuStrip_Main.Size = new System.Drawing.Size(696, 28);
+            this.menuStrip_Main.TabIndex = 2;
             // 
             // fileToolStripMenuItem
             // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { saveToolStripMenuItem, loadToolStripMenuItem, importToolStripMenuItem, exportToolStripMenuItem });
-            fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            fileToolStripMenuItem.Size = new Size(46, 24);
-            fileToolStripMenuItem.Text = "File";
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.saveToolStripMenuItem,
+            this.loadToolStripMenuItem,
+            this.importToolStripMenuItem,
+            this.exportToolStripMenuItem});
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 24);
+            this.fileToolStripMenuItem.Text = "File";
             // 
             // saveToolStripMenuItem
             // 
-            saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            saveToolStripMenuItem.Size = new Size(137, 26);
-            saveToolStripMenuItem.Text = "Save";
-            saveToolStripMenuItem.Click += Save_Click;
+            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(137, 26);
+            this.saveToolStripMenuItem.Text = "Save";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.Save_Click);
             // 
             // loadToolStripMenuItem
             // 
-            loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            loadToolStripMenuItem.Size = new Size(137, 26);
-            loadToolStripMenuItem.Text = "Load";
-            loadToolStripMenuItem.Click += Load_Click;
+            this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(137, 26);
+            this.loadToolStripMenuItem.Text = "Load";
+            this.loadToolStripMenuItem.Click += new System.EventHandler(this.Load_Click);
             // 
             // importToolStripMenuItem
             // 
-            importToolStripMenuItem.Name = "importToolStripMenuItem";
-            importToolStripMenuItem.Size = new Size(137, 26);
-            importToolStripMenuItem.Text = "Import";
-            importToolStripMenuItem.Click += Import_Click;
+            this.importToolStripMenuItem.Name = "importToolStripMenuItem";
+            this.importToolStripMenuItem.Size = new System.Drawing.Size(137, 26);
+            this.importToolStripMenuItem.Text = "Import";
+            this.importToolStripMenuItem.Click += new System.EventHandler(this.Import_Click);
             // 
             // exportToolStripMenuItem
             // 
-            exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            exportToolStripMenuItem.Size = new Size(137, 26);
-            exportToolStripMenuItem.Text = "Export";
-            exportToolStripMenuItem.Click += Export_Click;
+            this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(137, 26);
+            this.exportToolStripMenuItem.Text = "Export";
+            this.exportToolStripMenuItem.Click += new System.EventHandler(this.Export_Click);
             // 
             // toggleThemeToolStripMenuItem
             // 
-            toggleThemeToolStripMenuItem.Name = "toggleThemeToolStripMenuItem";
-            toggleThemeToolStripMenuItem.Size = new Size(118, 24);
-            toggleThemeToolStripMenuItem.Text = "Toggle Theme";
-            toggleThemeToolStripMenuItem.Click += ToggleTheme_Click;
+            this.toggleThemeToolStripMenuItem.Name = "toggleThemeToolStripMenuItem";
+            this.toggleThemeToolStripMenuItem.Size = new System.Drawing.Size(118, 24);
+            this.toggleThemeToolStripMenuItem.Text = "Toggle Theme";
+            this.toggleThemeToolStripMenuItem.Click += new System.EventHandler(this.ToggleTheme_Click);
+            // 
+            // optionsToolStripMenuItem
+            // 
+            this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.outputBMDToolStripMenuItem,
+            this.outputTBLToolStripMenuItem,
+            this.comboBox_Encoding});
+            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(75, 24);
+            this.optionsToolStripMenuItem.Text = "Options";
+            // 
+            // outputBMDToolStripMenuItem
+            // 
+            this.outputBMDToolStripMenuItem.Checked = true;
+            this.outputBMDToolStripMenuItem.CheckOnClick = true;
+            this.outputBMDToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.outputBMDToolStripMenuItem.Name = "outputBMDToolStripMenuItem";
+            this.outputBMDToolStripMenuItem.Size = new System.Drawing.Size(280, 26);
+            this.outputBMDToolStripMenuItem.Text = "Output BMD instead of MSG";
+            // 
+            // outputTBLToolStripMenuItem
+            // 
+            this.outputTBLToolStripMenuItem.Checked = true;
+            this.outputTBLToolStripMenuItem.CheckOnClick = true;
+            this.outputTBLToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.outputTBLToolStripMenuItem.Name = "outputTBLToolStripMenuItem";
+            this.outputTBLToolStripMenuItem.Size = new System.Drawing.Size(280, 26);
+            this.outputTBLToolStripMenuItem.Text = "Output Edited TBL";
             // 
             // splitContainer_Main
             // 
-            splitContainer_Main.Dock = DockStyle.Fill;
-            splitContainer_Main.Location = new Point(3, 50);
-            splitContainer_Main.Name = "splitContainer_Main";
+            this.splitContainer_Main.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer_Main.Location = new System.Drawing.Point(3, 50);
+            this.splitContainer_Main.Name = "splitContainer_Main";
             // 
             // splitContainer_Main.Panel1
             // 
-            splitContainer_Main.Panel1.Controls.Add(listBox_Main);
+            this.splitContainer_Main.Panel1.Controls.Add(this.tlp_ListAndSearch);
             // 
             // splitContainer_Main.Panel2
             // 
-            splitContainer_Main.Panel2.Controls.Add(panel_Editor);
-            splitContainer_Main.Size = new Size(690, 417);
-            splitContainer_Main.SplitterDistance = 186;
-            splitContainer_Main.TabIndex = 3;
+            this.splitContainer_Main.Panel2.Controls.Add(this.panel_Editor);
+            this.splitContainer_Main.Size = new System.Drawing.Size(690, 417);
+            this.splitContainer_Main.SplitterDistance = 186;
+            this.splitContainer_Main.TabIndex = 3;
+            // 
+            // tlp_ListAndSearch
+            // 
+            this.tlp_ListAndSearch.ColumnCount = 1;
+            this.tlp_ListAndSearch.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlp_ListAndSearch.Controls.Add(this.txt_Search, 0, 0);
+            this.tlp_ListAndSearch.Controls.Add(this.listBox_Main, 0, 1);
+            this.tlp_ListAndSearch.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlp_ListAndSearch.Location = new System.Drawing.Point(0, 0);
+            this.tlp_ListAndSearch.Margin = new System.Windows.Forms.Padding(0);
+            this.tlp_ListAndSearch.Name = "tlp_ListAndSearch";
+            this.tlp_ListAndSearch.RowCount = 2;
+            this.tlp_ListAndSearch.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8F));
+            this.tlp_ListAndSearch.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 92F));
+            this.tlp_ListAndSearch.Size = new System.Drawing.Size(186, 417);
+            this.tlp_ListAndSearch.TabIndex = 1;
+            // 
+            // txt_Search
+            // 
+            this.txt_Search.Location = new System.Drawing.Point(3, 3);
+            this.txt_Search.Name = "txt_Search";
+            this.txt_Search.Size = new System.Drawing.Size(180, 26);
+            this.txt_Search.TabIndex = 5;
+            this.txt_Search.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Search_KeyDown);
             // 
             // listBox_Main
             // 
-            listBox_Main.BorderStyle = BorderStyle.FixedSingle;
-            listBox_Main.Dock = DockStyle.Fill;
-            listBox_Main.ItemHeight = 20;
-            listBox_Main.Location = new Point(0, 0);
-            listBox_Main.Name = "listBox_Main";
-            listBox_Main.Size = new Size(186, 417);
-            listBox_Main.TabIndex = 0;
-            listBox_Main.SelectedIndexChanged += SelectedEntry_Changed;
+            this.listBox_Main.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.listBox_Main.ItemHeight = 20;
+            this.listBox_Main.Location = new System.Drawing.Point(3, 36);
+            this.listBox_Main.Name = "listBox_Main";
+            this.listBox_Main.Size = new System.Drawing.Size(180, 362);
+            this.listBox_Main.TabIndex = 0;
+            this.listBox_Main.SelectedIndexChanged += new System.EventHandler(this.SelectedEntry_Changed);
+            this.listBox_Main.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ListBox_Main_KeyDown);
             // 
             // panel_Editor
             // 
-            panel_Editor.AutoSize = true;
-            panel_Editor.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            panel_Editor.Controls.Add(tlp_Editor);
-            panel_Editor.Dock = DockStyle.Fill;
-            panel_Editor.Location = new Point(0, 0);
-            panel_Editor.Name = "panel_Editor";
-            panel_Editor.Size = new Size(500, 417);
-            panel_Editor.TabIndex = 0;
+            this.panel_Editor.AutoSize = true;
+            this.panel_Editor.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panel_Editor.Controls.Add(this.tlp_Editor);
+            this.panel_Editor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel_Editor.Location = new System.Drawing.Point(0, 0);
+            this.panel_Editor.Name = "panel_Editor";
+            this.panel_Editor.Size = new System.Drawing.Size(500, 417);
+            this.panel_Editor.TabIndex = 0;
             // 
             // tlp_Editor
             // 
-            tlp_Editor.AutoScroll = true;
-            tlp_Editor.ColumnCount = 2;
-            tlp_Editor.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-            tlp_Editor.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 75F));
-            tlp_Editor.Controls.Add(txt_Description, 1, 4);
-            tlp_Editor.Controls.Add(lbl_Id, 0, 0);
-            tlp_Editor.Controls.Add(num_Id, 1, 0);
-            tlp_Editor.Controls.Add(label1, 0, 4);
-            tlp_Editor.Controls.Add(lbl_Name, 0, 1);
-            tlp_Editor.Controls.Add(txt_Name, 1, 1);
-            tlp_Editor.Controls.Add(lbl_OldName, 0, 2);
-            tlp_Editor.Controls.Add(txt_OldName, 1, 2);
-            tlp_Editor.Dock = DockStyle.Top;
-            tlp_Editor.Location = new Point(0, 0);
-            tlp_Editor.Name = "tlp_Editor";
-            tlp_Editor.RowCount = 5;
-            tlp_Editor.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
-            tlp_Editor.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
-            tlp_Editor.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
-            tlp_Editor.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
-            tlp_Editor.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
-            tlp_Editor.Size = new Size(500, 464);
-            tlp_Editor.TabIndex = 0;
+            this.tlp_Editor.AutoScroll = true;
+            this.tlp_Editor.ColumnCount = 2;
+            this.tlp_Editor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tlp_Editor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 75F));
+            this.tlp_Editor.Controls.Add(this.txt_Description, 1, 4);
+            this.tlp_Editor.Controls.Add(this.lbl_Id, 0, 0);
+            this.tlp_Editor.Controls.Add(this.num_Id, 1, 0);
+            this.tlp_Editor.Controls.Add(this.label1, 0, 4);
+            this.tlp_Editor.Controls.Add(this.lbl_Name, 0, 1);
+            this.tlp_Editor.Controls.Add(this.txt_Name, 1, 1);
+            this.tlp_Editor.Controls.Add(this.lbl_OldName, 0, 2);
+            this.tlp_Editor.Controls.Add(this.txt_OldName, 1, 2);
+            this.tlp_Editor.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tlp_Editor.Location = new System.Drawing.Point(0, 0);
+            this.tlp_Editor.Name = "tlp_Editor";
+            this.tlp_Editor.RowCount = 5;
+            this.tlp_Editor.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tlp_Editor.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tlp_Editor.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tlp_Editor.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tlp_Editor.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tlp_Editor.Size = new System.Drawing.Size(500, 464);
+            this.tlp_Editor.TabIndex = 0;
             // 
             // txt_Description
             // 
-            txt_Description.Enabled = false;
-            txt_Description.Location = new Point(128, 163);
-            txt_Description.Multiline = true;
-            txt_Description.Name = "txt_Description";
-            txt_Description.Size = new Size(362, 213);
-            txt_Description.TabIndex = 9;
-            txt_Description.TextChanged += Desc_Changed;
+            this.txt_Description.Enabled = false;
+            this.txt_Description.Location = new System.Drawing.Point(128, 163);
+            this.txt_Description.Multiline = true;
+            this.txt_Description.Name = "txt_Description";
+            this.txt_Description.Size = new System.Drawing.Size(362, 213);
+            this.txt_Description.TabIndex = 9;
+            this.txt_Description.TextChanged += new System.EventHandler(this.Desc_Changed);
             // 
             // lbl_Id
             // 
-            lbl_Id.Anchor = AnchorStyles.Right;
-            lbl_Id.AutoSize = true;
-            lbl_Id.Location = new Point(91, 10);
-            lbl_Id.Name = "lbl_Id";
-            lbl_Id.Size = new Size(31, 20);
-            lbl_Id.TabIndex = 0;
-            lbl_Id.Text = "ID:";
+            this.lbl_Id.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.lbl_Id.AutoSize = true;
+            this.lbl_Id.Location = new System.Drawing.Point(91, 10);
+            this.lbl_Id.Name = "lbl_Id";
+            this.lbl_Id.Size = new System.Drawing.Size(31, 20);
+            this.lbl_Id.TabIndex = 0;
+            this.lbl_Id.Text = "ID:";
             // 
             // num_Id
             // 
-            num_Id.Anchor = AnchorStyles.Left;
-            num_Id.Enabled = false;
-            num_Id.Location = new Point(128, 7);
-            num_Id.Maximum = new decimal(new int[] { 999999, 0, 0, 0 });
-            num_Id.Name = "num_Id";
-            num_Id.ReadOnly = true;
-            num_Id.Size = new Size(150, 26);
-            num_Id.TabIndex = 1;
+            this.num_Id.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.num_Id.Enabled = false;
+            this.num_Id.Location = new System.Drawing.Point(128, 7);
+            this.num_Id.Maximum = new decimal(new int[] {
+            999999,
+            0,
+            0,
+            0});
+            this.num_Id.Name = "num_Id";
+            this.num_Id.ReadOnly = true;
+            this.num_Id.Size = new System.Drawing.Size(150, 26);
+            this.num_Id.TabIndex = 1;
             // 
             // label1
             // 
-            label1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            label1.AutoSize = true;
-            label1.Location = new Point(22, 160);
-            label1.Name = "label1";
-            label1.Size = new Size(100, 20);
-            label1.TabIndex = 5;
-            label1.Text = "Description:";
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(22, 160);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(100, 20);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "Description:";
             // 
             // lbl_Name
             // 
-            lbl_Name.Anchor = AnchorStyles.Right;
-            lbl_Name.AutoSize = true;
-            lbl_Name.Location = new Point(64, 50);
-            lbl_Name.Name = "lbl_Name";
-            lbl_Name.Size = new Size(58, 20);
-            lbl_Name.TabIndex = 2;
-            lbl_Name.Text = "Name:";
+            this.lbl_Name.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.lbl_Name.AutoSize = true;
+            this.lbl_Name.Location = new System.Drawing.Point(64, 50);
+            this.lbl_Name.Name = "lbl_Name";
+            this.lbl_Name.Size = new System.Drawing.Size(58, 20);
+            this.lbl_Name.TabIndex = 2;
+            this.lbl_Name.Text = "Name:";
             // 
             // txt_Name
             // 
-            txt_Name.Anchor = AnchorStyles.Left;
-            txt_Name.Enabled = false;
-            txt_Name.Location = new Point(128, 47);
-            txt_Name.Name = "txt_Name";
-            txt_Name.Size = new Size(199, 26);
-            txt_Name.TabIndex = 6;
-            txt_Name.TextChanged += Name_Changed;
+            this.txt_Name.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.txt_Name.Enabled = false;
+            this.txt_Name.Location = new System.Drawing.Point(128, 47);
+            this.txt_Name.Name = "txt_Name";
+            this.txt_Name.Size = new System.Drawing.Size(199, 26);
+            this.txt_Name.TabIndex = 6;
+            this.txt_Name.TextChanged += new System.EventHandler(this.Name_Changed);
             // 
             // lbl_OldName
             // 
-            lbl_OldName.Anchor = AnchorStyles.Right;
-            lbl_OldName.AutoSize = true;
-            lbl_OldName.Location = new Point(33, 90);
-            lbl_OldName.Name = "lbl_OldName";
-            lbl_OldName.Size = new Size(89, 20);
-            lbl_OldName.TabIndex = 3;
-            lbl_OldName.Text = "OG Name:";
+            this.lbl_OldName.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.lbl_OldName.AutoSize = true;
+            this.lbl_OldName.Location = new System.Drawing.Point(33, 90);
+            this.lbl_OldName.Name = "lbl_OldName";
+            this.lbl_OldName.Size = new System.Drawing.Size(89, 20);
+            this.lbl_OldName.TabIndex = 3;
+            this.lbl_OldName.Text = "OG Name:";
             // 
             // txt_OldName
             // 
-            txt_OldName.Anchor = AnchorStyles.Left;
-            txt_OldName.Location = new Point(128, 87);
-            txt_OldName.Name = "txt_OldName";
-            txt_OldName.ReadOnly = true;
-            txt_OldName.Size = new Size(199, 26);
-            txt_OldName.TabIndex = 7;
+            this.txt_OldName.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.txt_OldName.Location = new System.Drawing.Point(128, 87);
+            this.txt_OldName.Name = "txt_OldName";
+            this.txt_OldName.ReadOnly = true;
+            this.txt_OldName.Size = new System.Drawing.Size(199, 26);
+            this.txt_OldName.TabIndex = 7;
             // 
             // tabControl_TblSections
             // 
-            tabControl_TblSections.AnimateEasingType = MetroSet_UI.Enums.EasingType.CubeOut;
-            tabControl_TblSections.AnimateTime = 200;
-            tabControl_TblSections.BackgroundColor = Color.White;
-            tabControl_TblSections.Dock = DockStyle.Fill;
-            tabControl_TblSections.IsDerivedStyle = true;
-            tabControl_TblSections.ItemSize = new Size(100, 38);
-            tabControl_TblSections.Location = new Point(3, 3);
-            tabControl_TblSections.Name = "tabControl_TblSections";
-            tabControl_TblSections.SelectedTextColor = Color.White;
-            tabControl_TblSections.Size = new Size(690, 41);
-            tabControl_TblSections.SizeMode = TabSizeMode.Fixed;
-            tabControl_TblSections.Speed = 100;
-            tabControl_TblSections.Style = MetroSet_UI.Enums.Style.Light;
-            tabControl_TblSections.StyleManager = null;
-            tabControl_TblSections.TabIndex = 4;
-            tabControl_TblSections.TabStyle = MetroSet_UI.Enums.TabStyle.Style2;
-            tabControl_TblSections.ThemeAuthor = "Narwin";
-            tabControl_TblSections.ThemeName = "MetroLite";
-            tabControl_TblSections.UnselectedTextColor = Color.Gray;
-            tabControl_TblSections.UseAnimation = false;
-            tabControl_TblSections.SelectedIndexChanged += SelectedTblSection_Changed;
+            this.tabControl_TblSections.AnimateEasingType = MetroSet_UI.Enums.EasingType.CubeOut;
+            this.tabControl_TblSections.AnimateTime = 200;
+            this.tabControl_TblSections.BackgroundColor = System.Drawing.Color.White;
+            this.tabControl_TblSections.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl_TblSections.IsDerivedStyle = true;
+            this.tabControl_TblSections.ItemSize = new System.Drawing.Size(100, 38);
+            this.tabControl_TblSections.Location = new System.Drawing.Point(3, 3);
+            this.tabControl_TblSections.Name = "tabControl_TblSections";
+            this.tabControl_TblSections.SelectedTextColor = System.Drawing.Color.White;
+            this.tabControl_TblSections.Size = new System.Drawing.Size(690, 41);
+            this.tabControl_TblSections.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
+            this.tabControl_TblSections.Speed = 100;
+            this.tabControl_TblSections.Style = MetroSet_UI.Enums.Style.Light;
+            this.tabControl_TblSections.StyleManager = null;
+            this.tabControl_TblSections.TabIndex = 4;
+            this.tabControl_TblSections.TabStyle = MetroSet_UI.Enums.TabStyle.Style2;
+            this.tabControl_TblSections.ThemeAuthor = "Narwin";
+            this.tabControl_TblSections.ThemeName = "MetroLite";
+            this.tabControl_TblSections.UnselectedTextColor = System.Drawing.Color.Gray;
+            this.tabControl_TblSections.UseAnimation = false;
+            this.tabControl_TblSections.SelectedIndexChanged += new System.EventHandler(this.SelectedTblSection_Changed);
             // 
             // tlp_Main
             // 
-            tlp_Main.ColumnCount = 1;
-            tlp_Main.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tlp_Main.Controls.Add(splitContainer_Main, 0, 1);
-            tlp_Main.Controls.Add(tabControl_TblSections, 0, 0);
-            tlp_Main.Dock = DockStyle.Fill;
-            tlp_Main.Location = new Point(2, 28);
-            tlp_Main.Margin = new Padding(0);
-            tlp_Main.Name = "tlp_Main";
-            tlp_Main.RowCount = 2;
-            tlp_Main.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
-            tlp_Main.RowStyles.Add(new RowStyle(SizeType.Percent, 90F));
-            tlp_Main.Size = new Size(696, 470);
-            tlp_Main.TabIndex = 5;
+            this.tlp_Main.ColumnCount = 1;
+            this.tlp_Main.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlp_Main.Controls.Add(this.splitContainer_Main, 0, 1);
+            this.tlp_Main.Controls.Add(this.tabControl_TblSections, 0, 0);
+            this.tlp_Main.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlp_Main.Location = new System.Drawing.Point(2, 28);
+            this.tlp_Main.Margin = new System.Windows.Forms.Padding(0);
+            this.tlp_Main.Name = "tlp_Main";
+            this.tlp_Main.RowCount = 2;
+            this.tlp_Main.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.tlp_Main.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 90F));
+            this.tlp_Main.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlp_Main.Size = new System.Drawing.Size(696, 470);
+            this.tlp_Main.TabIndex = 5;
+            // 
+            // comboBox_Encoding
+            // 
+            this.comboBox_Encoding.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox_Encoding.DropDownWidth = 150;
+            this.comboBox_Encoding.Name = "comboBox_Encoding";
+            this.comboBox_Encoding.Size = new System.Drawing.Size(121, 28);
             // 
             // MainForm
             // 
-            AutoScaleMode = AutoScaleMode.None;
-            AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            BackgroundColor = Color.FromArgb(30, 30, 30);
-            ClientSize = new Size(700, 500);
-            Controls.Add(tlp_Main);
-            Controls.Add(menuStrip_Main);
-            DropShadowEffect = false;
-            Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            FormBorderStyle = FormBorderStyle.Sizable;
-            HeaderHeight = -40;
-            Icon = (Icon)resources.GetObject("$this.Icon");
-            MainMenuStrip = menuStrip_Main;
-            MinimumSize = new Size(700, 500);
-            Name = "MainForm";
-            Opacity = 0.99D;
-            Padding = new Padding(2, 0, 2, 2);
-            ShowHeader = true;
-            ShowLeftRect = false;
-            SizeGripStyle = SizeGripStyle.Show;
-            Style = MetroSet_UI.Enums.Style.Dark;
-            Text = "P5RStringEditor";
-            TextColor = Color.White;
-            ThemeName = "MetroDark";
-            menuStrip_Main.ResumeLayout(false);
-            menuStrip_Main.PerformLayout();
-            splitContainer_Main.Panel1.ResumeLayout(false);
-            splitContainer_Main.Panel2.ResumeLayout(false);
-            splitContainer_Main.Panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)splitContainer_Main).EndInit();
-            splitContainer_Main.ResumeLayout(false);
-            panel_Editor.ResumeLayout(false);
-            tlp_Editor.ResumeLayout(false);
-            tlp_Editor.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)num_Id).EndInit();
-            tlp_Main.ResumeLayout(false);
-            ResumeLayout(false);
-            PerformLayout();
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.ClientSize = new System.Drawing.Size(700, 500);
+            this.Controls.Add(this.tlp_Main);
+            this.Controls.Add(this.menuStrip_Main);
+            this.DropShadowEffect = false;
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
+            this.HeaderHeight = -40;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MainMenuStrip = this.menuStrip_Main;
+            this.MinimumSize = new System.Drawing.Size(700, 500);
+            this.Name = "MainForm";
+            this.Opacity = 0.99D;
+            this.Padding = new System.Windows.Forms.Padding(2, 0, 2, 2);
+            this.ShowHeader = true;
+            this.ShowLeftRect = false;
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
+            this.Style = MetroSet_UI.Enums.Style.Dark;
+            this.Text = "P5RStringEditor";
+            this.TextColor = System.Drawing.Color.White;
+            this.ThemeName = "MetroDark";
+            this.menuStrip_Main.ResumeLayout(false);
+            this.menuStrip_Main.PerformLayout();
+            this.splitContainer_Main.Panel1.ResumeLayout(false);
+            this.splitContainer_Main.Panel2.ResumeLayout(false);
+            this.splitContainer_Main.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer_Main)).EndInit();
+            this.splitContainer_Main.ResumeLayout(false);
+            this.tlp_ListAndSearch.ResumeLayout(false);
+            this.tlp_ListAndSearch.PerformLayout();
+            this.panel_Editor.ResumeLayout(false);
+            this.tlp_Editor.ResumeLayout(false);
+            this.tlp_Editor.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.num_Id)).EndInit();
+            this.tlp_Main.ResumeLayout(false);
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         #endregion
@@ -372,5 +453,11 @@ namespace P5RStringEditor
         private ToolStripMenuItem importToolStripMenuItem;
         private MetroSetTabControl tabControl_TblSections;
         private TableLayoutPanel tlp_Main;
+        private TextBox txt_Search;
+        private ToolStripMenuItem optionsToolStripMenuItem;
+        private ToolStripMenuItem outputBMDToolStripMenuItem;
+        private ToolStripMenuItem outputTBLToolStripMenuItem;
+        private TableLayoutPanel tlp_ListAndSearch;
+        private ToolStripComboBox comboBox_Encoding;
     }
 }

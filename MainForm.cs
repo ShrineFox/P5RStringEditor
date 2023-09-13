@@ -20,6 +20,7 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
+using static System.Collections.Specialized.BitVector32;
 
 namespace P5RStringEditor
 {
@@ -58,12 +59,12 @@ namespace P5RStringEditor
                     });
                 newSections.Add(section);
             }
-            TblSections = newSections;
+            FormTblSections = newSections;
         }
 
         private void ImportMSGData()
         {
-            foreach (var tblSection in TblSections.Where(x => TblSectionDatNamePairs.Any(y => y.Key == x.SectionName)))
+            foreach (var tblSection in FormTblSections.Where(x => TblSectionDatNamePairs.Any(y => y.Key == x.SectionName)))
             {
                 string msgPath = Path.Combine(DatMsgPakPath, $"dat{TblSectionDatNamePairs.First(x => x.Key == tblSection.SectionName).Value}Help.msg");
                 if (tblSection.SectionName.Contains("Persona"))
@@ -100,21 +101,16 @@ namespace P5RStringEditor
 
         private void CreateNameTBL()
         {
-            var tblSections = NameTBLEditor.ReadNameTBL(Path.GetFullPath("./Dependencies/P5RCBT/TABLE/NAME.TBL"));
+            // Use TBL data from the form if a matching TBL section is read from TBL file
+            var tblFileSections = NameTBLEditor.ReadNameTBL(Path.GetFullPath("./Dependencies/P5RCBT/TABLE/NAME.TBL"));
 
-            foreach (var section in tblSections)
-            {
-                if (TblSections.Any(x => x.SectionName == section.Name))
-                {
-                    var matchingSection = TblSections.First(x => x.SectionName == section.Name);
-                    for (int i = 0; i < section.Lines.Count; i++)
-                        section.Lines[i] = matchingSection.TblEntries[i].ItemName;
-                }
-            }
+            for (int i = 0; i < tblFileSections.Count; i++)
+                if (FormTblSections.Any(x => x.SectionName.Equals(tblFileSections[i].SectionName)))
+                    tblFileSections[i] = FormTblSections.First(x => x.SectionName.Equals(tblFileSections[i].SectionName));
 
             string outPath = Path.GetFullPath(".//Output//p5r.tblmod//P5REssentials//CPK//TBL.CPK/BATTLE/TABLE/NAME.TBL");
             Directory.CreateDirectory(Path.GetDirectoryName(outPath));
-            NameTBLEditor.SaveNameTBL(tblSections, outPath);
+            NameTBLEditor.SaveNameTBL(FormTblSections, outPath);
         }
 
         private void CreateNewBMD(KeyValuePair<string, string> tblPair)
@@ -140,7 +136,7 @@ namespace P5RStringEditor
             string[] oldMsgLines = File.ReadAllLines(inPath, AtlusEncoding.Persona5RoyalEFIGS);
             List<string> newMsgLines = new List<string>();
 
-            TblSection tblSection = TblSections.First(x => x.SectionName.Equals(tblName));
+            TblSection tblSection = FormTblSections.First(x => x.SectionName.Equals(tblName));
 
             // Replace lines in msg with form data's description text
             for (int i = 0; i < oldMsgLines.Length; i++)
@@ -171,18 +167,16 @@ namespace P5RStringEditor
 
             if (outputBMDToolStripMenuItem.Checked)
             {
-                using (FileSys.WaitForFile(msgPath)) { }
+                //using (FileSys.WaitForFile(msgPath)) { }
                 AtlusScriptCompiler.Program.Main(new string[] { msgPath,
                 "-Compile", "-Library", "P5R", "-Encoding", "P5R", "-OutFormat", "V1BE", "-Out", outPath });
                 AtlusScriptCompiler.Program.IsActionAssigned = false;
-                
-                using (FileSys.WaitForFile(outPath)) { }
-                using (FileSys.WaitForFile(msgPath)) { }
-                File.Delete(msgPath);
+
+                //File.Delete(msgPath);
             }
         }
 
-        List<TblSection> TblSections = new List<TblSection>();
+        List<TblSection> FormTblSections = new List<TblSection>();
         public static string TblPath { get; set; } = Path.GetFullPath("./Dependencies/P5RCBT/TABLE/NAME");
         public static string DatMsgPakPath { get; set; } = Path.GetFullPath("./Dependencies/P5RCBT/DATMSGPAK");
         public static Dictionary<string, string> TblSectionDatNamePairs = new Dictionary<string, string>()
@@ -200,19 +194,6 @@ namespace P5RStringEditor
                 {"Personas", "Myth"},
             };
         BindingSource bs = new BindingSource();
-
         public class TblSection
-        {
-            public string SectionName { get; set; } = "";
-            public List<Entry> TblEntries { get; set; } = new List<Entry>();
-        }
-
-        public class Entry
-        {
-            public int Id { get; set; } = 0;
-            public string ItemName { get; set; } = "";
-            public string OldName { get; set; } = "";
-            public string Description { get; set; } = "";
-        }
     }
 }

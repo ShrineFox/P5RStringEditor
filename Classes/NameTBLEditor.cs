@@ -18,9 +18,9 @@ namespace P5RStringEditor
     {
         public const int tblNumber = 38; // number of Name TBL sections, 34 for P5, 38 for P5R
 
-        public static List<NameTblSection> ReadNameTBL(string tblPath)
+        public static List<TblSection> ReadNameTBL(string tblPath)
         {
-            List<NameTblSection> TblSections = new List<NameTblSection>();
+            List<TblSection> TblSections = new List<TblSection>();
 
             using (BinaryObjectReader NAMETBLFile = new BinaryObjectReader(tblPath, Endianness.Big, AtlusEncoding.Persona5RoyalEFIGS))
             {
@@ -65,20 +65,18 @@ namespace P5RStringEditor
                         NAMETBLFile.Seek(targetPadding, SeekOrigin.Current);
                     }
 
-                    TblSections.Add(new NameTblSection() { 
-                        Name = GetTBLDirName(tblNumber, i),
-                        Lines = NameTBLStrings }
-                    );
+                    var tblSection = new TblSection() { SectionName = GetTBLDirName(tblNumber, i) };
+
+                    for (int x = 0; x < NameTBLStrings.Count; x++)
+                        tblSection.TblEntries.Add(new Entry() { ItemName = NameTBLStrings[x], OldName = NameTBLStrings[x], Id = x });
                 }
             }
 
             return TblSections;
         }
 
-        public static void SaveNameTBL(List<NameTblSection> tblSections, string outPath)
+        public static void SaveNameTBL(List<TblSection> tblSections, string outPath)
         {
-            
-
             using (BinaryObjectWriter NAMETBLFile = new BinaryObjectWriter(outPath, Endianness.Big, AtlusEncoding.Persona5RoyalEFIGS))
             {
                 for (int i = 0; i < tblSections.Count(); i++)
@@ -88,7 +86,7 @@ namespace P5RStringEditor
                     long fileSizePosition = NAMETBLFile.Position;
                     NAMETBLFile.WriteUInt32(0); // filesize
 
-                    int numOfPointers = tblSections[i].Lines.Count;
+                    int numOfPointers = tblSections[i].TblEntries.Count;
 
                     long StringPointersLocation = NAMETBLFile.Position;
                     for (int j = 0; j < numOfPointers; j++)
@@ -122,7 +120,7 @@ namespace P5RStringEditor
                     for (int j = 0; j < numOfPointers; j++)
                     {
                         StringPointers.Add(NAMETBLFile.Position - (fileSizePosition + 4));
-                        NAMETBLFile.WriteString(StringBinaryFormat.NullTerminated, tblSections[i].Lines[j]);
+                        NAMETBLFile.WriteString(StringBinaryFormat.NullTerminated, tblSections[i].TblEntries[j].ItemName);
                     }
                     filesize = (uint)(NAMETBLFile.Position - fileSizePosition) - 4;
 
@@ -151,7 +149,7 @@ namespace P5RStringEditor
             }
         }
 
-        static string pad_an_int(int N, int P)
+        public static string pad_an_int(int N, int P)
         {
             // string used in Format() method
             string s = "{0:";
@@ -167,7 +165,8 @@ namespace P5RStringEditor
             // return output
             return value;
         }
-        static string GetTBLDirName(int tblNumber, int index)
+
+        public static string GetTBLDirName(int tblNumber, int index)
         {
             // Initialization of array
             string[] tblNames = new string[] { "Arcanas", "Skills", "Enemies", "Personas", "Accessories", "Protectors", "Consumables",
@@ -188,9 +187,17 @@ namespace P5RStringEditor
         }
     }
 
-    public class NameTblSection
+    public class TblSection
     {
-        public string Name { get; set; } = "";
-        public List<string> Lines { get; set; } = new List<string>();
+        public string SectionName { get; set; } = "";
+        public List<Entry> TblEntries { get; set; } = new List<Entry>();
+    }
+
+    public class Entry
+    {
+        public int Id { get; set; } = 0;
+        public string ItemName { get; set; } = "";
+        public string OldName { get; set; } = "";
+        public string Description { get; set; } = "";
     }
 }

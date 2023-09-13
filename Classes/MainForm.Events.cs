@@ -40,7 +40,7 @@ namespace P5RStringEditor
 
         private void SetListBoxDataSource()
         {
-            bs.DataSource = TblSections.First(x => x.SectionName.Equals(tabControl_TblSections.SelectedTab.Text)).TblEntries;
+            bs.DataSource = FormTblSections.First(x => x.SectionName.Equals(tabControl_TblSections.SelectedTab.Text)).TblEntries;
             listBox_Main.DataSource = bs;
             listBox_Main.DisplayMember = "ItemName";
             listBox_Main.ValueMember = "Id";
@@ -98,7 +98,7 @@ namespace P5RStringEditor
                 outPath += ".json";
 
             // Remove default values from serialized objects
-            string jsonText = JsonConvert.SerializeObject(TblSections, Newtonsoft.Json.Formatting.Indented);
+            string jsonText = JsonConvert.SerializeObject(FormTblSections, Newtonsoft.Json.Formatting.Indented);
 
             // Save to .json file
             File.WriteAllText(outPath, jsonText);
@@ -111,7 +111,7 @@ namespace P5RStringEditor
             if (filePaths == null || filePaths.Count == 0 || string.IsNullOrEmpty(filePaths.First()))
                 return;
 
-            TblSections = JsonConvert.DeserializeObject<List<TblSection>>(File.ReadAllText(filePaths.First()));
+            FormTblSections = JsonConvert.DeserializeObject<List<TblSection>>(File.ReadAllText(filePaths.First()));
 
             SetListBoxDataSource();
             SelectFirstEntry();
@@ -121,7 +121,7 @@ namespace P5RStringEditor
         {
             if (!txt_Name.Enabled)
                 return;
-            TblSections.First(x => x.SectionName.Equals(tabControl_TblSections.SelectedTab.Text)).TblEntries[listBox_Main.SelectedIndex].ItemName = txt_Name.Text;
+            FormTblSections.First(x => x.SectionName.Equals(tabControl_TblSections.SelectedTab.Text)).TblEntries[listBox_Main.SelectedIndex].ItemName = txt_Name.Text;
 
             bs.ResetBindings(false);
         }
@@ -130,7 +130,7 @@ namespace P5RStringEditor
         {
             if (!txt_Description.Enabled)
                 return;
-            TblSections.First(x => x.SectionName.Equals(tabControl_TblSections.SelectedTab.Text)).TblEntries[listBox_Main.SelectedIndex].Description = txt_Description.Text;
+            FormTblSections.First(x => x.SectionName.Equals(tabControl_TblSections.SelectedTab.Text)).TblEntries[listBox_Main.SelectedIndex].Description = txt_Description.Text;
         }
 
         private void Export_Click(object sender, EventArgs e)

@@ -27,6 +27,8 @@ namespace P5RStringEditor
 {
     public partial class MainForm : MetroSetForm
     {
+        public Encoding userEncoding = AtlusEncoding.Persona5RoyalEFIGS;
+
         public MainForm()
         {
             InitializeComponent();
@@ -36,10 +38,10 @@ namespace P5RStringEditor
             MenuStripHelper.SetMenuStripIcons(MenuStripHelper.GetMenuStripIconPairs("Icons.txt"), this);
 
             ImportTBLData();
+            comboBox_Encoding.SelectedIndex = 0;
             ImportMSGData();
 
             tabControl_TblSections.Enabled = true;
-            comboBox_Encoding.SelectedIndex = 0;
         }
 
         private void ImportTBLData()
@@ -74,7 +76,7 @@ namespace P5RStringEditor
 
                 if (File.Exists(msgPath))
                 {
-                    string[] lines = File.ReadAllText(msgPath)
+                    string[] lines = File.ReadAllText(msgPath, userEncoding)
                         .Replace("[s]", "").Replace("[n]", "\r\n").Replace("[e]", "")
                         .Split('\n');
 
@@ -157,7 +159,7 @@ namespace P5RStringEditor
 
             // Save new .msg to output folder
             string msgPath = outPath.Replace(".bmd", ".msg");
-            File.WriteAllLines(msgPath, newMsgLines);
+            File.WriteAllLines(msgPath, newMsgLines, AtlusEncoding.GetByName(comboBox_Encoding.SelectedItem.ToString()));
 
             if (outputBMDToolStripMenuItem.Checked)
             {
@@ -168,8 +170,8 @@ namespace P5RStringEditor
                 AtlusScriptCompiler.Program.IsActionAssigned = false;
                 AtlusScriptCompiler.Program.InputFilePath = msgPath;
                 AtlusScriptCompiler.Program.OutputFilePath = outPath;
-                AtlusScriptCompiler.Program.MessageScriptEncoding = AtlusEncoding.GetByName(comboBox_Encoding.SelectedItem.ToString());
-                AtlusScriptCompiler.Program.MessageScriptTextEncodingName = AtlusScriptCompiler.Program.MessageScriptEncoding.EncodingName;
+                AtlusScriptCompiler.Program.MessageScriptEncoding = userEncoding;
+                AtlusScriptCompiler.Program.MessageScriptTextEncodingName = userEncoding.EncodingName;
                 AtlusScriptCompiler.Program.Logger = new Logger($"{nameof(AtlusScriptCompiler)}_{Path.GetFileNameWithoutExtension(outPath)}");
                 AtlusScriptCompiler.Program.Listener = new FileAndConsoleLogListener(true, LogLevel.Info | LogLevel.Warning | LogLevel.Error | LogLevel.Fatal);
 
@@ -198,6 +200,10 @@ namespace P5RStringEditor
                 {"Outfits", "Dress"},
                 {"Personas", "Myth"},
             };
-        
+
+        private void Encoding_Changed(object sender, EventArgs e)
+        {
+            userEncoding = AtlusEncoding.GetByName(comboBox_Encoding.SelectedItem.ToString());
+        }
     }
 }

@@ -168,6 +168,7 @@ namespace P5RStringEditor
             "P5R_CHINESE"});
             this.comboBox_Encoding.Name = "comboBox_Encoding";
             this.comboBox_Encoding.Size = new System.Drawing.Size(151, 28);
+            this.comboBox_Encoding.SelectedIndexChanged += new System.EventHandler(this.Encoding_Changed);
             // 
             // toggleThemeToolStripMenuItem
             // 

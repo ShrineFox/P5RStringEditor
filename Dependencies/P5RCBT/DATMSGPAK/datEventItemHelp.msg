@@ -89,7 +89,7 @@
 [s]Unused[n][e]
 
 [msg Item_01E]
-[s]The key to Caf姻 Leblanc.[n]Now you can go out at[n]night.[n][e]
+[s]The key to Café Leblanc.[n]Now you can go out at[n]night.[n][e]
 
 [msg Item_01F]
 [s]A bag from Iwai with a[n]suspicious-looking model[n]gun.[n][e]

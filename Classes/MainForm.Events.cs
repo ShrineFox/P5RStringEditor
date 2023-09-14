@@ -164,6 +164,11 @@ namespace P5RStringEditor
             ImportMSGData();
         }
 
+        private void Encoding_Changed(object sender, EventArgs e)
+        {
+            userEncoding = AtlusEncoding.GetByName(comboBox_Encoding.SelectedItem.ToString());
+        }
+
         private void Search_KeyDown(object sender, KeyEventArgs e)
         {
             int selectedIndex = listBox_Main.SelectedIndex;
@@ -174,7 +179,12 @@ namespace P5RStringEditor
 
             if (e.KeyData == Keys.Enter)
             {
-                for (int i = selectedIndex + 1; i < listBox_Main.Items.Count; i++)
+                // stop windows ding noise
+                e.Handled = true; 
+                e.SuppressKeyPress = true;
+
+                int i = selectedIndex + 1;
+                while (i < listBox_Main.Items.Count)
                 {
                     if (i == selectedIndex)
                         return;
@@ -184,10 +194,13 @@ namespace P5RStringEditor
                         || entry.OldName.ToLower().Contains(searchTxt.ToLower()))
                     {
                         listBox_Main.SelectedIndex = i;
+                        return;
                     }
 
-                    if (i == listBox_Main.Items.Count - 1 && selectedIndex != i)
+                    if (i == listBox_Main.Items.Count - 1)
                         i = 0;
+                    else
+                        i++;
                 }
             }
         }

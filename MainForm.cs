@@ -76,7 +76,7 @@ namespace P5RStringEditor
 
                 if (File.Exists(msgPath))
                 {
-                    string[] lines = File.ReadAllText(msgPath, userEncoding)
+                    string[] lines = File.ReadAllText(msgPath)
                         .Replace("[s]", "").Replace("[n]", "\r\n").Replace("[e]", "")
                         .Split('\n');
 
@@ -159,7 +159,7 @@ namespace P5RStringEditor
 
             // Save new .msg to output folder
             string msgPath = outPath.Replace(".bmd", ".msg");
-            File.WriteAllLines(msgPath, newMsgLines, AtlusEncoding.GetByName(comboBox_Encoding.SelectedItem.ToString()));
+            File.WriteAllLines(msgPath, newMsgLines, userEncoding);
 
             if (outputBMDToolStripMenuItem.Checked)
             {
@@ -200,10 +200,5 @@ namespace P5RStringEditor
                 {"Outfits", "Dress"},
                 {"Personas", "Myth"},
             };
-
-        private void Encoding_Changed(object sender, EventArgs e)
-        {
-            userEncoding = AtlusEncoding.GetByName(comboBox_Encoding.SelectedItem.ToString());
-        }
     }
 }

@@ -86,7 +86,7 @@
 [s]A giant elephant[n]monster of Sri[n]Lankan myth, it is[n]typically portrayed[n]as being ridden by[n]the Evil One, Mara.[n]Whoever looks into[n]its evil eye is said[n]to be met with[n]misfortune.[n][e]
 
 [msg myth_029]
-[s]The king of snow[n]who rules over an[n]infinite number of[n]Jack Frosts. He has[n]the power to freeze[n]the entire world,[n]but is unaware of[n]it due to his na院ve[n]personality.[n][e]
+[s]The king of snow[n]who rules over an[n]infinite number of[n]Jack Frosts. He has[n]the power to freeze[n]the entire world,[n]but is unaware of[n]it due to his naïve[n]personality.[n][e]
 
 [msg myth_030]
 [s]A young man of[n]Greek myth. He[n]rejected the nymph[n]Echo, who faded to[n]a whisper out of[n]despair. Cursed by[n]Nemesis, he fell[n]in love with his[n]own reflection and[n]wasted away.[n][e]
@@ -317,7 +317,7 @@
 [s]A type of tengu.[n]Their spiritual[n]power is weaker than[n]other tengu, so they[n]are much smaller.[n]They are said to be[n]the reincarnations[n]of long-lived wolves.[n][e]
 
 [msg myth_106]
-[s]A bluish-tinged[n]diamond that[n]Napol姻on Bonaparte[n]had mounted to the[n]pommel of his sword.[n]It was named after[n]the French Regent[n]Philippe II, Duke of[n]Orl姻ans, who had[n]purchased it in 1717.[n][e]
+[s]A bluish-tinged[n]diamond that[n]Napoléon Bonaparte[n]had mounted to the[n]pommel of his sword.[n]It was named after[n]the French Regent[n]Philippe II, Duke of[n]Orléans, who had[n]purchased it in 1717.[n][e]
 
 [msg myth_107]
 [s]The diamond[n]necklace that[n]Jeanne de la Motte[n]swindled from[n]jewelers in 1785 by[n]claiming it was on[n]behalf of the Queen[n]of France, Marie[n]Antoinette.[n][e]
@@ -599,10 +599,10 @@
 [s]RESERVE[n]Mythology[n][e]
 
 [msg myth_200]
-[s]A being based off of[n]the main character[n]of Maurice Leblanc's[n]novels, Ars因ne[n]Lupin. He appears[n]everywhere and is a[n]master of disguise.[n]He is known to help[n]law-abiding citizens.[n][e]
+[s]A being based off of[n]the main character[n]of Maurice Leblanc's[n]novels, Arsène[n]Lupin. He appears[n]everywhere and is a[n]master of disguise.[n]He is known to help[n]law-abiding citizens.[n][e]
 
 [msg myth_201]
-[s]A being based off of[n]the main character[n]of Maurice Leblanc's[n]novels, Ars因ne[n]Lupin. He appears[n]everywhere and is a[n]master of disguise.[n]He is known to help[n]law-abiding citizens.[n][e]
+[s]A being based off of[n]the main character[n]of Maurice Leblanc's[n]novels, Arsène[n]Lupin. He appears[n]everywhere and is a[n]master of disguise.[n]He is known to help[n]law-abiding citizens.[n][e]
 
 [msg myth_202]
 [s]A 17th century[n]privateer who[n]eventually became a[n]world-renowned[n]pirate. At his[n]execution, he[n]declared he had[n]hidden treasure,[n]leaving behind many[n]legends.[n][e]
@@ -722,7 +722,7 @@
 [s]The French name of[n]the titular heroine of[n]Cinderella, an oft-[n]retold tale of great[n]renown in which a[n]mistreated waif gains[n]luxury, beauty, and[n]a single night's dance[n]with a prince through[n]the power of magic.[n][e]
 
 [msg myth_241]
-[s]The true name of[n]Freyja, of the Norse[n]Vanir deities. Younger[n]twin sister of Freyr.[n]Her name means "d胤s[n]of the Vanir"悪d胤s[n]being a goddess.[n]Known to be a great[n]beauty and a witchlike[n]master of magic.[n][e]
+[s]The true name of[n]Freyja, of the Norse[n]Vanir deities. Younger[n]twin sister of Freyr.[n]Her name means "dís[n]of the Vanir"—dís[n]being a goddess.[n]Known to be a great[n]beauty and a witchlike[n]master of magic.[n][e]
 
 [msg myth_242]
 [s]The other name of[n]Captain Kidd, world-[n]renowned pirate.[n]For years after his[n]death, songs and[n]legends of his life[n]inspired many to[n]chase rumors of his[n]buried treasure[n]across the seas.[n][e]
@@ -1088,7 +1088,7 @@
 [s]A Persona of another[n]story. Daughter of[n]Zeus, and a goddess[n]of great martial[n]ability. She fights to[n]protect her land or[n]her family, but never[n]for sheer bloodlust.[n]Her symbol is the[n]olive tree.[n][e]
 
 [msg myth_363]
-[s]Another alias of[n]Maurice Leblanc's[n]hero, Ars因ne Lupin.[n]Infamous as a[n]phantom thief, he[n]was also known to[n]be a man of many[n]friends, lovers, and[n]treasured allies.[n][e]
+[s]Another alias of[n]Maurice Leblanc's[n]hero, Arsène Lupin.[n]Infamous as a[n]phantom thief, he[n]was also known to[n]be a man of many[n]friends, lovers, and[n]treasured allies.[n][e]
 
 [msg myth_364]
 [s]RESERVE[n]Mythology[n][e]
@@ -1280,7 +1280,7 @@
 [s]A revered bird of[n]Native American[n]mythology said to live[n]atop cloud-shrouded[n]peaks. Resembles an[n]eagle. Its wingbeats[n]create thunderclaps,[n]and some legends say[n]its eyes can unleash[n]lightning.[n][e]
 
 [msg myth_427]
-[s]An evil dragon of[n]Norse lore, it was[n]vanquished by the[n]hero, Siegfried.[n]According to the[n]V烏lsunga saga, it was[n]venomous, had legs[n]like snakes, and[n]shook the ground[n]with every step.[n][e]
+[s]An evil dragon of[n]Norse lore, it was[n]vanquished by the[n]hero, Siegfried.[n]According to the[n]Völsunga saga, it was[n]venomous, had legs[n]like snakes, and[n]shook the ground[n]with every step.[n][e]
 
 [msg myth_428]
 [s]A malformed, winged[n]servant of the Cthulhu[n]Mythos's cosmic god[n]Hastur. They can fly[n]even in the vacuum[n]of space, and it's said[n]that if you can[n]summon one, it will[n]carry you wherever[n]you wish.[n][e]

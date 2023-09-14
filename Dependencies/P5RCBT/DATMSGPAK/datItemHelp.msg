@@ -584,7 +584,7 @@
 [s]Rainy day special with[n]terrific texture. Restores[n]200 HP to one ally.[n][e]
 
 [msg Item_0C3]
-[s]A silk cr引pe book cover with[n]a Japanese-style print on it.[n]For the traditional lady.[n][e]
+[s]A silk crêpe book cover with[n]a Japanese-style print on it.[n]For the traditional lady.[n][e]
 
 [msg Item_0C4]
 [s]Sponge cake topped with[n]coarse sugar. For someone[n]with a sweet tooth.[n][e]
@@ -1142,7 +1142,7 @@
 [s]A book to help men not[n]get lost while visiting[n]amusement parks.[n][e]
 
 [msg Item_17D]
-[s]A novel based on Ars因ne.[n]His clever tricks make[n]you knowledgeable.[n][e]
+[s]A novel based on Arsène.[n]His clever tricks make[n]you knowledgeable.[n][e]
 
 [msg Item_17E]
 [s]The tale of the fearless[n]Captain Kidd. Reading this[n]would build guts.[n][e]
@@ -1898,7 +1898,7 @@
 [s]A teacher and a near defunct[n]high school golf team. Be[n]proficient in persuasion.[n][e]
 
 [msg Item_279]
-[s]Membership card for a[n]Maid Caf姻. Earn a stamp[n]with every visit.[n][e]
+[s]Membership card for a[n]Maid Café. Earn a stamp[n]with every visit.[n][e]
 
 [msg Item_27A]
 [s]A signed photo of Clara.[n]The autograph covers[n]most of the face.[n][e]
@@ -2081,7 +2081,7 @@
 [s]The ingredients are super[n]secret. Fully restores HP[n]and SP of all allies.[n][e]
 
 [msg Item_2B6]
-[s]Miraculous techniques[n]by a billiards master.[n]Learn about mass姻.[n][e]
+[s]Miraculous techniques[n]by a billiards master.[n]Learn about massé.[n][e]
 
 [msg Item_2B7]
 [s]Quality incense that raises[n]Persona's Ag and Lu by 1.[n][e]

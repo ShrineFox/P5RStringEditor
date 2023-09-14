@@ -539,7 +539,7 @@
 [s]Iron gloves that hold a[n]power within.[n][e]
 
 [msg Item_0B4]
-[s]Gloves that deal sound[n]barrier穐breaking hits.[n][e]
+[s]Gloves that deal sound[n]barrier–breaking hits.[n][e]
 
 [msg Item_0B5]
 [s]RESERVE[n][e]

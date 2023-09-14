@@ -168,23 +168,22 @@ namespace P5RStringEditor
 
         public static string GetTBLDirName(int tblNumber, int index)
         {
-            // Initialization of array
-            string[] tblNames = new string[] { "Arcanas", "Skills", "Enemies", "Personas", "Accessories", "Protectors", "Consumables",
+            if (tblNumber == 34)
+            {
+                return TblNames[index];
+            }
+            else return TblNamesR[index];
+        }
+
+        public static string[] TblNames = new string[] { "Arcanas", "Skills", "Enemies", "Personas", "Accessories", "Protectors", "Consumables",
                                                "Key Items", "Materials", "Melee Weapons", "Battle Actions", "Outfits", "Skill Cards",
                                                "Party FirstNames", "Party LastNames", "Confidant Names", "Ranged Weapons", "17",
                                                "18", "19", "20" };
 
-            string[] tblNamesR = new string[] { "Arcanas", "Skills", "Skills Again", "Enemies", "Personas", "Traits", "Accessories",
+        public static string[] TblNamesR = new string[] { "Arcanas", "Skills", "Skills Again", "Enemies", "Personas", "Traits", "Accessories",
                                                 "Protectors", "Consumables", "Key Items", "Materials", "Melee Weapons", "Battle Actions",
                                                 "Outfits", "Skill Cards", "Party FirstNames", "Party LastNames", "Confidant Names",
                                                 "Ranged Weapons", "39", "39", "39", "39" };
-
-            if (tblNumber == 34)
-            {
-                return tblNames[index];
-            }
-            else return tblNamesR[index];
-        }
     }
 
     public class TblSection

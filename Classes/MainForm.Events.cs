@@ -1,4 +1,5 @@
-﻿using MetroSet_UI.Child;
+﻿using AtlusScriptLibrary.Common.Text.Encodings;
+using MetroSet_UI.Child;
 using MetroSet_UI.Forms;
 using Newtonsoft.Json;
 using ShrineFox.IO;
@@ -37,11 +38,12 @@ namespace P5RStringEditor
                 tabControl_TblSections.Controls.Add(new MetroSetSetTabPage() { Text = pair.Key });
         }
 
+        BindingSource bindingSource_ListBox = new BindingSource();
 
         private void SetListBoxDataSource()
         {
-            bs.DataSource = FormTblSections.First(x => x.SectionName.Equals(tabControl_TblSections.SelectedTab.Text)).TblEntries;
-            listBox_Main.DataSource = bs;
+            bindingSource_ListBox.DataSource = FormTblSections.First(x => x.SectionName.Equals(tabControl_TblSections.SelectedTab.Text)).TblEntries;
+            listBox_Main.DataSource = bindingSource_ListBox;
             listBox_Main.DisplayMember = "ItemName";
             listBox_Main.ValueMember = "Id";
             listBox_Main.FormattingEnabled = true;
@@ -123,7 +125,7 @@ namespace P5RStringEditor
                 return;
             FormTblSections.First(x => x.SectionName.Equals(tabControl_TblSections.SelectedTab.Text)).TblEntries[listBox_Main.SelectedIndex].ItemName = txt_Name.Text;
 
-            bs.ResetBindings(false);
+            bindingSource_ListBox.ResetBindings(false);
         }
 
         private void Desc_Changed(object sender, EventArgs e)

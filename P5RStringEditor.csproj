@@ -169,61 +169,61 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Dependencies\mogna.ico" />
-    <Content Include="Dependencies\P5RCBT\TABLE\NAME\00 - Arcanas.txt">
+    <Content Include="Dependencies\P5RCBT\TABLE\NAME\Accessories.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Dependencies\P5RCBT\TABLE\NAME\01 - Skills.txt">
+    <Content Include="Dependencies\P5RCBT\TABLE\NAME\Arcanas.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Dependencies\P5RCBT\TABLE\NAME\02 - Skills Again.txt">
+    <Content Include="Dependencies\P5RCBT\TABLE\NAME\Battle Actions.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Dependencies\P5RCBT\TABLE\NAME\03 - Enemies.txt">
+    <Content Include="Dependencies\P5RCBT\TABLE\NAME\Confidant Names.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Dependencies\P5RCBT\TABLE\NAME\04 - Personas.txt">
+    <Content Include="Dependencies\P5RCBT\TABLE\NAME\Consumables.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Dependencies\P5RCBT\TABLE\NAME\05 - Traits.txt">
+    <Content Include="Dependencies\P5RCBT\TABLE\NAME\Enemies.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Dependencies\P5RCBT\TABLE\NAME\06 - Accessories.txt">
+    <Content Include="Dependencies\P5RCBT\TABLE\NAME\Key Items.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Dependencies\P5RCBT\TABLE\NAME\07 - Protectors.txt">
+    <Content Include="Dependencies\P5RCBT\TABLE\NAME\Materials.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Dependencies\P5RCBT\TABLE\NAME\08 - Consumables.txt">
+    <Content Include="Dependencies\P5RCBT\TABLE\NAME\Melee Weapons.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Dependencies\P5RCBT\TABLE\NAME\09 - Key Items.txt">
+    <Content Include="Dependencies\P5RCBT\TABLE\NAME\Outfits.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Dependencies\P5RCBT\TABLE\NAME\10 - Materials.txt">
+    <Content Include="Dependencies\P5RCBT\TABLE\NAME\Party FirstNames.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Dependencies\P5RCBT\TABLE\NAME\11 - Melee Weapons.txt">
+    <Content Include="Dependencies\P5RCBT\TABLE\NAME\Party LastNames.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Dependencies\P5RCBT\TABLE\NAME\12 - Battle Actions.txt">
+    <Content Include="Dependencies\P5RCBT\TABLE\NAME\Personas.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Dependencies\P5RCBT\TABLE\NAME\13 - Outfits.txt">
+    <Content Include="Dependencies\P5RCBT\TABLE\NAME\Protectors.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Dependencies\P5RCBT\TABLE\NAME\14 - Skill Cards.txt">
+    <Content Include="Dependencies\P5RCBT\TABLE\NAME\Ranged Weapons.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Dependencies\P5RCBT\TABLE\NAME\15 - Party FirstNames.txt">
+    <Content Include="Dependencies\P5RCBT\TABLE\NAME\Skill Cards.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Dependencies\P5RCBT\TABLE\NAME\16 - Party LastNames.txt">
+    <Content Include="Dependencies\P5RCBT\TABLE\NAME\Skills Again.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Dependencies\P5RCBT\TABLE\NAME\17 - Confidant Names.txt">
+    <Content Include="Dependencies\P5RCBT\TABLE\NAME\Skills.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Dependencies\P5RCBT\TABLE\NAME\18 - Ranged Weapons.txt">
+    <Content Include="Dependencies\P5RCBT\TABLE\NAME\Traits.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Icons.txt">

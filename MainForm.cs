@@ -1,4 +1,5 @@
-﻿using AtlusScriptLibrary.Common.Libraries;
+﻿using AtlusScriptCompiler;
+using AtlusScriptLibrary.Common.Libraries;
 using AtlusScriptLibrary.Common.Logging;
 using AtlusScriptLibrary.Common.Text;
 using AtlusScriptLibrary.Common.Text.Encodings;
@@ -38,6 +39,7 @@ namespace P5RStringEditor
             ImportMSGData();
 
             tabControl_TblSections.Enabled = true;
+            comboBox_Encoding.SelectedIndex = 0;
         }
 
         private void ImportTBLData()
@@ -59,7 +61,7 @@ namespace P5RStringEditor
                     });
                 newSections.Add(section);
             }
-            FormTblSections = newSections;
+            FormTblSections = newSections.OrderBy(x => Array.IndexOf(NameTBLEditor.TblNamesR, x.SectionName)).ToList();
         }
 
         private void ImportMSGData()
@@ -101,13 +103,6 @@ namespace P5RStringEditor
 
         private void CreateNameTBL()
         {
-            // Use TBL data from the form if a matching TBL section is read from TBL file
-            var tblFileSections = NameTBLEditor.ReadNameTBL(Path.GetFullPath("./Dependencies/P5RCBT/TABLE/NAME.TBL"));
-
-            for (int i = 0; i < tblFileSections.Count; i++)
-                if (FormTblSections.Any(x => x.SectionName.Equals(tblFileSections[i].SectionName)))
-                    tblFileSections[i] = FormTblSections.First(x => x.SectionName.Equals(tblFileSections[i].SectionName));
-
             string outPath = Path.GetFullPath(".//Output//p5r.tblmod//P5REssentials//CPK//TBL.CPK/BATTLE/TABLE/NAME.TBL");
             Directory.CreateDirectory(Path.GetDirectoryName(outPath));
             NameTBLEditor.SaveNameTBL(FormTblSections, outPath);
@@ -168,11 +163,17 @@ namespace P5RStringEditor
             if (outputBMDToolStripMenuItem.Checked)
             {
                 //using (FileSys.WaitForFile(msgPath)) { }
-                AtlusScriptCompiler.Program.Main(new string[] { msgPath,
-                "-Compile", "-Library", "P5R", "-Encoding", "P5R", "-OutFormat", "V1BE", "-Out", outPath });
                 AtlusScriptCompiler.Program.IsActionAssigned = false;
+                AtlusScriptCompiler.Program.InputFilePath = msgPath;
+                AtlusScriptCompiler.Program.OutputFilePath = outPath;
+                AtlusScriptCompiler.Program.Logger = new Logger($"{nameof(AtlusScriptCompiler)}_{Path.GetFileNameWithoutExtension(outPath)}");
+                AtlusScriptCompiler.Program.Listener = new FileAndConsoleLogListener(true, LogLevel.Info | LogLevel.Warning | LogLevel.Error | LogLevel.Fatal);
 
-                //File.Delete(msgPath);
+                AtlusScriptCompiler.Program.Main(new string[] { msgPath,
+                    "-Compile", "-Library", "P5R", "-Encoding", "P5R", "-OutFormat", "V1BE", "-Out", outPath });
+
+                //using (FileSys.WaitForFile(outPath)) { }
+                File.Delete(msgPath);
             }
         }
 
@@ -193,7 +194,6 @@ namespace P5RStringEditor
                 {"Outfits", "Dress"},
                 {"Personas", "Myth"},
             };
-        BindingSource bs = new BindingSource();
-        public class TblSection
+        
     }
 }

@@ -149,19 +149,19 @@ namespace P5RStringEditor
         private void Import_Click(object sender, EventArgs e)
         {
             var tblPath = WinFormsDialogs.SelectFile("Choose TBL File", false, new string[] { "TBL (*.tbl)" });
-            if (tblPath.Count > 0 && File.Exists(tblPath.First()))
-                TblPath = tblPath.First();
+            if (tblPath.Count() <= 0 || !File.Exists(tblPath.First()))
+                return;
 
-            var bmdPath = WinFormsDialogs.SelectFolder("Choose DATMSG.PAK Folder");
-            if (Directory.Exists(bmdPath))
-                DatMsgPakPath = bmdPath;
+            var bmdPath = WinFormsDialogs.SelectFolder("Choose DATMSG.PAK Folder Containing .MSGs");
+            if (!Directory.Exists(bmdPath))
+                return;
 
             if (!WinFormsDialogs.ShowMessageBox("Confirm Import",
                 "Are you sure you want to import? Current form data will be lost.", MessageBoxButtons.YesNo))
                 return;
 
-            ImportTBLData();
-            ImportMSGData();
+            ImportTBLData(tblPath.First());
+            ImportMSGData(bmdPath);
         }
 
         private void Encoding_Changed(object sender, EventArgs e)

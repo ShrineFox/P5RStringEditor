@@ -37,17 +37,33 @@ namespace P5RStringEditor
             SetLogging();
             MenuStripHelper.SetMenuStripIcons(MenuStripHelper.GetMenuStripIconPairs("Icons.txt"), this);
 
-            ImportTBLData();
+            ImportTBLFromTxtFiles(TblDirPath);
             comboBox_Encoding.SelectedIndex = 0;
-            ImportMSGData();
+            ImportMSGData(DatMsgPakPath);
 
             tabControl_TblSections.Enabled = true;
         }
 
-        private void ImportTBLData()
+        private void ImportTBLData(string tblFilePath = "")
+        {
+            if (File.Exists(tblFilePath))
+            {
+                FormTblSections = NameTBLEditor.ReadNameTBL(tblFilePath);
+                MessageBox.Show("Done importing!");
+            }
+            else if (Directory.Exists(tblFilePath))
+            {
+                ImportTBLFromTxtFiles(tblFilePath);
+                MessageBox.Show("Done importing!");
+            }
+            
+        }
+
+        private void ImportTBLFromTxtFiles(string TblDirPath)
         {
             List<TblSection> newSections = new List<TblSection>();
-            foreach (var txt in Directory.GetFiles(TblPath, "*.txt", SearchOption.TopDirectoryOnly))
+
+            foreach (var txt in Directory.GetFiles(TblDirPath, "*.txt", SearchOption.TopDirectoryOnly))
             {
                 string txtName = Path.GetFileNameWithoutExtension(txt);
                 var section = new TblSection() { SectionName = txtName };
@@ -66,11 +82,14 @@ namespace P5RStringEditor
             FormTblSections = newSections.OrderBy(x => Array.IndexOf(NameTBLEditor.TblNamesR, x.SectionName)).ToList();
         }
 
-        private void ImportMSGData()
+        private void ImportMSGData(string DatMsgPakDir)
         {
+            if (!Directory.Exists(DatMsgPakDir))
+                return;
+
             foreach (var tblSection in FormTblSections.Where(x => TblSectionDatNamePairs.Any(y => y.Key == x.SectionName)))
             {
-                string msgPath = Path.Combine(DatMsgPakPath, $"dat{TblSectionDatNamePairs.First(x => x.Key == tblSection.SectionName).Value}Help.msg");
+                string msgPath = Path.Combine(DatMsgPakDir, $"dat{TblSectionDatNamePairs.First(x => x.Key == tblSection.SectionName).Value}Help.msg");
                 if (tblSection.SectionName.Contains("Persona"))
                     msgPath = msgPath.Replace("Help.msg", ".msg");
 
@@ -184,7 +203,7 @@ namespace P5RStringEditor
         }
 
         List<TblSection> FormTblSections = new List<TblSection>();
-        public static string TblPath { get; set; } = Path.GetFullPath("./Dependencies/P5RCBT/TABLE/NAME");
+        public static string TblDirPath { get; set; } = Path.GetFullPath("./Dependencies/P5RCBT/TABLE/NAME");
         public static string DatMsgPakPath { get; set; } = Path.GetFullPath("./Dependencies/P5RCBT/DATMSGPAK");
         public static Dictionary<string, string> TblSectionDatNamePairs = new Dictionary<string, string>()
             {

@@ -41,11 +41,11 @@ namespace P5RStringEditor
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toggleThemeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.outputBMDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.outputTBLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.comboBox_Encoding = new System.Windows.Forms.ToolStripComboBox();
+            this.toggleThemeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer_Main = new System.Windows.Forms.SplitContainer();
             this.tlp_ListAndSearch = new System.Windows.Forms.TableLayoutPanel();
             this.txt_Search = new System.Windows.Forms.TextBox();
@@ -130,13 +130,6 @@ namespace P5RStringEditor
             this.exportToolStripMenuItem.Text = "Export";
             this.exportToolStripMenuItem.Click += new System.EventHandler(this.Export_Click);
             // 
-            // toggleThemeToolStripMenuItem
-            // 
-            this.toggleThemeToolStripMenuItem.Name = "toggleThemeToolStripMenuItem";
-            this.toggleThemeToolStripMenuItem.Size = new System.Drawing.Size(118, 24);
-            this.toggleThemeToolStripMenuItem.Text = "Toggle Theme";
-            this.toggleThemeToolStripMenuItem.Click += new System.EventHandler(this.ToggleTheme_Click);
-            // 
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -176,6 +169,13 @@ namespace P5RStringEditor
             this.comboBox_Encoding.Name = "comboBox_Encoding";
             this.comboBox_Encoding.Size = new System.Drawing.Size(151, 28);
             // 
+            // toggleThemeToolStripMenuItem
+            // 
+            this.toggleThemeToolStripMenuItem.Name = "toggleThemeToolStripMenuItem";
+            this.toggleThemeToolStripMenuItem.Size = new System.Drawing.Size(118, 24);
+            this.toggleThemeToolStripMenuItem.Text = "Toggle Theme";
+            this.toggleThemeToolStripMenuItem.Click += new System.EventHandler(this.ToggleTheme_Click);
+            // 
             // splitContainer_Main
             // 
             this.splitContainer_Main.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -211,6 +211,7 @@ namespace P5RStringEditor
             // 
             // txt_Search
             // 
+            this.txt_Search.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Search.Location = new System.Drawing.Point(3, 3);
             this.txt_Search.Name = "txt_Search";
             this.txt_Search.Size = new System.Drawing.Size(180, 26);
@@ -220,10 +221,11 @@ namespace P5RStringEditor
             // listBox_Main
             // 
             this.listBox_Main.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.listBox_Main.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listBox_Main.ItemHeight = 20;
             this.listBox_Main.Location = new System.Drawing.Point(3, 36);
             this.listBox_Main.Name = "listBox_Main";
-            this.listBox_Main.Size = new System.Drawing.Size(180, 362);
+            this.listBox_Main.Size = new System.Drawing.Size(180, 378);
             this.listBox_Main.TabIndex = 0;
             this.listBox_Main.SelectedIndexChanged += new System.EventHandler(this.SelectedEntry_Changed);
             this.listBox_Main.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ListBox_Main_KeyDown);

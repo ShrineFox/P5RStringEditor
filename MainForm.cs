@@ -74,7 +74,10 @@ namespace P5RStringEditor
 
                 if (File.Exists(msgPath))
                 {
-                    string[] lines = File.ReadAllLines(msgPath);
+                    string[] lines = File.ReadAllText(msgPath)
+                        .Replace("[s]", "").Replace("[n]", "\r\n").Replace("[e]", "")
+                        .Split('\n');
+
                     for (int i = 0; i < lines.Length; i++)
                     {
                         if (lines[i].StartsWith("[msg "))
@@ -87,12 +90,15 @@ namespace P5RStringEditor
                                 for (int x = i + 1; x < lines.Length; x++)
                                 {
                                     if (lines[x].Contains("[msg "))
+                                    {
+                                        i = x - 1;
                                         break;
+                                    }
 
-                                    description += lines[x] + "\r\n";
+                                    description += lines[x] + "\n";
                                 }
 
-                                description = description.Replace("[s]", "").Replace("[n]", "\r\n").Replace("[e]", "").TrimEnd();
+                                description = description.TrimEnd();
                                 tblSection.TblEntries.First(x => x.Id.Equals(Convert.ToInt32(itemId))).Description = description;
                             }
                         }
@@ -128,32 +134,25 @@ namespace P5RStringEditor
             if (!File.Exists(inPath))
                 return;
 
-            string[] oldMsgLines = File.ReadAllLines(inPath, AtlusEncoding.Persona5RoyalEFIGS);
             List<string> newMsgLines = new List<string>();
 
             TblSection tblSection = FormTblSections.First(x => x.SectionName.Equals(tblName));
 
-            // Replace lines in msg with form data's description text
-            for (int i = 0; i < oldMsgLines.Length; i++)
+            // Create .msg file with form data's description text
+            for (int i = 0; i < tblSection.TblEntries.Count; i++)
             {
-                if (oldMsgLines[i].StartsWith("[msg "))
-                {
-                    newMsgLines.Add(oldMsgLines[i]);
+                if (bmdName.Contains("Help"))
+                    newMsgLines.Add($"[msg item_{i.ToString("X3")}]");
+                else
+                    newMsgLines.Add($"[msg myth_{i.ToString("D3")}]");
 
-                    int itemId = GetItemIdFromFlowscriptLine(oldMsgLines[i], bmdName.Contains("Help"));
+                string[] descLines = tblSection.TblEntries[i].Description.Split('\n');
+                foreach (var line in descLines)
+                    if (!string.IsNullOrEmpty(line) && !line.Equals("\r"))
+                        newMsgLines.Add(line.Replace("\r", "[n]"));
 
-                    if (tblSection.TblEntries.Any(x => x.Id.Equals(itemId)))
-                    {
-                        string[] descLines = tblSection.TblEntries.First(x => x.Id.Equals(itemId)).Description.Split('\n');
-                        foreach (var line in descLines)
-                        {
-                            if (!string.IsNullOrEmpty(line) && !line.Equals("\r"))
-                                newMsgLines.Add(line.Replace("\r","[n]"));
-                        }
-                    }
-
-                    newMsgLines.Add("[e]");
-                }
+                newMsgLines.Add("[e]");
+                
             }
 
             // Save new .msg to output folder
@@ -162,17 +161,22 @@ namespace P5RStringEditor
 
             if (outputBMDToolStripMenuItem.Checked)
             {
-                //using (FileSys.WaitForFile(msgPath)) { }
+                // HACK: Comment out mFileWriter lines in AtlusScriptCompiler/FileAndConsoleLogListener.cs
+                // to prevent file access errors, at expense of no log output
+
+                using (FileSys.WaitForFile(msgPath)) { }
                 AtlusScriptCompiler.Program.IsActionAssigned = false;
                 AtlusScriptCompiler.Program.InputFilePath = msgPath;
                 AtlusScriptCompiler.Program.OutputFilePath = outPath;
+                AtlusScriptCompiler.Program.MessageScriptEncoding = AtlusEncoding.GetByName(comboBox_Encoding.SelectedItem.ToString());
+                AtlusScriptCompiler.Program.MessageScriptTextEncodingName = AtlusScriptCompiler.Program.MessageScriptEncoding.EncodingName;
                 AtlusScriptCompiler.Program.Logger = new Logger($"{nameof(AtlusScriptCompiler)}_{Path.GetFileNameWithoutExtension(outPath)}");
                 AtlusScriptCompiler.Program.Listener = new FileAndConsoleLogListener(true, LogLevel.Info | LogLevel.Warning | LogLevel.Error | LogLevel.Fatal);
 
                 AtlusScriptCompiler.Program.Main(new string[] { msgPath,
-                    "-Compile", "-Library", "P5R", "-Encoding", "P5R", "-OutFormat", "V1BE", "-Out", outPath });
+                    "-Compile", "-Library", "P5R", "-Encoding", comboBox_Encoding.SelectedItem.ToString(), "-OutFormat", "V1BE", "-Out", outPath });
 
-                //using (FileSys.WaitForFile(outPath)) { }
+                using (FileSys.WaitForFile(outPath)) { }
                 File.Delete(msgPath);
             }
         }

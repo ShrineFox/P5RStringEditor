@@ -53,9 +53,19 @@ namespace P5RStringEditor
 
         private void ImportTBLData(string tblFilePath = "")
         {
+            Changes.Clear();
+
             if (File.Exists(tblFilePath))
             {
-                FormTblSections = NameTBLEditor.ReadNameTBL(tblFilePath);
+                var ImportedTbl = NameTBLEditor.ReadNameTBL(tblFilePath);
+                foreach (var section in ImportedTbl)
+                    foreach (var entry in section.TblEntries)
+                    {
+                        var matchingEntry = FormTblSections.First(x => x.SectionName == section.SectionName).TblEntries.First(x => x.Id.Equals(entry.Id));
+                        if (matchingEntry.ItemName != entry.ItemName)
+                            Changes.Add(new Change() { Id = entry.Id, SectionName = section.SectionName, Description = matchingEntry.Description, ItemName = entry.ItemName });
+                    }
+
                 MessageBox.Show("Done importing!");
             }
             else if (Directory.Exists(tblFilePath))
@@ -63,7 +73,6 @@ namespace P5RStringEditor
                 ImportTBLFromTxtFiles(tblFilePath);
                 MessageBox.Show("Done importing!");
             }
-            
         }
 
         private void ImportTBLFromTxtFiles(string TblDirPath)
@@ -88,7 +97,7 @@ namespace P5RStringEditor
             FormTblSections = newSections.OrderBy(x => Array.IndexOf(NameTBLEditor.TblNamesR, x.SectionName)).ToList();
         }
 
-        private void ImportMSGData(string DatMsgPakDir)
+        private void ImportMSGData(string DatMsgPakDir, bool useChanges = false)
         {
             if (!Directory.Exists(DatMsgPakDir))
                 return;
@@ -103,6 +112,7 @@ namespace P5RStringEditor
                 {
                     string[] lines = File.ReadAllText(msgPath)
                         .Replace("[s]", "").Replace("[n]", "\r\n").Replace("[e]", "")
+                        .Replace("[f 0 5 65278][f 2 1]","")
                         .Split('\n');
 
                     for (int i = 0; i < lines.Length; i++)
@@ -126,7 +136,19 @@ namespace P5RStringEditor
                                 }
 
                                 description = description.TrimEnd();
-                                tblSection.TblEntries.First(x => x.Id.Equals(Convert.ToInt32(itemId))).Description = description;
+                                
+                                if (useChanges)
+                                {
+                                    if (tblSection.TblEntries.First(x => x.Id.Equals(Convert.ToInt32(itemId))).Description != description)
+                                    {
+                                        if (Changes.Any(x => x.SectionName == tblSection.SectionName && x.Id == itemId))
+                                            Changes.First(x => x.SectionName == tblSection.SectionName && x.Id == itemId).Description = description;
+                                        else
+                                            Changes.Add(new Change() { Id = itemId, SectionName = tblSection.SectionName, Description = description, ItemName = tblSection.TblEntries.First(x => x.Id.Equals(Convert.ToInt32(itemId))).ItemName });
+                                    }
+                                } 
+                                else
+                                    tblSection.TblEntries.First(x => x.Id.Equals(Convert.ToInt32(itemId))).Description = description;
                             }
                         }
                     }

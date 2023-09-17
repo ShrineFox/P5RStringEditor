@@ -69,6 +69,8 @@ namespace P5RStringEditor
 
                     for (int x = 0; x < NameTBLStrings.Count; x++)
                         tblSection.TblEntries.Add(new Entry() { ItemName = NameTBLStrings[x], Id = x });
+
+                    TblSections.Add(tblSection);
                 }
             }
 

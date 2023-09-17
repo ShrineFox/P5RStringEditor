@@ -58,7 +58,7 @@ namespace P5RStringEditor
             string sectionName = tabControl_TblSections.SelectedTab.Text;
 
             if (Changes.Any(x => x.SectionName == sectionName && x.Id.Equals(id)))
-                e.Value = $"![{id}] {Changes.First(x => x.SectionName == sectionName && x.Id.Equals(id)).ItemName}";
+                e.Value = $" * [{id}] {Changes.First(x => x.SectionName == sectionName && x.Id.Equals(id)).ItemName}";
             else
                 e.Value = $"[{id}] {itemName}";
         }
@@ -199,7 +199,7 @@ namespace P5RStringEditor
                 return;
 
             ImportTBLData(tblPath.First());
-            ImportMSGData(bmdPath);
+            ImportMSGData(bmdPath, true);
         }
 
         private void Encoding_Changed(object sender, EventArgs e)

@@ -81,8 +81,7 @@ namespace P5RStringEditor
                     section.TblEntries.Add(new Entry()
                     {
                         Id = i,
-                        ItemName = txtLines[i],
-                        OldName = txtLines[i]
+                        ItemName = txtLines[i]
                     });
                 newSections.Add(section);
             }
@@ -139,7 +138,19 @@ namespace P5RStringEditor
         {
             string outPath = Path.GetFullPath(".//Output//p5r.tblmod//P5REssentials//CPK//TBL.CPK/BATTLE/TABLE/NAME.TBL");
             Directory.CreateDirectory(Path.GetDirectoryName(outPath));
-            NameTBLEditor.SaveNameTBL(FormTblSections, outPath);
+
+            // Apply form changes to TBL object
+            var OutputNameTbl = FormTblSections.Copy();
+            foreach (var tblSection in OutputNameTbl)
+                foreach (var entry in tblSection.TblEntries)
+                    if (Changes.Any(x => x.SectionName == tblSection.SectionName && x.Id == entry.Id))
+                    {
+                        var changedEntry = Changes.First(x => x.SectionName == tblSection.SectionName && x.Id == entry.Id);
+                        entry.ItemName = changedEntry.ItemName;
+                    }
+            
+            // Save changed TBL
+            NameTBLEditor.SaveNameTBL(OutputNameTbl, outPath);
         }
 
         private void CreateNewBMD(KeyValuePair<string, string> tblPair)
@@ -164,7 +175,14 @@ namespace P5RStringEditor
 
             List<string> newMsgLines = new List<string>();
 
-            TblSection tblSection = FormTblSections.First(x => x.SectionName.Equals(tblName));
+            // Apply form changes to TBL object
+            TblSection tblSection = FormTblSections.First(x => x.SectionName.Equals(tblName)).Copy();
+            foreach (var entry in tblSection.TblEntries)
+                if (Changes.Any(x => x.SectionName == tblSection.SectionName && x.Id == entry.Id))
+                {
+                    var changedEntry = Changes.First(x => x.SectionName == tblSection.SectionName && x.Id == entry.Id);
+                    entry.Description = changedEntry.Description;
+                }
 
             // Create .msg file with form data's description text
             for (int i = 0; i < tblSection.TblEntries.Count; i++)
@@ -210,6 +228,7 @@ namespace P5RStringEditor
         }
 
         List<TblSection> FormTblSections = new List<TblSection>();
+        List<Change> Changes = new List<Change>();
         public static string TblDirPath { get; set; } = Path.GetFullPath("./Dependencies/P5RCBT/TABLE/NAME");
         public static string DatMsgPakPath { get; set; } = Path.GetFullPath("./Dependencies/P5RCBT/DATMSGPAK");
         public static Dictionary<string, string> TblSectionDatNamePairs = new Dictionary<string, string>()

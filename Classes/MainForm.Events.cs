@@ -52,10 +52,15 @@ namespace P5RStringEditor
 
         private void ListBoxFormat(object sender, ListControlConvertEventArgs e)
         {
-            string id = ((Entry)e.ListItem).Id.ToString();
-            string itemName = ((Entry)e.ListItem).ItemName;
+            var entry = (Entry)e.ListItem;
+            int id = entry.Id;
+            string itemName = entry.ItemName;
+            string sectionName = tabControl_TblSections.SelectedTab.Text;
 
-            e.Value = $"[{id}] {itemName}";
+            if (Changes.Any(x => x.SectionName == sectionName && x.Id.Equals(id)))
+                e.Value = $"![{id}] {Changes.First(x => x.SectionName == sectionName && x.Id.Equals(id)).ItemName}";
+            else
+                e.Value = $"[{id}] {itemName}";
         }
 
         private void SelectFirstEntry()
@@ -73,10 +78,22 @@ namespace P5RStringEditor
         {
             ToggleFormOptions(false);
 
-            num_Id.Value = tblEntry.Id;
-            txt_Name.Text = tblEntry.ItemName;
-            txt_Description.Text = tblEntry.Description;
-            txt_OldName.Text = tblEntry.OldName;
+            string name = tblEntry.ItemName;
+            string desc = tblEntry.Description;
+            string sectionName = tabControl_TblSections.SelectedTab.Text;
+            int id = tblEntry.Id;
+
+            num_Id.Value = id;
+            txt_Name.Text = name;
+            txt_Description.Text = desc;
+            txt_OldName.Text = tblEntry.ItemName;
+
+            if (Changes.Any(x => x.SectionName == sectionName && x.Id.Equals(id)))
+            {
+                Change changedEntry = Changes.First(x => x.SectionName == sectionName && x.Id.Equals(id));
+                txt_Name.Text = changedEntry.ItemName;
+                txt_Description.Text = changedEntry.Description;
+            }
 
             ToggleFormOptions(true);
         }
@@ -100,11 +117,11 @@ namespace P5RStringEditor
                 outPath += ".json";
 
             // Remove default values from serialized objects
-            string jsonText = JsonConvert.SerializeObject(FormTblSections, Newtonsoft.Json.Formatting.Indented);
+            string jsonText = JsonConvert.SerializeObject(Changes, Newtonsoft.Json.Formatting.Indented);
 
             // Save to .json file
             File.WriteAllText(outPath, jsonText);
-            MessageBox.Show($"Saved project file to:\n{outPath}", "Preset Project Successfully");
+            MessageBox.Show($"Saved project file to:\n{outPath}", "Project Saved");
         }
 
         private void Load_Click(object sender, EventArgs e)
@@ -113,17 +130,28 @@ namespace P5RStringEditor
             if (filePaths == null || filePaths.Count == 0 || string.IsNullOrEmpty(filePaths.First()))
                 return;
 
-            FormTblSections = JsonConvert.DeserializeObject<List<TblSection>>(File.ReadAllText(filePaths.First()));
+            Changes = JsonConvert.DeserializeObject<List<Change>>(File.ReadAllText(filePaths.First()));
 
             SetListBoxDataSource();
             SelectFirstEntry();
+
+            MessageBox.Show($"Loaded changes from:\n{filePaths.First()}", "Project Loaded");
         }
 
         private void Name_Changed(object sender, EventArgs e)
         {
             if (!txt_Name.Enabled)
                 return;
-            FormTblSections.First(x => x.SectionName.Equals(tabControl_TblSections.SelectedTab.Text)).TblEntries[listBox_Main.SelectedIndex].ItemName = txt_Name.Text;
+
+            string sectionName = tabControl_TblSections.SelectedTab.Text;
+            int id = Convert.ToInt32(num_Id.Value);
+            string itemName = txt_Name.Text;
+            string desc = txt_Description.Text;
+
+            if (Changes.Any(x => x.SectionName == sectionName && x.Id.Equals(id)))
+                Changes.First(x => x.SectionName == sectionName && x.Id.Equals(id)).ItemName = itemName;
+            else
+                Changes.Add(new Change() { Id = id, Description = desc, ItemName = itemName, SectionName = sectionName });
 
             bindingSource_ListBox.ResetBindings(false);
         }
@@ -132,7 +160,17 @@ namespace P5RStringEditor
         {
             if (!txt_Description.Enabled)
                 return;
-            FormTblSections.First(x => x.SectionName.Equals(tabControl_TblSections.SelectedTab.Text)).TblEntries[listBox_Main.SelectedIndex].Description = txt_Description.Text;
+
+            string sectionName = tabControl_TblSections.SelectedTab.Text;
+            int id = Convert.ToInt32(num_Id.Value);
+            string itemName = txt_Name.Text;
+            string desc = txt_Description.Text;
+
+            if (Changes.Any(x => x.SectionName == sectionName && x.Id.Equals(id)))
+                Changes.First(x => x.SectionName == sectionName && x.Id.Equals(id))
+                    .Description = desc;
+            else
+                Changes.Add(new Change() { Id = id, Description = desc, ItemName = itemName, SectionName = sectionName });
         }
 
         private void Export_Click(object sender, EventArgs e)
@@ -190,8 +228,7 @@ namespace P5RStringEditor
                         return;
 
                     var entry = (Entry)listBox_Main.Items[i];
-                    if (entry.ItemName.ToLower().Contains(searchTxt.ToLower()) 
-                        || entry.OldName.ToLower().Contains(searchTxt.ToLower()))
+                    if (entry.ItemName.ToLower().Contains(searchTxt.ToLower()))
                     {
                         listBox_Main.SelectedIndex = i;
                         return;

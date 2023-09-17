@@ -12,7 +12,7 @@ using StringBinaryFormat = Amicitia.IO.Binary.StringBinaryFormat;
 
 namespace P5RStringEditor
 {
-    // Code by DeathChaos25
+    // Original Code from DeathChaos25's P5NameTBLEditor
 
     public class NameTBLEditor
     {
@@ -68,7 +68,7 @@ namespace P5RStringEditor
                     var tblSection = new TblSection() { SectionName = GetTBLDirName(tblNumber, i) };
 
                     for (int x = 0; x < NameTBLStrings.Count; x++)
-                        tblSection.TblEntries.Add(new Entry() { ItemName = NameTBLStrings[x], OldName = NameTBLStrings[x], Id = x });
+                        tblSection.TblEntries.Add(new Entry() { ItemName = NameTBLStrings[x], Id = x });
                 }
             }
 
@@ -192,11 +192,19 @@ namespace P5RStringEditor
         public List<Entry> TblEntries { get; set; } = new List<Entry>();
     }
 
+    public class Change
+    {
+        public string SectionName { get; set; } = "";
+        public int Id { get; set; } = 0;
+        public string ItemName { get; set; } = "";
+        public string Description { get; set; } = "";
+
+    }
+
     public class Entry
     {
         public int Id { get; set; } = 0;
         public string ItemName { get; set; } = "";
-        public string OldName { get; set; } = "";
         public string Description { get; set; } = "";
     }
 }

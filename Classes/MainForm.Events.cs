@@ -210,7 +210,8 @@ namespace P5RStringEditor
         private void Search_KeyDown(object sender, KeyEventArgs e)
         {
             int selectedIndex = listBox_Main.SelectedIndex;
-            string searchTxt = txt_Search.Text;
+            string searchTxt = txt_Search.Text.ToLower();
+            string sectionName = tabControl_TblSections.SelectedTab.Text;
 
             if (string.IsNullOrEmpty(searchTxt))
                 return;
@@ -228,7 +229,8 @@ namespace P5RStringEditor
                         return;
 
                     var entry = (Entry)listBox_Main.Items[i];
-                    if (entry.ItemName.ToLower().Contains(searchTxt.ToLower()))
+                    if (entry.ItemName.ToLower().Contains(searchTxt)
+                        || Changes.Where(x => x.SectionName.Equals(sectionName)).Any(x => x.Id.Equals(i) && x.ItemName.ToLower().Contains(searchTxt)))
                     {
                         listBox_Main.SelectedIndex = i;
                         return;

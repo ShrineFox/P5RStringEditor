@@ -225,7 +225,7 @@ namespace P5RStringEditor
 
             // Save new .msg to output folder
             string msgPath = outPath.Replace(".bmd", ".msg");
-            File.WriteAllLines(msgPath, newMsgLines, userEncoding);
+            File.WriteAllLines(msgPath, newMsgLines);
 
             if (outputBMDToolStripMenuItem.Checked)
             {

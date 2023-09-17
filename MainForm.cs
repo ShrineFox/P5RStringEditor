@@ -32,16 +32,23 @@ namespace P5RStringEditor
         public MainForm()
         {
             InitializeComponent();
+
+            // Setup form appearance
             SetTabPages();
             ApplyTheme();
             SetLogging();
             MenuStripHelper.SetMenuStripIcons(MenuStripHelper.GetMenuStripIconPairs("Icons.txt"), this);
 
+            // Load default TBL/MSG data
             ImportTBLFromTxtFiles(TblDirPath);
             comboBox_Encoding.SelectedIndex = 0;
             ImportMSGData(DatMsgPakPath);
 
+            // Select first tab
             tabControl_TblSections.Enabled = true;
+            tabControl_TblSections.SelectedTab = tabControl_TblSections.TabPages[0];
+            SetListBoxDataSource();
+            SelectFirstEntry();
         }
 
         private void ImportTBLData(string tblFilePath = "")

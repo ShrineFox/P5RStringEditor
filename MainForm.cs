@@ -107,12 +107,20 @@ namespace P5RStringEditor
                 string msgPath = Path.Combine(DatMsgPakDir, $"dat{TblSectionDatNamePairs.First(x => x.Key == tblSection.SectionName).Value}Help.msg");
                 if (tblSection.SectionName.Contains("Persona"))
                     msgPath = msgPath.Replace("Help.msg", ".msg");
+                string bmdPath = FileSys.GetExtensionlessPath(msgPath) + ".bmd";
 
+                
+                if (File.Exists(bmdPath))
+                {
+                    DecompileBMD(bmdPath);
+                }
                 if (File.Exists(msgPath))
                 {
+                    using (FileSys.WaitForFile(msgPath)) { }
+
                     string[] lines = File.ReadAllText(msgPath)
                         .Replace("[s]", "").Replace("[n]", "\r\n").Replace("[e]", "")
-                        .Replace("[f 0 5 65278][f 2 1]","")
+                        .Replace("[f 0 5 65278][f 2 1]", "")
                         .Split('\n');
 
                     for (int i = 0; i < lines.Length; i++)
@@ -136,7 +144,7 @@ namespace P5RStringEditor
                                 }
 
                                 description = description.TrimEnd();
-                                
+
                                 if (useChanges)
                                 {
                                     if (tblSection.TblEntries.First(x => x.Id.Equals(Convert.ToInt32(itemId))).Description != description)
@@ -146,7 +154,7 @@ namespace P5RStringEditor
                                         else
                                             Changes.Add(new Change() { Id = itemId, SectionName = tblSection.SectionName, Description = description, ItemName = tblSection.TblEntries.First(x => x.Id.Equals(Convert.ToInt32(itemId))).ItemName });
                                     }
-                                } 
+                                }
                                 else
                                     tblSection.TblEntries.First(x => x.Id.Equals(Convert.ToInt32(itemId))).Description = description;
                             }
@@ -154,6 +162,22 @@ namespace P5RStringEditor
                     }
                 }
             }
+        }
+
+        private void DecompileBMD(string bmdPath)
+        {
+            string outPath = FileSys.GetExtensionlessPath(bmdPath) + ".msg";
+
+            AtlusScriptCompiler.Program.IsActionAssigned = false;
+            AtlusScriptCompiler.Program.InputFilePath = bmdPath;
+            AtlusScriptCompiler.Program.OutputFilePath = outPath;
+            AtlusScriptCompiler.Program.MessageScriptEncoding = userEncoding;
+            AtlusScriptCompiler.Program.MessageScriptTextEncodingName = userEncoding.EncodingName;
+            AtlusScriptCompiler.Program.Logger = new Logger($"{nameof(AtlusScriptCompiler)}_{Path.GetFileNameWithoutExtension(outPath)}");
+            AtlusScriptCompiler.Program.Listener = new FileAndConsoleLogListener(true, LogLevel.Info | LogLevel.Warning | LogLevel.Error | LogLevel.Fatal);
+
+            AtlusScriptCompiler.Program.Main(new string[] { bmdPath,
+                    "-Decompile", "-Library", "P5R", "-Encoding", comboBox_Encoding.SelectedItem.ToString(), "-Out", outPath });
         }
 
         private void CreateNameTBL()

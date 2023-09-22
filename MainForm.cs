@@ -288,7 +288,7 @@ namespace P5RStringEditor
                 {"Accessories", "Accessory"},
                 {"Consumables", "Item"},
                 {"Key Items", "EventItem"},
-                {"Traits", "AddEffect"},
+                {"Traits", "Specific"},
                 {"Materials", "Material"},
                 {"Skill Cards", "SkillCard"},
                 {"Outfits", "Dress"},

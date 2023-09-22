@@ -10,6 +10,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
+using static P5RStringEditor.FTDStringConverter;
 
 namespace P5RStringEditor
 {
@@ -20,8 +22,34 @@ namespace P5RStringEditor
             if (!tabControl_TblSections.Enabled)
                 return;
 
-            SetListBoxDataSource();
-            SelectFirstEntry();
+            if (tabControl_EditorType.SelectedTab.Text == ".FTDs")
+            {
+                if (!Ftds.Any(x => x.Name.Equals(tabControl_TblSections.SelectedTab.Text)))
+                    return;
+
+                bindingSource_ListBox.DataSource = Ftds.First(x => x.Name.Equals(tabControl_TblSections.SelectedTab.Text)).Lines;
+            }
+            else
+            {
+                if (!FormTblSections.Any(x => x.SectionName.Equals(tabControl_TblSections.SelectedTab.Text)))
+                    return;
+
+                bindingSource_ListBox.DataSource = FormTblSections.First(x => x.SectionName.Equals(tabControl_TblSections.SelectedTab.Text)).TblEntries;
+            }
+
+            listBox_Main.DataSource = bindingSource_ListBox;
+            listBox_Main.DisplayMember = "Name";
+            listBox_Main.ValueMember = "Id";
+            listBox_Main.FormattingEnabled = true;
+            listBox_Main.Format += ListBoxFormat;
+        }
+
+        private void EditorType_Changed(object sender, EventArgs e)
+        {
+            if (tabControl_EditorType.SelectedTab.Text == ".FTDs")
+                SetListBoxDataSource_ToFTD();
+            else
+                SetListBoxDataSource_ToTBL();
         }
 
         private static int GetItemIdFromFlowscriptLine(string line, bool isHelpBmd)
@@ -32,53 +60,119 @@ namespace P5RStringEditor
             return Convert.ToInt32(Int64.Parse(line.Split('_')[1].Replace("]", ""), System.Globalization.NumberStyles.HexNumber));
         }
 
-        private void SetTabPages()
-        {
-            foreach (var section in FormTblSections)
-                tabControl_TblSections.Controls.Add(new MetroSetSetTabPage() { Text = section.SectionName });
-        }
-
         BindingSource bindingSource_ListBox = new BindingSource();
 
-        private void SetListBoxDataSource()
+        private void SetListBoxDataSource_ToFTD()
         {
-            bindingSource_ListBox.DataSource = FormTblSections.First(x => x.SectionName.Equals(tabControl_TblSections.SelectedTab.Text)).TblEntries;
+            if (Ftds.Count == 0)
+                return;
+
+            tabControl_TblSections.Enabled = false;
+            tabControl_TblSections.TabPages.Clear();
+            foreach (var ftd in Ftds)
+                tabControl_TblSections.Controls.Add(new MetroSetSetTabPage() { Text = ftd.Name });
+
+            if (tabControl_TblSections.TabPages.Count == 0)
+                return;
+
+            tabControl_TblSections.Enabled = true;
+            tabControl_TblSections.SelectedTab = tabControl_TblSections.TabPages[0];
+
+            if (!Ftds.Any(x => x.Lines.Equals(tabControl_TblSections.SelectedTab.Text)))
+                return;
+
+            bindingSource_ListBox.DataSource = Ftds.First(x => x.Name.Equals(tabControl_TblSections.SelectedTab.Text)).Lines;
             listBox_Main.DataSource = bindingSource_ListBox;
-            listBox_Main.DisplayMember = "ItemName";
-            listBox_Main.ValueMember = "Id";
-            listBox_Main.FormattingEnabled = true;
-            listBox_Main.Format += ListBoxFormat;
+        }
+
+        private void SetListBoxDataSource_ToTBL()
+        {
+            if (FormTblSections.Count == 0)
+                return;
+
+            tabControl_TblSections.Enabled = false;
+            tabControl_TblSections.TabPages.Clear();
+            foreach (var section in FormTblSections)
+                tabControl_TblSections.Controls.Add(new MetroSetSetTabPage() { Text = section.SectionName });
+            
+            if (tabControl_TblSections.TabPages.Count == 0)
+                return;
+
+            tabControl_TblSections.Enabled = true;
+            tabControl_TblSections.SelectedTab = tabControl_TblSections.TabPages[0];
         }
 
         private void ListBoxFormat(object sender, ListControlConvertEventArgs e)
         {
-            var entry = (Entry)e.ListItem;
-            int id = entry.Id;
-            string itemName = entry.ItemName;
-            string sectionName = tabControl_TblSections.SelectedTab.Text;
+            bool ftdEditMode = tabControl_EditorType.SelectedTab.Text == ".FTDs";
 
-            if (Changes.Any(x => x.SectionName == sectionName && x.Id.Equals(id)))
-                e.Value = $" * [{id}] {Changes.First(x => x.SectionName == sectionName && x.Id.Equals(id)).ItemName}";
+            if (!ftdEditMode)
+            {
+                var entry = (Entry)e.ListItem;
+                int id = entry.Id;
+                string itemName = entry.Name;
+                string sectionName = tabControl_TblSections.SelectedTab.Text;
+
+                if (Changes.Any(x => x.SectionName == sectionName && x.Id.Equals(id)))
+                    e.Value = $" * [{id}] {Changes.First(x => x.SectionName == sectionName && x.Id.Equals(id)).Name}";
+                else
+                    e.Value = $"[{id}] {itemName}";
+            }
             else
-                e.Value = $"[{id}] {itemName}";
-        }
+            {
+                var entry = (FTDString)e.ListItem;
+                int id = entry.Id;
+                string itemName = entry.Name;
+                string sectionName = tabControl_TblSections.SelectedTab.Text;
 
-        private void SelectFirstEntry()
-        {
-            listBox_Main.SelectedIndex = 0;
+                if (Changes.Any(x => x.SectionName == sectionName && x.Id.Equals(id)))
+                    e.Value = $" * [{id}] {Changes.First(x => x.SectionName == sectionName && x.Id.Equals(id)).Name}";
+                else
+                    e.Value = $"[{id}] {itemName}";
+            }
+            
         }
 
         private void SelectedEntry_Changed(object sender, EventArgs e)
         {
-            var tblEntry = (Entry)listBox_Main.SelectedItem;
-            UpdateFormOptions(tblEntry);
+            if (tabControl_EditorType.SelectedTab.Text == ".FTDs")
+            {
+                var ftd = Ftds.First(x => x.Name.Equals(tabControl_TblSections.SelectedTab.Text));
+                UpdateFormOptions_WithFTD(ftd, listBox_Main.SelectedIndex);
+            }
+            else
+            {
+                var tblEntry = (Entry)listBox_Main.SelectedItem;
+                UpdateFormOptions_WithTBL(tblEntry);
+            }
+            
         }
 
-        private void UpdateFormOptions(Entry tblEntry)
+        private void UpdateFormOptions_WithFTD(FTD ftd, int selectedIndex)
         {
             ToggleFormOptions(false);
 
-            string name = tblEntry.ItemName;
+            string name = ftd.Lines[selectedIndex].Name;
+
+            num_Id.Value = selectedIndex;
+            txt_Name.Text = name;
+            txt_OldName.Text = name;
+            txt_Description.Text = "";
+
+            if (Changes.Any(x => x.SectionName == ftd.Name && x.Id.Equals(selectedIndex)))
+            {
+                Change changedEntry = Changes.First(x => x.SectionName == ftd.Name && x.Id.Equals(selectedIndex));
+                txt_Name.Text = changedEntry.Name;
+            }
+
+            ToggleFormOptions(true);
+        }
+
+        private void UpdateFormOptions_WithTBL(Entry tblEntry)
+        {
+            ToggleFormOptions(false);
+
+            string name = tblEntry.Name;
             string desc = tblEntry.Description;
             string sectionName = tabControl_TblSections.SelectedTab.Text;
             int id = tblEntry.Id;
@@ -86,12 +180,12 @@ namespace P5RStringEditor
             num_Id.Value = id;
             txt_Name.Text = name;
             txt_Description.Text = desc;
-            txt_OldName.Text = tblEntry.ItemName;
+            txt_OldName.Text = tblEntry.Name;
 
             if (Changes.Any(x => x.SectionName == sectionName && x.Id.Equals(id)))
             {
                 Change changedEntry = Changes.First(x => x.SectionName == sectionName && x.Id.Equals(id));
-                txt_Name.Text = changedEntry.ItemName;
+                txt_Name.Text = changedEntry.Name;
                 txt_Description.Text = changedEntry.Description;
             }
 
@@ -132,8 +226,7 @@ namespace P5RStringEditor
 
             Changes = JsonConvert.DeserializeObject<List<Change>>(File.ReadAllText(filePaths.First()));
 
-            SetListBoxDataSource();
-            SelectFirstEntry();
+            SetListBoxDataSource_ToTBL();
 
             MessageBox.Show($"Loaded changes from:\n{filePaths.First()}", "Project Loaded");
         }
@@ -149,9 +242,9 @@ namespace P5RStringEditor
             string desc = txt_Description.Text;
 
             if (Changes.Any(x => x.SectionName == sectionName && x.Id.Equals(id)))
-                Changes.First(x => x.SectionName == sectionName && x.Id.Equals(id)).ItemName = itemName;
+                Changes.First(x => x.SectionName == sectionName && x.Id.Equals(id)).Name = itemName;
             else
-                Changes.Add(new Change() { Id = id, Description = desc, ItemName = itemName, SectionName = sectionName });
+                Changes.Add(new Change() { Id = id, Description = desc, Name = itemName, SectionName = sectionName });
 
             bindingSource_ListBox.ResetBindings(false);
         }
@@ -170,7 +263,7 @@ namespace P5RStringEditor
                 Changes.First(x => x.SectionName == sectionName && x.Id.Equals(id))
                     .Description = desc;
             else
-                Changes.Add(new Change() { Id = id, Description = desc, ItemName = itemName, SectionName = sectionName });
+                Changes.Add(new Change() { Id = id, Description = desc, Name = itemName, SectionName = sectionName });
         }
 
         private void Export_Click(object sender, EventArgs e)
@@ -229,8 +322,8 @@ namespace P5RStringEditor
                         return;
 
                     var entry = (Entry)listBox_Main.Items[i];
-                    if (entry.ItemName.ToLower().Contains(searchTxt)
-                        || Changes.Where(x => x.SectionName.Equals(sectionName)).Any(x => x.Id.Equals(i) && x.ItemName.ToLower().Contains(searchTxt)))
+                    if (entry.Name.ToLower().Contains(searchTxt)
+                        || Changes.Where(x => x.SectionName.Equals(sectionName)).Any(x => x.Id.Equals(i) && x.Name.ToLower().Contains(searchTxt)))
                     {
                         listBox_Main.SelectedIndex = i;
                         return;

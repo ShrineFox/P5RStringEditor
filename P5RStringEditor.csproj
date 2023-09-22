@@ -75,6 +75,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\FTDStringConverter.cs" />
     <Compile Include="Classes\MainForm.Events.cs">
       <SubType>Form</SubType>
     </Compile>

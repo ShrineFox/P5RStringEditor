@@ -68,7 +68,7 @@ namespace P5RStringEditor
                     var tblSection = new TblSection() { SectionName = GetTBLDirName(tblNumber, i) };
 
                     for (int x = 0; x < NameTBLStrings.Count; x++)
-                        tblSection.TblEntries.Add(new Entry() { ItemName = NameTBLStrings[x], Id = x });
+                        tblSection.TblEntries.Add(new Entry() { Name = NameTBLStrings[x], Id = x });
 
                     TblSections.Add(tblSection);
                 }
@@ -122,7 +122,7 @@ namespace P5RStringEditor
                     for (int j = 0; j < numOfPointers; j++)
                     {
                         StringPointers.Add(NAMETBLFile.Position - (fileSizePosition + 4));
-                        NAMETBLFile.WriteString(StringBinaryFormat.NullTerminated, tblSections[i].TblEntries[j].ItemName);
+                        NAMETBLFile.WriteString(StringBinaryFormat.NullTerminated, tblSections[i].TblEntries[j].Name);
                     }
                     filesize = (uint)(NAMETBLFile.Position - fileSizePosition) - 4;
 
@@ -198,7 +198,7 @@ namespace P5RStringEditor
     {
         public string SectionName { get; set; } = "";
         public int Id { get; set; } = 0;
-        public string ItemName { get; set; } = "";
+        public string Name { get; set; } = "";
         public string Description { get; set; } = "";
 
     }
@@ -206,7 +206,7 @@ namespace P5RStringEditor
     public class Entry
     {
         public int Id { get; set; } = 0;
-        public string ItemName { get; set; } = "";
+        public string Name { get; set; } = "";
         public string Description { get; set; } = "";
     }
 }

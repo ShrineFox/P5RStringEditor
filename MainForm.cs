@@ -21,7 +21,7 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
-using static System.Collections.Specialized.BitVector32;
+using static P5RStringEditor.FTDStringConverter;
 
 namespace P5RStringEditor
 {
@@ -44,11 +44,7 @@ namespace P5RStringEditor
             ImportMSGData(DatMsgPakPath);
 
             // Select first tab
-            SetTabPages();
-            tabControl_TblSections.Enabled = true;
-            tabControl_TblSections.SelectedTab = tabControl_TblSections.TabPages[0];
-            SetListBoxDataSource();
-            SelectFirstEntry();
+            SetListBoxDataSource_ToTBL();
         }
 
         private void ImportTBLData(string tblFilePath = "")
@@ -62,8 +58,8 @@ namespace P5RStringEditor
                     foreach (var entry in section.TblEntries)
                     {
                         var matchingEntry = FormTblSections.First(x => x.SectionName == section.SectionName).TblEntries.First(x => x.Id.Equals(entry.Id));
-                        if (matchingEntry.ItemName != entry.ItemName)
-                            Changes.Add(new Change() { Id = entry.Id, SectionName = section.SectionName, Description = matchingEntry.Description, ItemName = entry.ItemName });
+                        if (matchingEntry.Name != entry.Name)
+                            Changes.Add(new Change() { Id = entry.Id, SectionName = section.SectionName, Description = matchingEntry.Description, Name = entry.Name });
                     }
 
                 MessageBox.Show("Done importing!");
@@ -90,7 +86,7 @@ namespace P5RStringEditor
                     section.TblEntries.Add(new Entry()
                     {
                         Id = i,
-                        ItemName = txtLines[i]
+                        Name = txtLines[i]
                     });
                 newSections.Add(section);
             }
@@ -151,7 +147,7 @@ namespace P5RStringEditor
                                         if (Changes.Any(x => x.SectionName == tblSection.SectionName && x.Id == itemId))
                                             Changes.First(x => x.SectionName == tblSection.SectionName && x.Id == itemId).Description = description;
                                         else
-                                            Changes.Add(new Change() { Id = itemId, SectionName = tblSection.SectionName, Description = description, ItemName = tblSection.TblEntries.First(x => x.Id.Equals(Convert.ToInt32(itemId))).ItemName });
+                                            Changes.Add(new Change() { Id = itemId, SectionName = tblSection.SectionName, Description = description, Name = tblSection.TblEntries.First(x => x.Id.Equals(Convert.ToInt32(itemId))).Name });
                                     }
                                 }
                                 else
@@ -191,7 +187,7 @@ namespace P5RStringEditor
                     if (Changes.Any(x => x.SectionName == tblSection.SectionName && x.Id == entry.Id))
                     {
                         var changedEntry = Changes.First(x => x.SectionName == tblSection.SectionName && x.Id == entry.Id);
-                        entry.ItemName = changedEntry.ItemName;
+                        entry.Name = changedEntry.Name;
                     }
             
             // Save changed TBL
@@ -276,6 +272,7 @@ namespace P5RStringEditor
         }
 
         List<TblSection> FormTblSections = new List<TblSection>();
+        List<FTDStringConverter.FTD> Ftds = new List<FTD>();
         List<Change> Changes = new List<Change>();
         public static string TblDirPath { get; set; } = Path.GetFullPath("./Dependencies/P5RCBT/TABLE/NAME");
         public static string DatMsgPakPath { get; set; } = Path.GetFullPath("./Dependencies/P5RCBT/DATMSGPAK");

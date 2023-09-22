@@ -159,6 +159,7 @@ namespace P5RStringEditor
             }
         }
 
+
         private void DecompileBMD(string bmdPath)
         {
             string outPath = FileSys.GetExtensionlessPath(bmdPath) + ".msg";
@@ -173,6 +174,20 @@ namespace P5RStringEditor
 
             AtlusScriptCompiler.Program.Main(new string[] { bmdPath,
                     "-Decompile", "-Library", "P5R", "-Encoding", comboBox_Encoding.SelectedItem.ToString(), "-Out", outPath });
+        }
+
+        private void ImportFTDs(List<string> importPath)
+        {
+            foreach (var ftdFile in importPath)
+            {
+                FTD ftd = FTDStringConverter.ReadFTD(ftdFile);
+                if (ftd.Lines.Count > 0)
+                    Ftds.Add(ftd);
+            }
+
+            // Refresh FTD list
+            tabControl_EditorType.SelectedIndex = 0;
+            tabControl_EditorType.SelectedIndex = 1;
         }
 
         private void CreateNameTBL()
@@ -271,8 +286,22 @@ namespace P5RStringEditor
             }
         }
 
+        private void CreateNewFTD(FTD ftd)
+        {
+            string outPath = Path.GetFullPath($".//Output//p5r.tblmod//P5REssentials//CPK//FTD.CPK/FIELD/FTD/{ftd.Name}");
+            Directory.CreateDirectory(Path.GetDirectoryName(outPath));
+
+            // Apply form changes to FTD object
+            var OutputFtd = ftd.Copy();
+            foreach (var change in Changes.Where(x => x.SectionName == ftd.Name))
+                ftd.Lines[change.Id].Name = change.Name;
+
+            // Save changed FTD
+            FTDStringConverter.WriteFTD(OutputFtd, outPath);
+        }
+
         List<TblSection> FormTblSections = new List<TblSection>();
-        List<FTDStringConverter.FTD> Ftds = new List<FTD>();
+        List<FTD> Ftds = new List<FTD>();
         List<Change> Changes = new List<Change>();
         public static string TblDirPath { get; set; } = Path.GetFullPath("./Dependencies/P5RCBT/TABLE/NAME");
         public static string DatMsgPakPath { get; set; } = Path.GetFullPath("./Dependencies/P5RCBT/DATMSGPAK");

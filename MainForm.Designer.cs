@@ -387,7 +387,7 @@ namespace P5RStringEditor
             this.tabControl_TblSections.ThemeName = "MetroLite";
             this.tabControl_TblSections.UnselectedTextColor = System.Drawing.Color.Gray;
             this.tabControl_TblSections.UseAnimation = false;
-            this.tabControl_TblSections.SelectedIndexChanged += new System.EventHandler(this.SelectedTblSection_Changed);
+            this.tabControl_TblSections.SelectedIndexChanged += new System.EventHandler(this.SelectedTab_Changed);
             // 
             // tlp_Main
             // 

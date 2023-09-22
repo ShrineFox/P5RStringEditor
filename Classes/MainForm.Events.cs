@@ -17,57 +17,37 @@ namespace P5RStringEditor
 {
     public partial class MainForm : MetroSetForm
     {
-        private void SelectedTblSection_Changed(object sender, EventArgs e)
-        {
-            if (!tabControl_TblSections.Enabled)
-                return;
+        public static bool ftdMode = false;
+        public static string selectedTabName = "";
 
-            if (tabControl_EditorType.SelectedTab.Text == ".FTDs")
-            {
-                if (!Ftds.Any(x => x.Name.Equals(tabControl_TblSections.SelectedTab.Text)))
-                    return;
-
-                bindingSource_ListBox.DataSource = Ftds.First(x => x.Name.Equals(tabControl_TblSections.SelectedTab.Text)).Lines;
-            }
-            else
-            {
-                if (!FormTblSections.Any(x => x.SectionName.Equals(tabControl_TblSections.SelectedTab.Text)))
-                    return;
-
-                bindingSource_ListBox.DataSource = FormTblSections.First(x => x.SectionName.Equals(tabControl_TblSections.SelectedTab.Text)).TblEntries;
-            }
-
-            listBox_Main.DataSource = bindingSource_ListBox;
-            listBox_Main.DisplayMember = "Name";
-            listBox_Main.ValueMember = "Id";
-            listBox_Main.FormattingEnabled = true;
-            listBox_Main.Format += ListBoxFormat;
-        }
+        BindingSource bindingSource_ListBox = new BindingSource();
 
         private void EditorType_Changed(object sender, EventArgs e)
         {
+            selectedTabName = "";
+
             if (tabControl_EditorType.SelectedTab.Text == ".FTDs")
+            {
+                ftdMode = true;
                 SetListBoxDataSource_ToFTD();
+            }
             else
+            {
+                ftdMode = false;
                 SetListBoxDataSource_ToTBL();
+            }
         }
-
-        private static int GetItemIdFromFlowscriptLine(string line, bool isHelpBmd)
-        {
-            if (!isHelpBmd)
-                return Convert.ToInt32(line.Split('_')[1].Replace("]", ""));
-
-            return Convert.ToInt32(Int64.Parse(line.Split('_')[1].Replace("]", ""), System.Globalization.NumberStyles.HexNumber));
-        }
-
-        BindingSource bindingSource_ListBox = new BindingSource();
 
         private void SetListBoxDataSource_ToFTD()
         {
             if (Ftds.Count == 0)
+            {
+                tabControl_EditorType.SelectedIndex = 0;
                 return;
+            }
 
             tabControl_TblSections.Enabled = false;
+            
             tabControl_TblSections.TabPages.Clear();
             foreach (var ftd in Ftds)
                 tabControl_TblSections.Controls.Add(new MetroSetSetTabPage() { Text = ftd.Name });
@@ -78,10 +58,10 @@ namespace P5RStringEditor
             tabControl_TblSections.Enabled = true;
             tabControl_TblSections.SelectedTab = tabControl_TblSections.TabPages[0];
 
-            if (!Ftds.Any(x => x.Lines.Equals(tabControl_TblSections.SelectedTab.Text)))
+            if (!Ftds.Any(x => x.Lines.Equals(selectedTabName)))
                 return;
 
-            bindingSource_ListBox.DataSource = Ftds.First(x => x.Name.Equals(tabControl_TblSections.SelectedTab.Text)).Lines;
+            bindingSource_ListBox.DataSource = Ftds.First(x => x.Name.Equals(selectedTabName)).Lines;
             listBox_Main.DataSource = bindingSource_ListBox;
         }
 
@@ -102,42 +82,11 @@ namespace P5RStringEditor
             tabControl_TblSections.SelectedTab = tabControl_TblSections.TabPages[0];
         }
 
-        private void ListBoxFormat(object sender, ListControlConvertEventArgs e)
-        {
-            bool ftdEditMode = tabControl_EditorType.SelectedTab.Text == ".FTDs";
-
-            if (!ftdEditMode)
-            {
-                var entry = (Entry)e.ListItem;
-                int id = entry.Id;
-                string itemName = entry.Name;
-                string sectionName = tabControl_TblSections.SelectedTab.Text;
-
-                if (Changes.Any(x => x.SectionName == sectionName && x.Id.Equals(id)))
-                    e.Value = $" * [{id}] {Changes.First(x => x.SectionName == sectionName && x.Id.Equals(id)).Name}";
-                else
-                    e.Value = $"[{id}] {itemName}";
-            }
-            else
-            {
-                var entry = (FTDString)e.ListItem;
-                int id = entry.Id;
-                string itemName = entry.Name;
-                string sectionName = tabControl_TblSections.SelectedTab.Text;
-
-                if (Changes.Any(x => x.SectionName == sectionName && x.Id.Equals(id)))
-                    e.Value = $" * [{id}] {Changes.First(x => x.SectionName == sectionName && x.Id.Equals(id)).Name}";
-                else
-                    e.Value = $"[{id}] {itemName}";
-            }
-            
-        }
-
         private void SelectedEntry_Changed(object sender, EventArgs e)
         {
-            if (tabControl_EditorType.SelectedTab.Text == ".FTDs")
+            if (ftdMode)
             {
-                var ftd = Ftds.First(x => x.Name.Equals(tabControl_TblSections.SelectedTab.Text));
+                var ftd = Ftds.First(x => x.Name.Equals(selectedTabName));
                 UpdateFormOptions_WithFTD(ftd, listBox_Main.SelectedIndex);
             }
             else
@@ -145,7 +94,55 @@ namespace P5RStringEditor
                 var tblEntry = (Entry)listBox_Main.SelectedItem;
                 UpdateFormOptions_WithTBL(tblEntry);
             }
+        }
+
+        private void SelectedTab_Changed(object sender, EventArgs e)
+        {
+            if (!tabControl_TblSections.Enabled)
+                return;
+
+            selectedTabName = tabControl_TblSections.SelectedTab.Text;
+
+            if (ftdMode)
+            {
+                if (!Ftds.Any(x => x.Name.Equals(selectedTabName)))
+                    return;
+
+                bindingSource_ListBox.DataSource = Ftds.First(x => x.Name.Equals(selectedTabName)).Lines;
+            }
+            else
+            {
+                if (!FormTblSections.Any(x => x.SectionName.Equals(selectedTabName)))
+                    return;
+
+                bindingSource_ListBox.DataSource = FormTblSections.First(x => x.SectionName.Equals(selectedTabName)).TblEntries;
+            }
+
+            listBox_Main.DataSource = bindingSource_ListBox;
+            listBox_Main.DisplayMember = "Name";
+            listBox_Main.ValueMember = "Id";
+            listBox_Main.FormattingEnabled = true;
+            listBox_Main.Format += ListBoxFormat;
+        }
+
+        private void ListBoxFormat(object sender, ListControlConvertEventArgs e)
+        {
+            bool ftdEditMode = ftdMode;
             
+            dynamic entry;
+            if (!ftdEditMode)
+                entry = (Entry)e.ListItem;
+            else
+                entry = (FTDString)e.ListItem;
+
+            int id = entry.Id;
+            string itemName = entry.Name;
+            string sectionName = selectedTabName;
+
+            if (Changes.Any(x => x.SectionName == sectionName && x.Id.Equals(id)))
+                e.Value = $" * [{id}] {Changes.First(x => x.SectionName == sectionName && x.Id.Equals(id)).Name}";
+            else
+                e.Value = $"[{id}] {itemName}";
         }
 
         private void UpdateFormOptions_WithFTD(FTD ftd, int selectedIndex)
@@ -174,7 +171,7 @@ namespace P5RStringEditor
 
             string name = tblEntry.Name;
             string desc = tblEntry.Description;
-            string sectionName = tabControl_TblSections.SelectedTab.Text;
+            string sectionName = selectedTabName;
             int id = tblEntry.Id;
 
             num_Id.Value = id;
@@ -236,15 +233,14 @@ namespace P5RStringEditor
             if (!txt_Name.Enabled)
                 return;
 
-            string sectionName = tabControl_TblSections.SelectedTab.Text;
             int id = Convert.ToInt32(num_Id.Value);
             string itemName = txt_Name.Text;
             string desc = txt_Description.Text;
 
-            if (Changes.Any(x => x.SectionName == sectionName && x.Id.Equals(id)))
-                Changes.First(x => x.SectionName == sectionName && x.Id.Equals(id)).Name = itemName;
+            if (Changes.Any(x => x.SectionName == selectedTabName && x.Id.Equals(id)))
+                Changes.First(x => x.SectionName == selectedTabName && x.Id.Equals(id)).Name = itemName;
             else
-                Changes.Add(new Change() { Id = id, Description = desc, Name = itemName, SectionName = sectionName });
+                Changes.Add(new Change() { Id = id, Description = desc, Name = itemName, SectionName = selectedTabName });
 
             bindingSource_ListBox.ResetBindings(false);
         }
@@ -254,7 +250,7 @@ namespace P5RStringEditor
             if (!txt_Description.Enabled)
                 return;
 
-            string sectionName = tabControl_TblSections.SelectedTab.Text;
+            string sectionName = selectedTabName;
             int id = Convert.ToInt32(num_Id.Value);
             string itemName = txt_Name.Text;
             string desc = txt_Description.Text;
@@ -274,25 +270,39 @@ namespace P5RStringEditor
             foreach (var pair in TblSectionDatNamePairs)
                 CreateNewBMD(pair);
 
+            foreach (var ftd in Ftds)
+                CreateNewFTD(ftd);
+
             MessageBox.Show("Done exporting to output folder!");
         }
 
         private void Import_Click(object sender, EventArgs e)
         {
-            var tblPath = WinFormsDialogs.SelectFile("Choose TBL File", false, new string[] { "TBL (*.tbl)" });
-            if (tblPath.Count() <= 0 || !File.Exists(tblPath.First()))
+            var importPath = WinFormsDialogs.SelectFile("Choose File", true, new string[] { "TBL (*.tbl)", "FTD (*.ftd)" });
+            if (importPath.Count() <= 0 || !File.Exists(importPath.First()))
                 return;
 
-            var bmdPath = WinFormsDialogs.SelectFolder("Choose DATMSG.PAK Folder Containing .MSGs");
-            if (!Directory.Exists(bmdPath))
-                return;
+            switch (Path.GetExtension(importPath.First()).ToLower())
+            {
+                case ".tbl":
+                    var bmdPath = WinFormsDialogs.SelectFolder("Choose DATMSG.PAK Folder Containing .MSGs");
+                    
+                    if (!Directory.Exists(bmdPath))
+                        return;
 
-            if (!WinFormsDialogs.ShowMessageBox("Confirm Import",
-                "Are you sure you want to import? Current form data will be lost.", MessageBoxButtons.YesNo))
-                return;
+                    if (!WinFormsDialogs.ShowMessageBox("Confirm Import",
+                        "Are you sure you want to import? Current form data will be lost.", MessageBoxButtons.YesNo))
+                        return;
 
-            ImportTBLData(tblPath.First());
-            ImportMSGData(bmdPath, true);
+                    ImportTBLData(importPath.First());
+                    ImportMSGData(bmdPath, true);
+                    break;
+                case ".ftd":
+                    ImportFTDs(importPath);
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void Encoding_Changed(object sender, EventArgs e)
@@ -304,7 +314,7 @@ namespace P5RStringEditor
         {
             int selectedIndex = listBox_Main.SelectedIndex;
             string searchTxt = txt_Search.Text.ToLower();
-            string sectionName = tabControl_TblSections.SelectedTab.Text;
+            string sectionName = selectedTabName;
 
             if (string.IsNullOrEmpty(searchTxt))
                 return;
@@ -371,6 +381,14 @@ namespace P5RStringEditor
             Output.Logging = true;
             Output.LogPath = "Log.txt";
             Output.LogToFile = true;
+        }
+
+        private static int GetItemIdFromFlowscriptLine(string line, bool isHelpBmd)
+        {
+            if (!isHelpBmd)
+                return Convert.ToInt32(line.Split('_')[1].Replace("]", ""));
+
+            return Convert.ToInt32(Int64.Parse(line.Split('_')[1].Replace("]", ""), System.Globalization.NumberStyles.HexNumber));
         }
     }
 }

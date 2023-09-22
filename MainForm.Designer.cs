@@ -62,6 +62,7 @@ namespace P5RStringEditor
             this.txt_OldName = new System.Windows.Forms.TextBox();
             this.tabControl_TblSections = new MetroSet_UI.Controls.MetroSetTabControl();
             this.tlp_Main = new System.Windows.Forms.TableLayoutPanel();
+            this.deleteOutputMSGToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip_Main.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_Main)).BeginInit();
             this.splitContainer_Main.Panel1.SuspendLayout();
@@ -80,6 +81,7 @@ namespace P5RStringEditor
             // 
             // menuStrip_Main
             // 
+            this.menuStrip_Main.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.menuStrip_Main.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip_Main.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
@@ -88,7 +90,7 @@ namespace P5RStringEditor
             this.menuStrip_Main.Location = new System.Drawing.Point(2, 0);
             this.menuStrip_Main.Name = "menuStrip_Main";
             this.menuStrip_Main.Padding = new System.Windows.Forms.Padding(3, 2, 0, 2);
-            this.menuStrip_Main.Size = new System.Drawing.Size(696, 28);
+            this.menuStrip_Main.Size = new System.Drawing.Size(696, 33);
             this.menuStrip_Main.TabIndex = 2;
             // 
             // fileToolStripMenuItem
@@ -99,34 +101,34 @@ namespace P5RStringEditor
             this.importToolStripMenuItem,
             this.exportToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 24);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(54, 29);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(137, 26);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(169, 34);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.Save_Click);
             // 
             // loadToolStripMenuItem
             // 
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(137, 26);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(169, 34);
             this.loadToolStripMenuItem.Text = "Load";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.Load_Click);
             // 
             // importToolStripMenuItem
             // 
             this.importToolStripMenuItem.Name = "importToolStripMenuItem";
-            this.importToolStripMenuItem.Size = new System.Drawing.Size(137, 26);
+            this.importToolStripMenuItem.Size = new System.Drawing.Size(169, 34);
             this.importToolStripMenuItem.Text = "Import";
             this.importToolStripMenuItem.Click += new System.EventHandler(this.Import_Click);
             // 
             // exportToolStripMenuItem
             // 
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(137, 26);
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(169, 34);
             this.exportToolStripMenuItem.Text = "Export";
             this.exportToolStripMenuItem.Click += new System.EventHandler(this.Export_Click);
             // 
@@ -134,10 +136,11 @@ namespace P5RStringEditor
             // 
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.outputBMDToolStripMenuItem,
+            this.deleteOutputMSGToolStripMenuItem,
             this.outputTBLToolStripMenuItem,
             this.comboBox_Encoding});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(75, 24);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(92, 29);
             this.optionsToolStripMenuItem.Text = "Options";
             // 
             // outputBMDToolStripMenuItem
@@ -146,8 +149,8 @@ namespace P5RStringEditor
             this.outputBMDToolStripMenuItem.CheckOnClick = true;
             this.outputBMDToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.outputBMDToolStripMenuItem.Name = "outputBMDToolStripMenuItem";
-            this.outputBMDToolStripMenuItem.Size = new System.Drawing.Size(280, 26);
-            this.outputBMDToolStripMenuItem.Text = "Output BMD instead of MSG";
+            this.outputBMDToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.outputBMDToolStripMenuItem.Text = "Output BMD";
             // 
             // outputTBLToolStripMenuItem
             // 
@@ -155,7 +158,7 @@ namespace P5RStringEditor
             this.outputTBLToolStripMenuItem.CheckOnClick = true;
             this.outputTBLToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.outputTBLToolStripMenuItem.Name = "outputTBLToolStripMenuItem";
-            this.outputTBLToolStripMenuItem.Size = new System.Drawing.Size(280, 26);
+            this.outputTBLToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.outputTBLToolStripMenuItem.Text = "Output Edited TBL";
             // 
             // comboBox_Encoding
@@ -167,20 +170,20 @@ namespace P5RStringEditor
             "P5R_JAPANESE",
             "P5R_CHINESE"});
             this.comboBox_Encoding.Name = "comboBox_Encoding";
-            this.comboBox_Encoding.Size = new System.Drawing.Size(151, 28);
+            this.comboBox_Encoding.Size = new System.Drawing.Size(151, 33);
             this.comboBox_Encoding.SelectedIndexChanged += new System.EventHandler(this.Encoding_Changed);
             // 
             // toggleThemeToolStripMenuItem
             // 
             this.toggleThemeToolStripMenuItem.Name = "toggleThemeToolStripMenuItem";
-            this.toggleThemeToolStripMenuItem.Size = new System.Drawing.Size(118, 24);
+            this.toggleThemeToolStripMenuItem.Size = new System.Drawing.Size(139, 29);
             this.toggleThemeToolStripMenuItem.Text = "Toggle Theme";
             this.toggleThemeToolStripMenuItem.Click += new System.EventHandler(this.ToggleTheme_Click);
             // 
             // splitContainer_Main
             // 
             this.splitContainer_Main.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer_Main.Location = new System.Drawing.Point(3, 50);
+            this.splitContainer_Main.Location = new System.Drawing.Point(3, 49);
             this.splitContainer_Main.Name = "splitContainer_Main";
             // 
             // splitContainer_Main.Panel1
@@ -190,7 +193,7 @@ namespace P5RStringEditor
             // splitContainer_Main.Panel2
             // 
             this.splitContainer_Main.Panel2.Controls.Add(this.panel_Editor);
-            this.splitContainer_Main.Size = new System.Drawing.Size(690, 417);
+            this.splitContainer_Main.Size = new System.Drawing.Size(690, 413);
             this.splitContainer_Main.SplitterDistance = 186;
             this.splitContainer_Main.TabIndex = 3;
             // 
@@ -207,7 +210,7 @@ namespace P5RStringEditor
             this.tlp_ListAndSearch.RowCount = 2;
             this.tlp_ListAndSearch.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8F));
             this.tlp_ListAndSearch.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 92F));
-            this.tlp_ListAndSearch.Size = new System.Drawing.Size(186, 417);
+            this.tlp_ListAndSearch.Size = new System.Drawing.Size(186, 413);
             this.tlp_ListAndSearch.TabIndex = 1;
             // 
             // txt_Search
@@ -215,7 +218,7 @@ namespace P5RStringEditor
             this.txt_Search.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Search.Location = new System.Drawing.Point(3, 3);
             this.txt_Search.Name = "txt_Search";
-            this.txt_Search.Size = new System.Drawing.Size(180, 26);
+            this.txt_Search.Size = new System.Drawing.Size(180, 30);
             this.txt_Search.TabIndex = 5;
             this.txt_Search.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Search_KeyDown);
             // 
@@ -223,10 +226,10 @@ namespace P5RStringEditor
             // 
             this.listBox_Main.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.listBox_Main.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listBox_Main.ItemHeight = 20;
+            this.listBox_Main.ItemHeight = 25;
             this.listBox_Main.Location = new System.Drawing.Point(3, 36);
             this.listBox_Main.Name = "listBox_Main";
-            this.listBox_Main.Size = new System.Drawing.Size(180, 378);
+            this.listBox_Main.Size = new System.Drawing.Size(180, 374);
             this.listBox_Main.TabIndex = 0;
             this.listBox_Main.SelectedIndexChanged += new System.EventHandler(this.SelectedEntry_Changed);
             this.listBox_Main.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ListBox_Main_KeyDown);
@@ -239,7 +242,7 @@ namespace P5RStringEditor
             this.panel_Editor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel_Editor.Location = new System.Drawing.Point(0, 0);
             this.panel_Editor.Name = "panel_Editor";
-            this.panel_Editor.Size = new System.Drawing.Size(500, 417);
+            this.panel_Editor.Size = new System.Drawing.Size(500, 413);
             this.panel_Editor.TabIndex = 0;
             // 
             // tlp_Editor
@@ -282,9 +285,9 @@ namespace P5RStringEditor
             // 
             this.lbl_Id.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.lbl_Id.AutoSize = true;
-            this.lbl_Id.Location = new System.Drawing.Point(91, 10);
+            this.lbl_Id.Location = new System.Drawing.Point(85, 7);
             this.lbl_Id.Name = "lbl_Id";
-            this.lbl_Id.Size = new System.Drawing.Size(31, 20);
+            this.lbl_Id.Size = new System.Drawing.Size(37, 25);
             this.lbl_Id.TabIndex = 0;
             this.lbl_Id.Text = "ID:";
             // 
@@ -292,7 +295,7 @@ namespace P5RStringEditor
             // 
             this.num_Id.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.num_Id.Enabled = false;
-            this.num_Id.Location = new System.Drawing.Point(128, 7);
+            this.num_Id.Location = new System.Drawing.Point(128, 5);
             this.num_Id.Maximum = new decimal(new int[] {
             999999,
             0,
@@ -300,16 +303,16 @@ namespace P5RStringEditor
             0});
             this.num_Id.Name = "num_Id";
             this.num_Id.ReadOnly = true;
-            this.num_Id.Size = new System.Drawing.Size(150, 26);
+            this.num_Id.Size = new System.Drawing.Size(150, 30);
             this.num_Id.TabIndex = 1;
             // 
             // label1
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(22, 160);
+            this.label1.Location = new System.Drawing.Point(7, 160);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(100, 20);
+            this.label1.Size = new System.Drawing.Size(115, 25);
             this.label1.TabIndex = 5;
             this.label1.Text = "Description:";
             // 
@@ -317,9 +320,9 @@ namespace P5RStringEditor
             // 
             this.lbl_Name.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.lbl_Name.AutoSize = true;
-            this.lbl_Name.Location = new System.Drawing.Point(64, 50);
+            this.lbl_Name.Location = new System.Drawing.Point(52, 47);
             this.lbl_Name.Name = "lbl_Name";
-            this.lbl_Name.Size = new System.Drawing.Size(58, 20);
+            this.lbl_Name.Size = new System.Drawing.Size(70, 25);
             this.lbl_Name.TabIndex = 2;
             this.lbl_Name.Text = "Name:";
             // 
@@ -327,9 +330,9 @@ namespace P5RStringEditor
             // 
             this.txt_Name.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.txt_Name.Enabled = false;
-            this.txt_Name.Location = new System.Drawing.Point(128, 47);
+            this.txt_Name.Location = new System.Drawing.Point(128, 45);
             this.txt_Name.Name = "txt_Name";
-            this.txt_Name.Size = new System.Drawing.Size(199, 26);
+            this.txt_Name.Size = new System.Drawing.Size(199, 30);
             this.txt_Name.TabIndex = 6;
             this.txt_Name.TextChanged += new System.EventHandler(this.Name_Changed);
             // 
@@ -337,19 +340,19 @@ namespace P5RStringEditor
             // 
             this.lbl_OldName.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.lbl_OldName.AutoSize = true;
-            this.lbl_OldName.Location = new System.Drawing.Point(33, 90);
+            this.lbl_OldName.Location = new System.Drawing.Point(16, 87);
             this.lbl_OldName.Name = "lbl_OldName";
-            this.lbl_OldName.Size = new System.Drawing.Size(89, 20);
+            this.lbl_OldName.Size = new System.Drawing.Size(106, 25);
             this.lbl_OldName.TabIndex = 3;
             this.lbl_OldName.Text = "OG Name:";
             // 
             // txt_OldName
             // 
             this.txt_OldName.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.txt_OldName.Location = new System.Drawing.Point(128, 87);
+            this.txt_OldName.Location = new System.Drawing.Point(128, 85);
             this.txt_OldName.Name = "txt_OldName";
             this.txt_OldName.ReadOnly = true;
-            this.txt_OldName.Size = new System.Drawing.Size(199, 26);
+            this.txt_OldName.Size = new System.Drawing.Size(199, 30);
             this.txt_OldName.TabIndex = 7;
             // 
             // tabControl_TblSections
@@ -363,7 +366,7 @@ namespace P5RStringEditor
             this.tabControl_TblSections.Location = new System.Drawing.Point(3, 3);
             this.tabControl_TblSections.Name = "tabControl_TblSections";
             this.tabControl_TblSections.SelectedTextColor = System.Drawing.Color.White;
-            this.tabControl_TblSections.Size = new System.Drawing.Size(690, 41);
+            this.tabControl_TblSections.Size = new System.Drawing.Size(690, 40);
             this.tabControl_TblSections.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tabControl_TblSections.Speed = 100;
             this.tabControl_TblSections.Style = MetroSet_UI.Enums.Style.Light;
@@ -383,15 +386,22 @@ namespace P5RStringEditor
             this.tlp_Main.Controls.Add(this.splitContainer_Main, 0, 1);
             this.tlp_Main.Controls.Add(this.tabControl_TblSections, 0, 0);
             this.tlp_Main.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlp_Main.Location = new System.Drawing.Point(2, 28);
+            this.tlp_Main.Location = new System.Drawing.Point(2, 33);
             this.tlp_Main.Margin = new System.Windows.Forms.Padding(0);
             this.tlp_Main.Name = "tlp_Main";
             this.tlp_Main.RowCount = 2;
             this.tlp_Main.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.tlp_Main.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 90F));
             this.tlp_Main.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlp_Main.Size = new System.Drawing.Size(696, 470);
+            this.tlp_Main.Size = new System.Drawing.Size(696, 465);
             this.tlp_Main.TabIndex = 5;
+            // 
+            // deleteOutputMSGToolStripMenuItem
+            // 
+            this.deleteOutputMSGToolStripMenuItem.CheckOnClick = true;
+            this.deleteOutputMSGToolStripMenuItem.Name = "deleteOutputMSGToolStripMenuItem";
+            this.deleteOutputMSGToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.deleteOutputMSGToolStripMenuItem.Text = "Delete Output MSG";
             // 
             // MainForm
             // 
@@ -466,5 +476,6 @@ namespace P5RStringEditor
         private ToolStripMenuItem outputTBLToolStripMenuItem;
         private TableLayoutPanel tlp_ListAndSearch;
         private ToolStripComboBox comboBox_Encoding;
+        private ToolStripMenuItem deleteOutputMSGToolStripMenuItem;
     }
 }

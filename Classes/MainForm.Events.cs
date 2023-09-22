@@ -34,8 +34,8 @@ namespace P5RStringEditor
 
         private void SetTabPages()
         {
-            foreach (var pair in TblSectionDatNamePairs)
-                tabControl_TblSections.Controls.Add(new MetroSetSetTabPage() { Text = pair.Key });
+            foreach (var section in FormTblSections)
+                tabControl_TblSections.Controls.Add(new MetroSetSetTabPage() { Text = section.SectionName });
         }
 
         BindingSource bindingSource_ListBox = new BindingSource();

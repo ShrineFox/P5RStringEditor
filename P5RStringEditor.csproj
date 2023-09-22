@@ -102,7 +102,16 @@
     <None Include="Dependencies\P5RCBT\DATMSGPAK\datAccessoryHelp.msg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Dependencies\P5RCBT\DATMSGPAK\datAddEffectHelp.msg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Dependencies\P5RCBT\DATMSGPAK\datArmorHelp.msg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Dependencies\P5RCBT\DATMSGPAK\datBatonTouchHelp.msg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Dependencies\P5RCBT\DATMSGPAK\datCustomPartsHelp.msg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Dependencies\P5RCBT\DATMSGPAK\datDressHelp.msg">
@@ -114,7 +123,13 @@
     <None Include="Dependencies\P5RCBT\DATMSGPAK\datGunHelp.msg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Dependencies\P5RCBT\DATMSGPAK\datItem2Help.msg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Dependencies\P5RCBT\DATMSGPAK\datItemHelp.msg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Dependencies\P5RCBT\DATMSGPAK\datItemPackageHelp.msg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Dependencies\P5RCBT\DATMSGPAK\datMaterialHelp.msg">
@@ -123,10 +138,22 @@
     <None Include="Dependencies\P5RCBT\DATMSGPAK\datMyth.msg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Dependencies\P5RCBT\DATMSGPAK\datQuestHelp.msg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Dependencies\P5RCBT\DATMSGPAK\datSkillCardHelp.msg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Dependencies\P5RCBT\DATMSGPAK\datSkillHelp.msg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Dependencies\P5RCBT\DATMSGPAK\datSpecificHelp.msg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Dependencies\P5RCBT\DATMSGPAK\datTechnicalHelp.msg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Dependencies\P5RCBT\DATMSGPAK\datWeapon2Help.msg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Dependencies\P5RCBT\DATMSGPAK\datWeaponHelp.msg">

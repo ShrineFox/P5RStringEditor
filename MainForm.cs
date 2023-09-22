@@ -34,7 +34,6 @@ namespace P5RStringEditor
             InitializeComponent();
 
             // Setup form appearance
-            SetTabPages();
             ApplyTheme();
             SetLogging();
             MenuStripHelper.SetMenuStripIcons(MenuStripHelper.GetMenuStripIconPairs("Icons.txt"), this);
@@ -45,6 +44,7 @@ namespace P5RStringEditor
             ImportMSGData(DatMsgPakPath);
 
             // Select first tab
+            SetTabPages();
             tabControl_TblSections.Enabled = true;
             tabControl_TblSections.SelectedTab = tabControl_TblSections.TabPages[0];
             SetListBoxDataSource();
@@ -111,9 +111,8 @@ namespace P5RStringEditor
 
                 
                 if (File.Exists(bmdPath))
-                {
                     DecompileBMD(bmdPath);
-                }
+
                 if (File.Exists(msgPath))
                 {
                     using (FileSys.WaitForFile(msgPath)) { }
@@ -127,7 +126,7 @@ namespace P5RStringEditor
                     {
                         if (lines[i].StartsWith("[msg "))
                         {
-                            int itemId = GetItemIdFromFlowscriptLine(lines[i], msgPath.Contains("Help"));
+                            int itemId = GetItemIdFromFlowscriptLine(lines[i], msgPath.Contains("Help") && !msgPath.Contains("AddEffect"));
 
                             if (tblSection.TblEntries.Any(x => x.Id.Equals(itemId)))
                             {
@@ -233,7 +232,7 @@ namespace P5RStringEditor
             // Create .msg file with form data's description text
             for (int i = 0; i < tblSection.TblEntries.Count; i++)
             {
-                if (bmdName.Contains("Help"))
+                if (bmdName.Contains("Help") && !bmdName.Contains("AddEffect"))
                     newMsgLines.Add($"[msg item_{i.ToString("X3")}]");
                 else
                     newMsgLines.Add($"[msg myth_{i.ToString("D3")}]");
@@ -268,8 +267,11 @@ namespace P5RStringEditor
                 AtlusScriptCompiler.Program.Main(new string[] { msgPath,
                     "-Compile", "-Library", "P5R", "-Encoding", comboBox_Encoding.SelectedItem.ToString(), "-OutFormat", "V1BE", "-Out", outPath });
 
-                using (FileSys.WaitForFile(outPath)) { }
-                File.Delete(msgPath);
+                if (deleteOutputMSGToolStripMenuItem.Checked)
+                {
+                    using (FileSys.WaitForFile(msgPath)) { }
+                    File.Delete(msgPath);
+                }
             }
         }
 
@@ -286,6 +288,7 @@ namespace P5RStringEditor
                 {"Accessories", "Accessory"},
                 {"Consumables", "Item"},
                 {"Key Items", "EventItem"},
+                {"Traits", "AddEffect"},
                 {"Materials", "Material"},
                 {"Skill Cards", "SkillCard"},
                 {"Outfits", "Dress"},

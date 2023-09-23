@@ -26,7 +26,7 @@ namespace P5RStringEditor
         {
             selectedTabName = "";
 
-            if (tabControl_EditorType.SelectedTab.Text == ".FTDs")
+            if (tabControl_EditorType.SelectedTab.Text == ".FTDs" && Ftds.Count > 0)
             {
                 ftdMode = true;
                 SetListBoxDataSource_ToFTD();
@@ -36,50 +36,35 @@ namespace P5RStringEditor
                 ftdMode = false;
                 SetListBoxDataSource_ToTBL();
             }
+
+            tabControl_TblSections.SelectedIndex = -1;
+            tabControl_TblSections.SelectedIndex = 0;
+            tabControl_TblSections.SelectedTab = tabControl_TblSections.TabPages[0];
+            selectedTabName = tabControl_TblSections.SelectedTab.Text;
         }
 
         private void SetListBoxDataSource_ToFTD()
         {
-            if (Ftds.Count == 0)
-            {
-                tabControl_EditorType.SelectedIndex = 0;
-                return;
-            }
-
-            tabControl_TblSections.Enabled = false;
+            tabControl_EditorType.SelectedIndex = 1;
             
             tabControl_TblSections.TabPages.Clear();
             foreach (var ftd in Ftds)
-                tabControl_TblSections.Controls.Add(new MetroSetSetTabPage() { Text = ftd.Name });
-
-            if (tabControl_TblSections.TabPages.Count == 0)
-                return;
-
-            tabControl_TblSections.Enabled = true;
-            tabControl_TblSections.SelectedTab = tabControl_TblSections.TabPages[0];
-
-            if (!Ftds.Any(x => x.Lines.Equals(selectedTabName)))
-                return;
-
-            bindingSource_ListBox.DataSource = Ftds.First(x => x.Name.Equals(selectedTabName)).Lines;
-            listBox_Main.DataSource = bindingSource_ListBox;
+                tabControl_TblSections.Controls.Add(new MetroSetSetTabPage() { Text = ftd.Name, Style = Theme.ThemeStyle });
         }
 
         private void SetListBoxDataSource_ToTBL()
         {
+            tabControl_EditorType.SelectedIndex = 0;
+
             if (FormTblSections.Count == 0)
                 return;
 
-            tabControl_TblSections.Enabled = false;
             tabControl_TblSections.TabPages.Clear();
             foreach (var section in FormTblSections)
-                tabControl_TblSections.Controls.Add(new MetroSetSetTabPage() { Text = section.SectionName });
-            
-            if (tabControl_TblSections.TabPages.Count == 0)
-                return;
+                tabControl_TblSections.Controls.Add(new MetroSetSetTabPage() { Text = section.SectionName, Style = Theme.ThemeStyle });
 
-            tabControl_TblSections.Enabled = true;
             tabControl_TblSections.SelectedTab = tabControl_TblSections.TabPages[0];
+            selectedTabName = tabControl_TblSections.SelectedTab.Text;
         }
 
         private void SelectedEntry_Changed(object sender, EventArgs e)
@@ -98,7 +83,7 @@ namespace P5RStringEditor
 
         private void SelectedTab_Changed(object sender, EventArgs e)
         {
-            if (!tabControl_TblSections.Enabled)
+            if (!tabControl_TblSections.Enabled || tabControl_TblSections.SelectedTab == null)
                 return;
 
             selectedTabName = tabControl_TblSections.SelectedTab.Text;

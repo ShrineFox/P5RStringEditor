@@ -421,7 +421,7 @@ namespace P5RStringEditor
             this.tabControl_EditorType.ItemSize = new System.Drawing.Size(100, 38);
             this.tabControl_EditorType.Location = new System.Drawing.Point(3, 3);
             this.tabControl_EditorType.Name = "tabControl_EditorType";
-            this.tabControl_EditorType.SelectedIndex = 0;
+            this.tabControl_EditorType.SelectedIndex = 1;
             this.tabControl_EditorType.SelectedTextColor = System.Drawing.Color.White;
             this.tabControl_EditorType.Size = new System.Drawing.Size(690, 41);
             this.tabControl_EditorType.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
@@ -439,7 +439,7 @@ namespace P5RStringEditor
             // 
             this.tabPage_TBL.Location = new System.Drawing.Point(4, 42);
             this.tabPage_TBL.Name = "tabPage_TBL";
-            this.tabPage_TBL.Size = new System.Drawing.Size(682, 0);
+            this.tabPage_TBL.Size = new System.Drawing.Size(682, -5);
             this.tabPage_TBL.TabIndex = 0;
             this.tabPage_TBL.Text = "NAME.TBL";
             // 
@@ -447,7 +447,7 @@ namespace P5RStringEditor
             // 
             this.tabPage_FTDs.Location = new System.Drawing.Point(4, 42);
             this.tabPage_FTDs.Name = "tabPage_FTDs";
-            this.tabPage_FTDs.Size = new System.Drawing.Size(682, -5);
+            this.tabPage_FTDs.Size = new System.Drawing.Size(682, 0);
             this.tabPage_FTDs.TabIndex = 1;
             this.tabPage_FTDs.Text = ".FTDs";
             // 

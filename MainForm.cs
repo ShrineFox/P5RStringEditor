@@ -45,6 +45,8 @@ namespace P5RStringEditor
 
             // Select first tab
             SetListBoxDataSource_ToTBL();
+            tabControl_TblSections.SelectedIndex = -1;
+            tabControl_TblSections.SelectedIndex = 0;
         }
 
         private void ImportTBLData(string tblFilePath = "")
@@ -181,7 +183,7 @@ namespace P5RStringEditor
             foreach (var ftdFile in importPath)
             {
                 FTD ftd = FTDStringConverter.ReadFTD(ftdFile);
-                if (ftd.Lines.Count > 0)
+                if (ftd.Lines.Any(x => !String.IsNullOrEmpty(x.Name)))
                     Ftds.Add(ftd);
             }
 

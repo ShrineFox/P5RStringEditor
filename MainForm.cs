@@ -301,7 +301,7 @@ namespace P5RStringEditor
             // Apply form changes to FTD object
             var OutputFtd = ftd.Copy();
             foreach (var change in Changes.Where(x => x.SectionName == ftd.Name))
-                ftd.Lines[change.Id].Name = change.Name;
+                OutputFtd.Lines[change.Id].Name = change.Name;
 
             // Save changed FTD
             FTDStringConverter.WriteFTD(OutputFtd, outPath);

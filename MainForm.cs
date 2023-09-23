@@ -293,6 +293,9 @@ namespace P5RStringEditor
             string outPath = Path.GetFullPath($".//Output//p5r.tblmod//P5REssentials//CPK//FTD.CPK/FIELD/FTD/{ftd.Name}");
             Directory.CreateDirectory(Path.GetDirectoryName(outPath));
 
+            if (!Changes.Any(x => x.SectionName == ftd.Name))
+                return;
+
             // Apply form changes to FTD object
             var OutputFtd = ftd.Copy();
             foreach (var change in Changes.Where(x => x.SectionName == ftd.Name))

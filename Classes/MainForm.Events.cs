@@ -26,10 +26,18 @@ namespace P5RStringEditor
         {
             selectedTabName = "";
 
-            if (tabControl_EditorType.SelectedTab.Text == ".FTDs" && Ftds.Count > 0)
+            if (tabControl_EditorType.SelectedTab.Text == ".FTDs")
             {
-                ftdMode = true;
-                SetListBoxDataSource_ToFTD();
+                if (Ftds.Count > 0)
+                {
+                    ftdMode = true;
+                    SetListBoxDataSource_ToFTD();
+                }
+                else
+                {
+                    MessageBox.Show("Import a .FTD file to use this tab!");
+                    tabControl_EditorType.SelectedIndex = 0;
+                }
             }
             else
             {

@@ -124,7 +124,7 @@ namespace P5RStringEditor
                     {
                         if (lines[i].StartsWith("[msg "))
                         {
-                            int itemId = GetItemIdFromFlowscriptLine(lines[i], msgPath.Contains("Help") && !msgPath.Contains("AddEffect"));
+                            int itemId = GetItemIdFromFlowscriptLine(lines[i], msgPath.Contains("Help") && !msgPath.Contains("Specific"));
 
                             if (tblSection.TblEntries.Any(x => x.Id.Equals(itemId)))
                             {
@@ -245,10 +245,12 @@ namespace P5RStringEditor
             // Create .msg file with form data's description text
             for (int i = 0; i < tblSection.TblEntries.Count; i++)
             {
-                if (bmdName.Contains("Help") && !bmdName.Contains("AddEffect"))
+                if (bmdName.Contains("Help") && !bmdName.Contains("Specific"))
                     newMsgLines.Add($"[msg item_{i.ToString("X3")}]");
-                else
+                else if (bmdName.Contains("Myth"))
                     newMsgLines.Add($"[msg myth_{i.ToString("D3")}]");
+                else
+                    newMsgLines.Add($"[msg specific_{i.ToString("D3")}]");
 
                 string[] descLines = tblSection.TblEntries[i].Description.Split('\n');
                 foreach (var line in descLines)

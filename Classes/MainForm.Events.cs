@@ -318,13 +318,19 @@ namespace P5RStringEditor
                 e.Handled = true; 
                 e.SuppressKeyPress = true;
 
+                dynamic entry;
+
                 int i = selectedIndex + 1;
                 while (i < listBox_Main.Items.Count)
                 {
                     if (i == selectedIndex)
                         return;
 
-                    var entry = (Entry)listBox_Main.Items[i];
+                    if (ftdMode)
+                        entry = (FTDString)listBox_Main.Items[i];
+                    else
+                        entry = (Entry)listBox_Main.Items[i];
+
                     if (entry.Name.ToLower().Contains(searchTxt)
                         || Changes.Where(x => x.SectionName.Equals(sectionName)).Any(x => x.Id.Equals(i) && x.Name.ToLower().Contains(searchTxt)))
                     {

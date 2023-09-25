@@ -104,6 +104,7 @@ namespace P5RStringEditor
 
                 long NextPos = ftdfile.Position;
                 int i = 0;
+                AtlusEncoding encoding = AtlusEncoding.Persona5RoyalEFIGS;
                 foreach (var ftdString in ftd.Lines)
                 {
                     long targetPointerPos = 0x10 + 4 * i;
@@ -112,7 +113,7 @@ namespace P5RStringEditor
 
                     ftdfile.Seek(NextPos, SeekOrigin.Begin);
 
-                    var strLen = ftdString.Name.Length + 1;
+                    var strLen = encoding.GetByteCount(ftdString.Name.ToCharArray()) + 1;
                     if (ftd.Type == 0)
                     {
                         ftdfile.WriteUInt32(0);
@@ -120,7 +121,7 @@ namespace P5RStringEditor
                         ftdfile.WriteUInt32(1);
                         ftdfile.WriteUInt16(0);
                         ftdfile.WriteUInt16(0);
-                        ftdfile.WriteString(StringBinaryFormat.FixedLength, ftdString.Name, ftdString.Name.Length);
+                        ftdfile.WriteString(StringBinaryFormat.FixedLength, ftdString.Name, strLen);
                         ftdfile.WriteByte(0);
 
                     }
@@ -129,7 +130,7 @@ namespace P5RStringEditor
                         ftdfile.WriteByte((byte)strLen);
                         ftdfile.WriteByte(1);
                         ftdfile.WriteUInt16(0);
-                        ftdfile.WriteString(StringBinaryFormat.FixedLength, ftdString.Name, ftdString.Name.Length);
+                        ftdfile.WriteString(StringBinaryFormat.FixedLength, ftdString.Name, strLen);
                         ftdfile.WriteByte(0);
                     }
 

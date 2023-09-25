@@ -14,3 +14,7 @@ Also imports/exports FTDs so you can edit NPC names, Field names etc.
 - Edits should work with both P5R Vanilla and DeathChaos's P5RCBT mod
 
 I might add support for P5 PS3 at some point in the future.
+
+# Credit
+- DeathChaos25 for [P5NameTBLEditor](https://github.com/DeathChaos25/P5NameTBLEditor) and [P5FTDStringConverter](https://github.com/DeathChaos25/P5FTDStringConverter), which I've lightly modified to work with the form.
+- [samudebug](https://github.com/samudebug) for adding support for Type 0 FTDs and helping fix bugs with Trait descriptions.

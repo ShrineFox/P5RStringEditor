@@ -12,6 +12,7 @@ namespace P5RStringEditor
     {
         public class FTD
         {
+            public int Type { get; set; }
             public string Name { get; set; } = "";
             public List<FTDString> Lines { get; set; } = new List<FTDString>();
         }
@@ -34,7 +35,8 @@ namespace P5RStringEditor
                 var temp2 = ftdfile.ReadUInt16(); // should be 00 00
                 UInt32 Magic = ftdfile.ReadUInt32(); // FTD0
                 UInt32 Filesize = ftdfile.ReadUInt32(); // location is 0x8
-                var temp3 = ftdfile.ReadUInt16(); // should be 00 01
+                var fileType = ftdfile.ReadUInt16(); // Can be 0 or 1
+                ftd.Type = fileType;
                 var numOfPointers = ftdfile.ReadUInt16(); // location 0xE
 
                 List<String> FTDStrings = new List<String>();
@@ -43,15 +45,32 @@ namespace P5RStringEditor
                 {
                     StringPointers.Add(ftdfile.ReadUInt32());
                 }
-
-                for (int i = 0; i < numOfPointers; i++)
+                if (fileType == 0)
                 {
-                    ftdfile.Seek(StringPointers[i], SeekOrigin.Begin);
-                    var stringLength = ftdfile.ReadByte();
-                    var unk = ftdfile.ReadByte(); // should be 0x1
-                    var nullVar = ftdfile.ReadUInt16(); // should be 00 00
+                    for (int i = 0; i < numOfPointers; i++)
+                    {
+                        ftdfile.Seek(StringPointers[i], SeekOrigin.Begin);
+                        var field0 = ftdfile.ReadUInt32();
+                        var stringLength = ftdfile.ReadUInt32();
+                        var entryCount = ftdfile.ReadUInt32(); // should be 0x1
+                        var type = ftdfile.ReadUInt16(); // should be 00 00
+                        var unk = ftdfile.ReadUInt16();
 
-                    ftd.Lines.Add(new FTDString() { Name = ftdfile.ReadString(StringBinaryFormat.NullTerminated), Id = i });
+                        ftd.Lines.Add(new FTDString() { Name = ftdfile.ReadString(StringBinaryFormat.NullTerminated), Id = i });
+                    }
+                }
+                if (fileType == 1)
+                {
+
+                    for (int i = 0; i < numOfPointers; i++)
+                    {
+                        ftdfile.Seek(StringPointers[i], SeekOrigin.Begin);
+                        var stringLength = ftdfile.ReadByte();
+                        var unk = ftdfile.ReadByte(); // should be 0x1
+                        var nullVar = ftdfile.ReadUInt16(); // should be 00 00
+
+                        ftd.Lines.Add(new FTDString() { Name = ftdfile.ReadString(StringBinaryFormat.NullTerminated), Id = i });
+                    }
                 }
             }
 
@@ -66,7 +85,7 @@ namespace P5RStringEditor
                 ftdfile.WriteUInt16(0x0000);
                 ftdfile.WriteUInt32(0x46544430); // FTD0
                 ftdfile.WriteUInt32(0x0); // Filesize, come back and fix later
-                ftdfile.WriteUInt16(0x0001);
+                ftdfile.WriteUInt16(Convert.ToUInt16(ftd.Type));
                 ftdfile.WriteUInt16(Convert.ToUInt16(ftd.Lines.Count));
 
                 foreach (var line in ftd.Lines)
@@ -94,11 +113,25 @@ namespace P5RStringEditor
                     ftdfile.Seek(NextPos, SeekOrigin.Begin);
 
                     var strLen = ftdString.Name.Length + 1;
-                    ftdfile.WriteByte((byte)strLen);
-                    ftdfile.WriteByte(1);
-                    ftdfile.WriteUInt16(0);
-                    ftdfile.WriteString(StringBinaryFormat.FixedLength, ftdString.Name, ftdString.Name.Length);
-                    ftdfile.WriteByte(0);
+                    if (ftd.Type == 0)
+                    {
+                        ftdfile.WriteUInt32(0);
+                        ftdfile.WriteUInt32(Convert.ToUInt32(strLen));
+                        ftdfile.WriteUInt32(1);
+                        ftdfile.WriteUInt16(0);
+                        ftdfile.WriteUInt16(0);
+                        ftdfile.WriteString(StringBinaryFormat.FixedLength, ftdString.Name, ftdString.Name.Length);
+                        ftdfile.WriteByte(0);
+
+                    }
+                    if (ftd.Type == 1)
+                    {
+                        ftdfile.WriteByte((byte)strLen);
+                        ftdfile.WriteByte(1);
+                        ftdfile.WriteUInt16(0);
+                        ftdfile.WriteString(StringBinaryFormat.FixedLength, ftdString.Name, ftdString.Name.Length);
+                        ftdfile.WriteByte(0);
+                    }
 
                     targetPadding = (int)((0x10 - ftdfile.Position % 0x10) % 0x10);
                     if (targetPadding > 0)

@@ -286,7 +286,7 @@ namespace P5RStringEditor
 
         private void Import_Click(object sender, EventArgs e)
         {
-            var importPath = WinFormsDialogs.SelectFile("Choose File", true, new string[] { "TBL (*.tbl)", "FTD (*.ftd)" });
+            var importPath = WinFormsDialogs.SelectFile("Choose File", true, new string[] { "TBL (*.tbl)", "FTD (*.ftd)", "CTD (*.ctd)" });
             if (importPath.Count() <= 0 || !File.Exists(importPath.First()))
                 return;
 
@@ -306,8 +306,10 @@ namespace P5RStringEditor
                     ImportMSGData(bmdPath, true);
                     break;
                 case ".ftd":
+                case ".ctd":
                     ImportFTDs(importPath);
                     break;
+
                 default:
                     break;
             }

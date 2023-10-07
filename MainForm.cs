@@ -183,7 +183,7 @@ namespace P5RStringEditor
             foreach (var ftdFile in importPath)
             {
                 FTD ftd = FTDStringConverter.ReadFTD(ftdFile);
-                if (ftd.Lines.Any(x => !String.IsNullOrEmpty(x.Name)))
+                if (ftd.Lines.Any(x => !String.IsNullOrEmpty(x.Name)) || ftd.Entries.Any(x => x.Lines.Any(y => !String.IsNullOrEmpty(y.Name))))
                     Ftds.Add(ftd);
             }
 
@@ -301,7 +301,24 @@ namespace P5RStringEditor
             // Apply form changes to FTD object
             var OutputFtd = ftd.Copy();
             foreach (var change in Changes.Where(x => x.SectionName == ftd.Name))
-                OutputFtd.Lines[change.Id].Name = change.Name;
+            {
+                if (OutputFtd.Type == 1)
+                {
+                    OutputFtd.Lines[change.Id].Name = change.Name;
+                }
+                if (OutputFtd.Type == 0)
+                {
+                    foreach (var entry in OutputFtd.Entries)
+                    {
+                        var lineIndex = entry.Lines.FindIndex(x => x.Id == change.Id);
+                        if (lineIndex > -1)
+                        {
+
+                            entry.Lines[lineIndex].Name = change.Name;
+                        }
+                    }
+                }
+            }
 
             // Save changed FTD
             FTDStringConverter.WriteFTD(OutputFtd, outPath);

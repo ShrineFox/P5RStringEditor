@@ -19,6 +19,7 @@ namespace P5RStringEditor
     {
         public static bool ftdMode = false;
         public static string selectedTabName = "";
+        public List<FTDString> lines = new List<FTDString>();
 
         BindingSource bindingSource_ListBox = new BindingSource();
 
@@ -100,8 +101,22 @@ namespace P5RStringEditor
             {
                 if (!Ftds.Any(x => x.Name.Equals(selectedTabName)))
                     return;
+                var ftd = Ftds.First(x => x.Name.Equals(selectedTabName));
+                if (ftd.Type == 1)
+                {
 
-                bindingSource_ListBox.DataSource = Ftds.First(x => x.Name.Equals(selectedTabName)).Lines;
+                    bindingSource_ListBox.DataSource = Ftds.First(x => x.Name.Equals(selectedTabName)).Lines;
+                    lines = Ftds.First(x => x.Name.Equals(selectedTabName)).Lines;
+                } else
+                {
+                    var totalLines = new List<FTDString>();
+                    foreach (var entry in ftd.Entries)
+                    {
+                        totalLines = totalLines.Concat(entry.Lines).ToList();
+                    }
+                    bindingSource_ListBox.DataSource = totalLines;
+                    lines = totalLines;
+                }
             }
             else
             {
@@ -142,7 +157,7 @@ namespace P5RStringEditor
         {
             ToggleFormOptions(false);
 
-            string name = ftd.Lines[selectedIndex].Name;
+            string name = lines[selectedIndex].Name;
 
             num_Id.Value = selectedIndex;
             txt_Name.Text = name;
@@ -271,7 +286,7 @@ namespace P5RStringEditor
 
         private void Import_Click(object sender, EventArgs e)
         {
-            var importPath = WinFormsDialogs.SelectFile("Choose File", true, new string[] { "TBL (*.tbl)", "FTD (*.ftd)" });
+            var importPath = WinFormsDialogs.SelectFile("Choose File", true, new string[] { "TBL (*.tbl)", "FTD (*.ftd)", "CTD (*.ctd)" });
             if (importPath.Count() <= 0 || !File.Exists(importPath.First()))
                 return;
 
@@ -291,8 +306,10 @@ namespace P5RStringEditor
                     ImportMSGData(bmdPath, true);
                     break;
                 case ".ftd":
+                case ".ctd":
                     ImportFTDs(importPath);
                     break;
+
                 default:
                     break;
             }

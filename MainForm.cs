@@ -1,5 +1,4 @@
-﻿using AtlusScriptCompiler;
-using AtlusScriptLibrary.Common.Libraries;
+﻿using AtlusScriptLibrary.Common.Libraries;
 using AtlusScriptLibrary.Common.Logging;
 using AtlusScriptLibrary.Common.Text;
 using AtlusScriptLibrary.Common.Text.Encodings;
@@ -10,6 +9,7 @@ using AtlusScriptLibrary.MessageScriptLanguage.Decompiler;
 using MetroSet_UI.Child;
 using MetroSet_UI.Forms;
 using Newtonsoft.Json;
+using P5RStringEditor.Properties;
 using ShrineFox.IO;
 using System;
 using System.CodeDom.Compiler;
@@ -28,6 +28,7 @@ namespace P5RStringEditor
     public partial class MainForm : MetroSetForm
     {
         public Encoding userEncoding = AtlusEncoding.Persona5RoyalEFIGS;
+        public string CompilerPath = "";
 
         public MainForm()
         {
@@ -47,6 +48,8 @@ namespace P5RStringEditor
             SetListBoxDataSource_ToTBL();
             tabControl_TblSections.SelectedIndex = -1;
             tabControl_TblSections.SelectedIndex = 0;
+
+            SetCompilerPath();
         }
 
         private void ImportTBLData(string tblFilePath = "")
@@ -165,17 +168,8 @@ namespace P5RStringEditor
         private void DecompileBMD(string bmdPath)
         {
             string outPath = FileSys.GetExtensionlessPath(bmdPath) + ".msg";
-
-            AtlusScriptCompiler.Program.IsActionAssigned = false;
-            AtlusScriptCompiler.Program.InputFilePath = bmdPath;
-            AtlusScriptCompiler.Program.OutputFilePath = outPath;
-            AtlusScriptCompiler.Program.MessageScriptEncoding = userEncoding;
-            AtlusScriptCompiler.Program.MessageScriptTextEncodingName = userEncoding.EncodingName;
-            AtlusScriptCompiler.Program.Logger = new Logger($"{nameof(AtlusScriptCompiler)}_{Path.GetFileNameWithoutExtension(outPath)}");
-            AtlusScriptCompiler.Program.Listener = new FileAndConsoleLogListener(true, LogLevel.Info | LogLevel.Warning | LogLevel.Error | LogLevel.Fatal);
-
-            AtlusScriptCompiler.Program.Main(new string[] { bmdPath,
-                    "-Decompile", "-Library", "P5R", "-Encoding", comboBox_Encoding.SelectedItem.ToString(), "-Out", outPath });
+            string args = $"\"{bmdPath}\" -Decompile -Library P5R -Encoding {comboBox_Encoding.SelectedItem} -Out \"{outPath}\"";
+            Exe.Run(Path.GetFullPath(CompilerPath), args, redirectStdOut: true);
         }
 
         private void ImportFTDs(List<string> importPath)
@@ -267,20 +261,9 @@ namespace P5RStringEditor
 
             if (outputBMDToolStripMenuItem.Checked)
             {
-                // HACK: Comment out mFileWriter lines in AtlusScriptCompiler/FileAndConsoleLogListener.cs
-                // to prevent file access errors, at expense of no log output
-
                 using (FileSys.WaitForFile(msgPath)) { }
-                AtlusScriptCompiler.Program.IsActionAssigned = false;
-                AtlusScriptCompiler.Program.InputFilePath = msgPath;
-                AtlusScriptCompiler.Program.OutputFilePath = outPath;
-                AtlusScriptCompiler.Program.MessageScriptEncoding = userEncoding;
-                AtlusScriptCompiler.Program.MessageScriptTextEncodingName = userEncoding.EncodingName;
-                AtlusScriptCompiler.Program.Logger = new Logger($"{nameof(AtlusScriptCompiler)}_{Path.GetFileNameWithoutExtension(outPath)}");
-                AtlusScriptCompiler.Program.Listener = new FileAndConsoleLogListener(true, LogLevel.Info | LogLevel.Warning | LogLevel.Error | LogLevel.Fatal);
-
-                AtlusScriptCompiler.Program.Main(new string[] { msgPath,
-                    "-Compile", "-Library", "P5R", "-Encoding", comboBox_Encoding.SelectedItem.ToString(), "-OutFormat", "V1BE", "-Out", outPath });
+                string args = $"\"{msgPath}\" -Compile -Encoding {comboBox_Encoding.SelectedItem} -OutFormat V1BE -Out \"{outPath}\"";
+                Exe.Run(Path.GetFullPath(CompilerPath), args, redirectStdOut: true);
 
                 if (deleteOutputMSGToolStripMenuItem.Checked)
                 {
@@ -322,6 +305,22 @@ namespace P5RStringEditor
 
             // Save changed FTD
             FTDStringConverter.WriteFTD(OutputFtd, outPath);
+        }
+
+        private void SetCompilerPath()
+        {
+            if (File.Exists("CompilerPath.txt"))
+                CompilerPath = File.ReadAllText("CompilerPath.txt");
+
+            while (!File.Exists(CompilerPath))
+            {
+                var fileSelect = WinFormsDialogs.SelectFile("Select your AtlusScriptCompiler.exe", false, new string[] { "Executable File (.exe)" });
+                if (fileSelect.Count > 0 && File.Exists(fileSelect.First()))
+                {
+                    CompilerPath = fileSelect.First();
+                    File.WriteAllText("CompilerPath.txt", CompilerPath);
+                }
+            }
         }
 
         List<TblSection> FormTblSections = new List<TblSection>();

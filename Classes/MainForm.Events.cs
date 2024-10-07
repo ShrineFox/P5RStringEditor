@@ -282,6 +282,7 @@ namespace P5RStringEditor
                 CreateNewFTD(ftd);
 
             MessageBox.Show("Done exporting to output folder!");
+            Exe.Run("explorer.exe", Path.GetFullPath(".//Output"), hideWindow: false);
         }
 
         private void Import_Click(object sender, EventArgs e)

@@ -182,12 +182,8 @@
       <Project>{41cc0b70-6a3a-4873-bde7-ca451e4d0984}</Project>
       <Name>Amicitia.IO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Atlus-Script-Tools\Source\AtlusScriptCompiler\AtlusScriptCompiler.csproj">
-      <Project>{58e13e8a-ea32-4627-a798-58e4648d812e}</Project>
-      <Name>AtlusScriptCompiler</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Atlus-Script-Tools\Source\AtlusScriptLibrary\AtlusScriptLibrary.csproj">
-      <Project>{62ee486f-ae33-4dbb-ac4c-409a22cb04ad}</Project>
+      <Project>{623a9e01-beee-464c-8208-ca8ba68b7949}</Project>
       <Name>AtlusScriptLibrary</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShrineFox.IO\ShrineFox.IO.csproj">

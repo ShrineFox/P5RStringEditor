@@ -118,10 +118,7 @@ namespace P5RStringEditor
                 {
                     using (FileSys.WaitForFile(msgPath)) { }
 
-                    string[] lines = File.ReadAllText(msgPath)
-                        .Replace("[s]", "").Replace("[n]", "\r\n").Replace("[e]", "")
-                        .Replace("[f 0 5 65278][f 2 1]", "")
-                        .Split('\n');
+                    string[] lines = SanitizeMessagescript(File.ReadAllText(msgPath)).Split('\n');
 
                     for (int i = 0; i < lines.Length; i++)
                     {
@@ -164,6 +161,10 @@ namespace P5RStringEditor
             }
         }
 
+        private string SanitizeMessagescript(string inputText)
+        {
+            return inputText.Replace("[s]", "").Replace("[n]", "\r\n").Replace("[e]", "").Replace("[f 0 5 65278][f 2 1]", "");
+        }
 
         private void DecompileBMD(string bmdPath)
         {

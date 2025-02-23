@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using static P5RStringEditor.FTDStringConverter;
+using static System.Collections.Specialized.BitVector32;
 
 namespace P5RStringEditor
 {
@@ -318,7 +319,7 @@ namespace P5RStringEditor
 
         private void Encoding_Changed(object sender, EventArgs e)
         {
-            userEncoding = AtlusEncoding.GetByName(comboBox_Encoding.SelectedItem.ToString());
+            userEncoding = AtlusEncoding.Persona5RoyalEFIGS;
         }
 
         private void Search_KeyDown(object sender, KeyEventArgs e)
@@ -406,6 +407,66 @@ namespace P5RStringEditor
                 return Convert.ToInt32(line.Split('_')[1].Replace("]", ""));
 
             return Convert.ToInt32(Int64.Parse(line.Split('_')[1].Replace("]", ""), System.Globalization.NumberStyles.HexNumber));
+        }
+
+
+        private void ImportCostumes_Click(object sender, EventArgs e)
+        {
+            var costumesDir = WinFormsDialogs.SelectFolder("Choose Mod's Costume Folder");
+            if (!Directory.Exists(costumesDir))
+                return;
+
+            foreach(var charFolder in Directory.GetDirectories(costumesDir))
+                foreach(var costumeFolder in Directory.GetDirectories(charFolder))
+                {
+                    string charName = Path.GetFileName(charFolder);
+                    string ogOutfitName = Path.GetFileName(costumeFolder);
+                    string newOutfitName = "";
+                    string configPath = Path.Combine(costumeFolder, "config.yaml");
+                    string[] configText = new string[] { };
+                    string descPath = Path.Combine(costumeFolder, "description.msg");
+                    string descText = "";
+
+                    if (File.Exists(configPath))
+                    {
+                        configText = File.ReadAllLines(configPath);
+                        if (File.Exists(descPath))
+                        {
+                            descText = File.ReadAllText(descPath);
+                        }
+
+                        foreach (var line in configText.Where(x => x.StartsWith("name:")))
+                            newOutfitName = line.Replace("name:","").Trim().Replace("\"","");
+
+                        descText = SanitizeMessagescript(descText.Replace("\r\n", ""));
+
+                        // List of party member names used to get index of costumes that share names
+                        string[] partyNames = new string[] { "Joker", "Ryuji", "Morgana", "Ann", "Yusuke", "Makoto", "Haru", "Futaba", "Akechi", "Sumire" };
+                        
+                        // If any outfits have matching folder name...
+                        if (FormTblSections.First(x => x.SectionName == "Outfits").TblEntries.Any(x => x.Name.Equals(ogOutfitName)))
+                        {
+                            // Get index in cases where outfit isn't unique to one character
+                            int index = FormTblSections.First(x => x.SectionName == "Outfits").TblEntries.First(x => x.Name.Equals(ogOutfitName)).Id;
+                            if (FormTblSections.First(x => x.SectionName == "Outfits").TblEntries.Where(x => x.Name.Equals(ogOutfitName)).Count() > 1)
+                            {
+                                index = FormTblSections.First(x => x.SectionName == "Outfits").TblEntries.Where(x => x.Name.Equals(ogOutfitName))
+                                    .Skip(Array.IndexOf(partyNames, charName)).First().Id;
+                            }
+
+                            // Update existing Change or add new one with new outfit name/description
+                            if (Changes.Any(x => x.SectionName == "Outfits" && x.Id == index))
+                            {
+                                Changes.First(x => x.SectionName == "Outfits" && x.Id == index).Name = newOutfitName;
+                                Changes.First(x => x.SectionName == "Outfits" && x.Id == index).Description = descText;
+                            }
+                            else
+                                Changes.Add(new Change() { SectionName = "Outfits", Id = index, Description = descText, Name = newOutfitName });
+                        }
+                    }
+                }
+
+            MessageBox.Show($"Updated Outfit names and descriptions successfully.", "Project Updated");
         }
     }
 }

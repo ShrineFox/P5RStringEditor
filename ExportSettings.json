@@ -1,0 +1,5 @@
+{
+  "PAKOutputDir": ".\\Output\\p5r.tblmod\\FEmulator\\PAK\\INIT\\DATMSG.PAK",
+  "TBLOutputDir": ".\\Output\\p5r.tblmod\\P5REssentials\\CPK\\TBL.CPK\\BATTLE\\TABLE",
+  "FTDOutputDir": ".\\Output\\p5r.tblmod\\P5REssentials\\CPK\\FTD.CPK\\FIELD\\FTD"
+}

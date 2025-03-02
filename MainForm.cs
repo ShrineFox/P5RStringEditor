@@ -29,7 +29,7 @@ namespace P5RStringEditor
     {
         public AtlusEncoding userEncoding = AtlusEncoding.Persona5RoyalEFIGS;
         public string CompilerPath = "";
-
+        public Config settings = new Config();
         public MainForm()
         {
             InitializeComponent();
@@ -38,6 +38,10 @@ namespace P5RStringEditor
             ApplyTheme();
             SetLogging();
             MenuStripHelper.SetMenuStripIcons(MenuStripHelper.GetMenuStripIconPairs("Icons.txt"), this);
+
+            // Load settings
+            //SaveJson("ExportSettings.json");
+            LoadJson("ExportSettings.json");
 
             // Load default TBL/MSG data
             ImportTBLFromTxtFiles(TblDirPath);
@@ -50,6 +54,19 @@ namespace P5RStringEditor
             tabControl_TblSections.SelectedIndex = 0;
 
             SetCompilerPath();
+        }
+        public void SaveJson(string jsonPath)
+        {
+            File.WriteAllText(jsonPath, JsonConvert.SerializeObject(settings, Newtonsoft.Json.Formatting.Indented));
+        }
+
+        public void LoadJson(string jsonPath)
+        {
+            if (!File.Exists(jsonPath))
+                return;
+
+            string jsonText = File.ReadAllText(Path.GetFullPath(jsonPath));
+            settings = JsonConvert.DeserializeObject<Config>(jsonText);
         }
 
         private void ImportTBLData(string tblFilePath = "")
@@ -169,7 +186,7 @@ namespace P5RStringEditor
         private void DecompileBMD(string bmdPath)
         {
             string outPath = FileSys.GetExtensionlessPath(bmdPath) + ".msg";
-            string args = $"\"{bmdPath}\" -Decompile -Library P5R -Encoding {comboBox_Encoding.SelectedItem} -Out \"{outPath}\"";
+            string args = $"\"{bmdPath}\" -Decompile -Library P5R -Encoding P5R_{comboBox_Encoding.SelectedItem} -Out \"{outPath}\"";
             Exe.Run(Path.GetFullPath(CompilerPath), args, redirectStdOut: true);
         }
 
@@ -189,7 +206,7 @@ namespace P5RStringEditor
 
         private void CreateNameTBL()
         {
-            string outPath = Path.GetFullPath(".//Output//p5r.tblmod//P5REssentials//CPK//TBL.CPK/BATTLE/TABLE/NAME.TBL");
+            string outPath = Path.GetFullPath(Path.Combine(settings.TBLOutputDir, "NAME.TBL"));
             Directory.CreateDirectory(Path.GetDirectoryName(outPath));
 
             // Apply form changes to TBL object
@@ -217,7 +234,7 @@ namespace P5RStringEditor
                 bmdName += "Help";
 
             string inPath = Path.GetFullPath($".\\Dependencies\\P5RCBT\\DATMSGPAK\\{bmdName}.msg");
-            string outDir = Path.GetFullPath(".\\Output\\p5r.tblmod\\FEmulator\\PAK\\INIT\\DATMSG.PAK");
+            string outDir = Path.GetFullPath(settings.PAKOutputDir);
             
             Directory.CreateDirectory(outDir + "\\h");
             Directory.Delete(outDir + "\\h"); // hack to create folder with extension in name
@@ -263,7 +280,7 @@ namespace P5RStringEditor
             if (outputBMDToolStripMenuItem.Checked)
             {
                 using (FileSys.WaitForFile(msgPath)) { }
-                string args = $"\"{msgPath}\" -Compile -Encoding {comboBox_Encoding.SelectedItem} -OutFormat V1BE -Out \"{outPath}\"";
+                string args = $"\"{msgPath}\" -Compile -Encoding P5R_{comboBox_Encoding.SelectedItem} -OutFormat V1BE -Out \"{outPath}\"";
                 Exe.Run(Path.GetFullPath(CompilerPath), args, redirectStdOut: true);
 
                 if (deleteOutputMSGToolStripMenuItem.Checked)
@@ -276,7 +293,7 @@ namespace P5RStringEditor
 
         private void CreateNewFTD(FTD ftd)
         {
-            string outPath = Path.GetFullPath($".//Output//p5r.tblmod//P5REssentials//CPK//FTD.CPK/FIELD/FTD/{ftd.Name}");
+            string outPath = Path.GetFullPath(Path.Combine(settings.FTDOutputDir, ftd.Name));
             Directory.CreateDirectory(Path.GetDirectoryName(outPath));
 
             if (!Changes.Any(x => x.SectionName == ftd.Name))
@@ -344,5 +361,13 @@ namespace P5RStringEditor
                 {"Outfits", "Dress"},
                 {"Personas", "Myth"},
             };
+    }
+
+    public class Config
+    {
+        public string PAKOutputDir { get; set; } = ".\\Output\\p5r.tblmod\\FEmulator\\PAK\\INIT\\DATMSG.PAK";
+        public string TBLOutputDir { get; set; } = ".\\Output\\p5r.tblmod\\P5REssentials\\CPK\\TBL.CPK\\BATTLE\\TABLE";
+        public string FTDOutputDir { get; set; } = ".\\Output\\p5r.tblmod\\P5REssentials\\CPK\\FTD.CPK\\FIELD\\FTD";
+
     }
 }

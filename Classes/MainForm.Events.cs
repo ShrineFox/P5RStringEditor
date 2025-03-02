@@ -283,7 +283,7 @@ namespace P5RStringEditor
                 CreateNewFTD(ftd);
 
             MessageBox.Show("Done exporting to output folder!");
-            Exe.Run("explorer.exe", Path.GetFullPath(".//Output"), hideWindow: false);
+            //Exe.Run("explorer.exe", Path.GetFullPath(".//Output"), hideWindow: false);
         }
 
         private void Import_Click(object sender, EventArgs e)
@@ -319,7 +319,7 @@ namespace P5RStringEditor
 
         private void Encoding_Changed(object sender, EventArgs e)
         {
-            string encodingName = comboBox_Encoding.SelectedItem.ToString();
+            string encodingName = "Persona5Royal" + comboBox_Encoding.SelectedItem.ToString();
             Type atlusEncodingType = typeof(AtlusEncoding);
             PropertyInfo property = atlusEncodingType.GetProperty(encodingName, BindingFlags.Public | BindingFlags.Static);
             AtlusEncoding encoding = (AtlusEncoding)property.GetValue(null);

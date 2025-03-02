@@ -186,8 +186,8 @@ namespace P5RStringEditor
             this.comboBox_Encoding.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox_Encoding.DropDownWidth = 150;
             this.comboBox_Encoding.Items.AddRange(new object[] {
-            "Persona5RoyalEFIGS",
-            "Persona5RoyalJapanese"});
+            "EFIGS",
+            "Japanese"});
             this.comboBox_Encoding.Name = "comboBox_Encoding";
             this.comboBox_Encoding.Size = new System.Drawing.Size(151, 28);
             this.comboBox_Encoding.SelectedIndexChanged += new System.EventHandler(this.Encoding_Changed);

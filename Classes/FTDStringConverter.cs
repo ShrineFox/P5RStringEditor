@@ -32,13 +32,13 @@ namespace P5RStringEditor
             public List<FTDString> Lines { get; set; } = new List<FTDString>();
         }
 
-        public static FTD ReadFTD(string ftdPath)
+        public static FTD ReadFTD(string ftdPath, AtlusEncoding encoding)
         {
             List<UInt32> StringPointers = new List<UInt32>();
 
             FTD ftd = new FTD() { Name = Path.GetFileName(ftdPath) };
 
-            using (BinaryObjectReader ftdfile = new BinaryObjectReader(ftdPath, Endianness.Big, AtlusEncoding.Persona5RoyalEFIGS))
+            using (BinaryObjectReader ftdfile = new BinaryObjectReader(ftdPath, Endianness.Big, encoding))
             {
                 var temp1 = ftdfile.ReadUInt16(); // should be 00 01
                 var temp2 = ftdfile.ReadUInt16(); // should be 00 00
@@ -93,9 +93,9 @@ namespace P5RStringEditor
             return ftd;
         }
 
-        public static void WriteFTD(FTD ftd, string savePath)
+        public static void WriteFTD(FTD ftd, string savePath, AtlusEncoding encoding)
         {
-            using (BinaryObjectWriter ftdfile = new BinaryObjectWriter(savePath, Endianness.Big, AtlusEncoding.Persona5RoyalEFIGS))
+            using (BinaryObjectWriter ftdfile = new BinaryObjectWriter(savePath, Endianness.Big, encoding))
             {
                 ftdfile.WriteUInt16(0x0001);
                 ftdfile.WriteUInt16(0x0000);
@@ -109,7 +109,8 @@ namespace P5RStringEditor
                     {
                         ftdfile.WriteUInt32(0x0); //Write dummy pointers
                     }
-                } else
+                }
+                else
                 {
                     ftdfile.WriteUInt16(Convert.ToUInt16(ftd.Entries.Count));
                     foreach (var line in ftd.Entries)
@@ -118,7 +119,7 @@ namespace P5RStringEditor
                     }
                 }
 
-                
+
 
                 int targetPadding = (int)((0x10 - ftdfile.Position % 0x10) % 0x10); // pad to end of line if not enough pointers
                 if (targetPadding > 0)
@@ -131,10 +132,10 @@ namespace P5RStringEditor
 
                 long NextPos = ftdfile.Position;
                 int i = 0;
-                AtlusEncoding encoding = AtlusEncoding.Persona5RoyalEFIGS;
+
                 if (ftd.Type == 0)
                 {
-                    foreach(var entry in ftd.Entries)
+                    foreach (var entry in ftd.Entries)
                     {
                         long targetPointerPos = 0x10 + 4 * i;
                         ftdfile.Seek(targetPointerPos, SeekOrigin.Begin);
@@ -143,7 +144,7 @@ namespace P5RStringEditor
                         ftdfile.Seek(NextPos, SeekOrigin.Begin);
                         ftdfile.WriteUInt32(0);
                         var sizePointer = ftdfile.Position;
-                        ftdfile.WriteUInt32((UInt32) entry.Lines.Count * 64); // Entry size, coming back later to fix it
+                        ftdfile.WriteUInt32((UInt32)entry.Lines.Count * 64); // Entry size, coming back later to fix it
                         ftdfile.WriteUInt32((UInt32)entry.Lines.Count);
                         ftdfile.WriteUInt16(0);
                         ftdfile.WriteUInt16(0);
@@ -194,7 +195,7 @@ namespace P5RStringEditor
                         i++;
                     }
                 }
-                
+
                 ftdfile.Seek(8, SeekOrigin.Begin);
                 ftdfile.WriteUInt32((UInt32)ftdfile.Length); // fix filesize
                 ftdfile.Dispose();

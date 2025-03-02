@@ -27,7 +27,7 @@ namespace P5RStringEditor
 {
     public partial class MainForm : MetroSetForm
     {
-        public Encoding userEncoding = AtlusEncoding.Persona5RoyalEFIGS;
+        public AtlusEncoding userEncoding = AtlusEncoding.Persona5RoyalEFIGS;
         public string CompilerPath = "";
 
         public MainForm()
@@ -58,7 +58,7 @@ namespace P5RStringEditor
 
             if (File.Exists(tblFilePath))
             {
-                var ImportedTbl = NameTBLEditor.ReadNameTBL(tblFilePath);
+                var ImportedTbl = NameTBLEditor.ReadNameTBL(tblFilePath, userEncoding);
                 foreach (var section in ImportedTbl)
                     foreach (var entry in section.TblEntries)
                     {
@@ -177,7 +177,7 @@ namespace P5RStringEditor
         {
             foreach (var ftdFile in importPath)
             {
-                FTD ftd = FTDStringConverter.ReadFTD(ftdFile);
+                FTD ftd = FTDStringConverter.ReadFTD(ftdFile, userEncoding);
                 if (ftd.Lines.Any(x => !String.IsNullOrEmpty(x.Name)) || ftd.Entries.Any(x => x.Lines.Any(y => !String.IsNullOrEmpty(y.Name))))
                     Ftds.Add(ftd);
             }
@@ -203,7 +203,7 @@ namespace P5RStringEditor
                     }
             
             // Save changed TBL
-            NameTBLEditor.SaveNameTBL(OutputNameTbl, outPath);
+            NameTBLEditor.SaveNameTBL(OutputNameTbl, outPath, userEncoding);
         }
 
         private void CreateNewBMD(KeyValuePair<string, string> tblPair)
@@ -305,7 +305,7 @@ namespace P5RStringEditor
             }
 
             // Save changed FTD
-            FTDStringConverter.WriteFTD(OutputFtd, outPath);
+            FTDStringConverter.WriteFTD(OutputFtd, outPath, userEncoding);
         }
 
         private void SetCompilerPath()

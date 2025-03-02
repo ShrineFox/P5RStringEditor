@@ -111,14 +111,14 @@ namespace P5RStringEditor
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(137, 26);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.Save_Click);
             // 
             // loadToolStripMenuItem
             // 
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(137, 26);
             this.loadToolStripMenuItem.Text = "Load";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.Load_Click);
             // 
@@ -127,7 +127,7 @@ namespace P5RStringEditor
             this.importToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fromCostumesFolderToolStripMenuItem});
             this.importToolStripMenuItem.Name = "importToolStripMenuItem";
-            this.importToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.importToolStripMenuItem.Size = new System.Drawing.Size(137, 26);
             this.importToolStripMenuItem.Text = "Import";
             this.importToolStripMenuItem.Click += new System.EventHandler(this.Import_Click);
             // 
@@ -141,7 +141,7 @@ namespace P5RStringEditor
             // exportToolStripMenuItem
             // 
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(137, 26);
             this.exportToolStripMenuItem.Text = "Export";
             this.exportToolStripMenuItem.Click += new System.EventHandler(this.Export_Click);
             // 
@@ -186,9 +186,8 @@ namespace P5RStringEditor
             this.comboBox_Encoding.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox_Encoding.DropDownWidth = 150;
             this.comboBox_Encoding.Items.AddRange(new object[] {
-            "P5R_EFIGS",
-            "P5R_JAPANESE",
-            "P5R_CHINESE"});
+            "Persona5RoyalEFIGS",
+            "Persona5RoyalJapanese"});
             this.comboBox_Encoding.Name = "comboBox_Encoding";
             this.comboBox_Encoding.Size = new System.Drawing.Size(151, 28);
             this.comboBox_Encoding.SelectedIndexChanged += new System.EventHandler(this.Encoding_Changed);

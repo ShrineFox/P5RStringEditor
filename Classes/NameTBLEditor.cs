@@ -18,11 +18,11 @@ namespace P5RStringEditor
     {
         public const int tblNumber = 38; // number of Name TBL sections, 34 for P5, 38 for P5R
 
-        public static List<TblSection> ReadNameTBL(string tblPath)
+        public static List<TblSection> ReadNameTBL(string tblPath, AtlusEncoding encoding)
         {
             List<TblSection> TblSections = new List<TblSection>();
 
-            using (BinaryObjectReader NAMETBLFile = new BinaryObjectReader(tblPath, Endianness.Big, AtlusEncoding.Persona5RoyalEFIGS))
+            using (BinaryObjectReader NAMETBLFile = new BinaryObjectReader(tblPath, Endianness.Big, encoding))
             {
                 for (int i = 0; i < tblNumber / 2; i++)
                 {
@@ -77,9 +77,9 @@ namespace P5RStringEditor
             return TblSections;
         }
 
-        public static void SaveNameTBL(List<TblSection> tblSections, string outPath)
+        public static void SaveNameTBL(List<TblSection> tblSections, string outPath, AtlusEncoding encoding)
         {
-            using (BinaryObjectWriter NAMETBLFile = new BinaryObjectWriter(outPath, Endianness.Big, AtlusEncoding.Persona5RoyalEFIGS))
+            using (BinaryObjectWriter NAMETBLFile = new BinaryObjectWriter(outPath, Endianness.Big, encoding))
             {
                 for (int i = 0; i < tblSections.Count(); i++)
                 {

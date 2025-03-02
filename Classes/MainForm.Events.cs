@@ -7,12 +7,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using static P5RStringEditor.FTDStringConverter;
-using static System.Collections.Specialized.BitVector32;
 
 namespace P5RStringEditor
 {
@@ -319,7 +319,13 @@ namespace P5RStringEditor
 
         private void Encoding_Changed(object sender, EventArgs e)
         {
-            userEncoding = AtlusEncoding.Persona5RoyalEFIGS;
+            string encodingName = comboBox_Encoding.SelectedItem.ToString();
+            Type atlusEncodingType = typeof(AtlusEncoding);
+            PropertyInfo property = atlusEncodingType.GetProperty(encodingName, BindingFlags.Public | BindingFlags.Static);
+            AtlusEncoding encoding = (AtlusEncoding)property.GetValue(null);
+
+            userEncoding = encoding;
+
         }
 
         private void Search_KeyDown(object sender, KeyEventArgs e)
